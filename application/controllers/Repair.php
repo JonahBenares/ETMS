@@ -46,6 +46,7 @@ class Repair extends CI_Controller {
                         'ed_id'=>$det->ed_id,
                         'empid'=>$empid,
                         'damaged'=>$det->damage,
+                        'beyond_repair'=>$det->beyond_repair,
                         'asset_control'=>$det->asset_control_no,
                         'acquisition_date'=>$det->acquisition_date,
                         'serial_no'=>$det->serial_no,
@@ -69,7 +70,7 @@ class Repair extends CI_Controller {
         $this->load->view('template/header');
         $this->load->view('template/sidebar');
         foreach($this->super_model->select_all("repair_details") AS $det){
-            if($det->saved == 0){
+            if($det->saved == 0 AND $det->unsaved==1){
                 $data['rep'][]=array(
                     'repair_id'=>$det->repair_id,
                     'ed_id'=>$det->ed_id,
@@ -137,18 +138,16 @@ class Repair extends CI_Controller {
         /*$etid = $this->input->post('etid');*/
         $checked =count($edid);
         for($x=0;$x<$checked;$x++){
-            /*echo $etid[$x];*/
             foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid[$x]) AS $rep){
-                if($rep->beyond_repair == 0){
+                //if($rep->beyond_repair == 0){
                     $rep_data = array(
-                        /*'et_id'=>$etid[$x],*/
                         'ed_id'=>$edid[$x],
+                        'unsaved'=>1,
                     );
                     $this->super_model->insert_into("repair_details", $rep_data);
-                }else {
+                /*}else {
                     for($x=0;$x<$checked;$x++){
                         $rep_data = array(
-                            /*'et_id'=>$etid[$x],*/
                             'ed_id'=>$edid[$x],
                             'repair_date'=>'',
                             'repair_price'=>'',
@@ -160,6 +159,7 @@ class Repair extends CI_Controller {
                             'create_date'=>'',
                             'user_id'=>'',
                             'saved'=>0,
+                            'unsaved'=>1,
                         );
                         $this->super_model->update_where("repair_details", $rep_data, "ed_id", $edid[$x]);
 
@@ -168,19 +168,9 @@ class Repair extends CI_Controller {
                         );
                         $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
                     }
-                }
+                }*/
             }
         }
-        
-        /*$data = array(
-            'foo' => 'bar',
-            'baz' => 'boom',
-            'cow' => 'milk',
-            'php' => 'hypertext processor',
-        );
-
-        echo http_build_query( $data ) . "\n";
-        echo http_build_query( $data, '', '&amp;' );*/
         
         echo "<script>window.location = '".base_url()."index.php/repair/repair_form';</script>";
     }
@@ -209,6 +199,7 @@ class Repair extends CI_Controller {
                     'create_date'=>date("Y-m-d H:i:s"),
                     'user_id'=>$user_id,
                     'saved'=>1,
+                    'unsaved'=>0,
                 );
                 $this->super_model->update_where("repair_details", $rep_data, "ed_id", $edid);
             }
@@ -225,7 +216,24 @@ class Repair extends CI_Controller {
                 $this->super_model->update_where("et_details", $det_data, "ed_id", $edid);
             }
         }
-        echo "<script>alert('Successfully Repaired'); window.location = '".base_url()."index.php/repair/repair_list';</script>";
+        if($radio=='1'){
+            echo "<script>alert('Successfully Repaired'); window.location = '".base_url()."index.php/repair/repair_list';</script>";
+        }else {
+            echo "<script>alert('Equipment is Beyond Repair'); window.location = '".base_url()."index.php/repair/repair_list';</script>";
+        }
     }
+
+    public function unsaved(){
+        $count = $this->input->post('count');
+        for($x=0;$x<$count;$x++){
+            $edid = $this->input->post('ed_id'.$x);
+            $data = array(
+                'unsaved'=>0
+            ); 
+            $this->super_model->update_where("repair_details", $data, "ed_id", $edid);
+        }
+        echo "<script>window.location = '".base_url()."index.php/repair/repair_list';</script>";
+    }
+
 }
 ?>

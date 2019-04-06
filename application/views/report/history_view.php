@@ -41,6 +41,10 @@
                                         <tr>
                                             <td colspan="7"><button class="btn btn-success btn-block btn-lg animated headShake">Available</button></td>
                                         </tr>
+                                        <?php } else if($borrowed=='1'){ ?>
+                                        <tr>
+                                            <td colspan="7"><button class="btn btn-warning btn-block btn-lg animated headShake text-white">Borrowed</button></td>
+                                        </tr>   
                                         <?php }else { echo ''; } ?>
                                     </table>
 

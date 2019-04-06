@@ -22,6 +22,7 @@
                                             <th>Brand</th>
                                             <th>Model</th>
                                             <th>Serial No.</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -35,6 +36,7 @@
                                             <td><?php echo $d['brand'];?></td>
                                             <td><?php echo $d['model'];?></td>
                                             <td><?php echo $d['serial_no'];?></td>
+                                            <td><?php if($d['beyond_repair']==1){ echo 'Beyond Repair';}else { echo 'Repaired'; }?></td>
                                         </tr>
                                         <?php $x++; } }?>                                        
                                     </tbody>

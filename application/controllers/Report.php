@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+/*error_reporting(0);*/
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Report extends CI_Controller {
@@ -518,24 +518,29 @@ class Report extends CI_Controller {
                 'department'=>$department
             );
 
-            foreach($this->super_model->select_row_where('et_details','et_id',$nxt->et_id) AS $det){
-                $data['details'][] = array(
-                    'et_id'=>$det->et_id,
-                    'ed_id'=>$det->ed_id,
-                    'date'=>$det->acquisition_date,
-                    'date_issued'=>$det->date_issued,
-                    'serial'=>$det->serial_no,
-                    'brand'=>$det->brand,
-                    'model'=>$det->model,
-                    'type'=>$det->type,
-                    'price'=>$det->unit_price,
-                    'currency'=>$det->currency_id,
-                    'acquired_by'=>$det->acquired_by,
-                    'remarks'=>$det->remarks,
-                    'picture1'=>$det->picture1,
-                    'picture2'=>$det->picture2,
-                    'picture3'=>$det->picture3,
-                );
+            $row = $this->super_model->count_rows_where('et_details','et_id',$nxt->et_id);
+            if($row!=0){  
+                foreach($this->super_model->select_row_where('et_details','et_id',$nxt->et_id) AS $det){
+                    $data['details'][] = array(
+                        'et_id'=>$det->et_id,
+                        'ed_id'=>$det->ed_id,
+                        'date'=>$det->acquisition_date,
+                        'date_issued'=>$det->date_issued,
+                        'serial'=>$det->serial_no,
+                        'brand'=>$det->brand,
+                        'model'=>$det->model,
+                        'type'=>$det->type,
+                        'price'=>$det->unit_price,
+                        'currency'=>$det->currency_id,
+                        'acquired_by'=>$det->acquired_by,
+                        'remarks'=>$det->remarks,
+                        'picture1'=>$det->picture1,
+                        'picture2'=>$det->picture2,
+                        'picture3'=>$det->picture3,
+                    );
+                }
+            }else {
+                $data['details']=array();
             }
         }
         $this->load->view('report/edit_encode',$data);
@@ -546,15 +551,105 @@ class Report extends CI_Controller {
         $id = $this->input->post('et_id');
         $qty = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
         /*$serial = array();*/
-        for($x=0;$x<$qty;$x++){
-            $edid = $this->input->post('ed_id['.$x.']');
-            $serial = $this->input->post('sn['.$x.']');
-            /*$itemname=$test;*/
-            $error_ext=0;
-            $dest= realpath(APPPATH . '../uploads/');
-            //$count = count($_FILES['pic']['name']);
-           // $z=1;
-           // for($y=0;$y<$count;$y++){
+        $row = $this->super_model->count_rows_where('et_details','et_id',$id);
+        if($row!=0){
+            for($x=0;$x<$qty;$x++){
+                $edid = $this->input->post('ed_id['.$x.']');
+                $serial = $this->input->post('sn['.$x.']');
+                /*$itemname=$test;*/
+                $error_ext=0;
+                $dest= realpath(APPPATH . '../uploads/');
+                //$count = count($_FILES['pic']['name']);
+               // $z=1;
+               // for($y=0;$y<$count;$y++){
+                    if(!empty($_FILES['pic1']['name'][$x])){
+                         $img1= basename($_FILES['pic1']['name'][$x]);
+                         $img1=explode('.',$img1);
+                         $ext1=$img1[1];
+                        
+                        if($ext1=='php' || ($ext1!='png' && $ext1 != 'jpg' && $ext1!='jpeg')){
+                            $error_ext++;
+                        } else {
+                            $filename1=$serial.'-1.'.$ext1;
+                            move_uploaded_file($_FILES['pic1']['tmp_name'][$x], $dest.'\/'.$filename1);
+                            $data_pic1 = array(
+                                'picture1'=>$filename1
+                            );
+                            $this->super_model->update_where("et_details", $data_pic1, "ed_id", $edid);
+                        }
+                    } 
+                
+                
+                    if(!empty($_FILES['pic2']['name'][$x])){
+                         $img2= basename($_FILES['pic2']['name'][$x]);
+                         $img2=explode('.',$img2);
+                         $ext2=$img2[1];
+                         
+                        if($ext2=='php' || ($ext2!='png' && $ext2 != 'jpg' && $ext2!='jpeg')){
+                            $error_ext++;
+                        } else {
+                            $filename2=$serial.'-2.'.$ext2;
+                            move_uploaded_file($_FILES["pic2"]['tmp_name'][$x], $dest.'\/'.$filename2);
+                            $data_pic2 = array(
+                                'picture2'=>$filename2
+                            );
+                            $this->super_model->update_where("et_details", $data_pic2, "ed_id", $edid);
+                        }
+                    }
+
+                    if(!empty($_FILES['pic3']['name'][$x])){
+                         $img3= basename($_FILES['pic3']['name'][$x]);
+                         $img3=explode('.',$img3);
+                         $ext3=$img3[1];
+                        
+                        if($ext3=='php' || ($ext3!='png' && $ext3 != 'jpg' && $ext3!='jpeg')){
+                            $error_ext++;
+                        } else {
+                            $filename3=$serial.'-3.'.$ext3;
+                            move_uploaded_file($_FILES["pic3"]['tmp_name'][$x], $dest.'\/'.$filename3);
+                            $data_pic3 = array(
+                                'picture3'=>$filename3
+                            );
+                            $this->super_model->update_where("et_details", $data_pic3, "ed_id", $edid);
+                        }
+                    }
+
+                
+                $data = array(
+                    'et_id'=>$this->input->post('et_id'),
+                    'acquisition_date'=>$this->input->post('acq_date['.$x.']'),
+                    'date_issued'=>$this->input->post('date_issued['.$x.']'),
+                    'serial_no'=>$this->input->post('sn['.$x.']'),
+                    'brand'=>$this->input->post('brand['.$x.']'),
+                    'model'=>$this->input->post('model['.$x.']'),
+                    'type'=>$this->input->post('type['.$x.']'),
+                    'unit_price'=>$this->input->post('price['.$x.']'),
+                    'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
+                    'remarks'=>$this->input->post('remarks['.$x.']'),
+                    'currency_id'=>$this->input->post('cur['.$x.']'),
+                );
+
+                if($this->super_model->update_where("et_details", $data, "ed_id", $edid)){
+                    /*$assetdetails=explode("-", $this->input->post('acn['.$x.']'));
+                    $subcat_prefix1=$assetdetails[0];
+                    $subcat_prefix2=$assetdetails[1];
+                    $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
+                    $series = $assetdetails[2];
+                    $asset_data= array(
+                        'subcat_prefix'=>$subcat_prefix,
+                        'series'=>$series
+                    );
+                    $this->super_model->insert_into("asset_series", $asset_data);*/
+
+                    echo "<script>alert('Equipment/Tool successfully Updated!'); 
+                        window.location ='".base_url()."index.php/report/report_main'; </script>";
+                }    
+            }
+        }else{
+            for($x=0;$x<$qty;$x++){
+                $serial = $this->input->post('sn['.$x.']');
+                $error_ext=0;
+                $dest= realpath(APPPATH . '../uploads/');
                 if(!empty($_FILES['pic1']['name'][$x])){
                      $img1= basename($_FILES['pic1']['name'][$x]);
                      $img1=explode('.',$img1);
@@ -564,13 +659,11 @@ class Report extends CI_Controller {
                         $error_ext++;
                     } else {
                         $filename1=$serial.'-1.'.$ext1;
-                        move_uploaded_file($_FILES['pic1']['tmp_name'][$x], $dest.'\/'.$filename1);
-                        $data_pic1 = array(
-                            'picture1'=>$filename1
-                        );
-                        $this->super_model->update_where("et_details", $data_pic1, "ed_id", $edid);
+                        move_uploaded_file($_FILES['pic1']['tmp_name'][$x], $dest.'/'.$filename1);
                     }
-                } 
+                } else {
+                    $filename1="";
+                }
             
             
                 if(!empty($_FILES['pic2']['name'][$x])){
@@ -582,12 +675,10 @@ class Report extends CI_Controller {
                         $error_ext++;
                     } else {
                         $filename2=$serial.'-2.'.$ext2;
-                        move_uploaded_file($_FILES["pic2"]['tmp_name'][$x], $dest.'\/'.$filename2);
-                        $data_pic2 = array(
-                            'picture2'=>$filename2
-                        );
-                        $this->super_model->update_where("et_details", $data_pic2, "ed_id", $edid);
+                        move_uploaded_file($_FILES["pic2"]['tmp_name'][$x], $dest.'/'.$filename2);
                     }
+                } else {
+                    $filename2="";
                 }
 
                 if(!empty($_FILES['pic3']['name'][$x])){
@@ -599,43 +690,45 @@ class Report extends CI_Controller {
                         $error_ext++;
                     } else {
                         $filename3=$serial.'-3.'.$ext3;
-                        move_uploaded_file($_FILES["pic3"]['tmp_name'][$x], $dest.'\/'.$filename3);
-                        $data_pic3 = array(
-                            'picture3'=>$filename3
-                        );
-                        $this->super_model->update_where("et_details", $data_pic3, "ed_id", $edid);
+                        move_uploaded_file($_FILES["pic3"]['tmp_name'][$x], $dest.'/'.$filename3);
+
                     }
+                } else {
+                    $filename3="";
                 }
-
             
-            $data = array(
-                'et_id'=>$this->input->post('et_id'),
-                'acquisition_date'=>$this->input->post('acq_date['.$x.']'),
-                'date_issued'=>$this->input->post('date_issued['.$x.']'),
-                'serial_no'=>$this->input->post('sn['.$x.']'),
-                'brand'=>$this->input->post('brand['.$x.']'),
-                'model'=>$this->input->post('model['.$x.']'),
-                'type'=>$this->input->post('type['.$x.']'),
-                'unit_price'=>$this->input->post('price['.$x.']'),
-                'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
-                'remarks'=>$this->input->post('remarks['.$x.']'),
-                'currency_id'=>$this->input->post('cur['.$x.']'),
-            );
-        
-            if($this->super_model->update_where("et_details", $data, "ed_id", $edid)){
-                /*$assetdetails=explode("-", $this->input->post('acn['.$x.']'));
-                $subcat_prefix1=$assetdetails[0];
-                $subcat_prefix2=$assetdetails[1];
-                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
-                $series = $assetdetails[2];
-                $asset_data= array(
-                    'subcat_prefix'=>$subcat_prefix,
-                    'series'=>$series
+                $data = array(
+                    'et_id'=>$this->input->post('et_id'),
+                    'acquisition_date'=>$this->input->post('acq_date['.$x.']'),
+                    'date_issued'=>$this->input->post('date_issued['.$x.']'),
+                    'asset_control_no'=>$this->input->post('acn['.$x.']'),
+                    'serial_no'=>$this->input->post('sn['.$x.']'),
+                    'brand'=>$this->input->post('brand['.$x.']'),
+                    'model'=>$this->input->post('model['.$x.']'),
+                    'type'=>$this->input->post('type['.$x.']'),
+                    'unit_price'=>$this->input->post('price['.$x.']'),
+                    'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
+                    'remarks'=>$this->input->post('remarks['.$x.']'),
+                    'currency_id'=>$this->input->post('cur['.$x.']'),
+                    'picture1'=>$filename1,
+                    'picture2'=>$filename2,
+                    'picture3'=>$filename3
                 );
-                $this->super_model->insert_into("asset_series", $asset_data);*/
-
-                echo "<script>alert('Equipment/Tool successfully Updated!'); 
-                    window.location ='".base_url()."index.php/report/report_main'; </script>";
+            
+                if($this->super_model->insert_into("et_details", $data)){
+                    $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
+                    $subcat_prefix1=$assetdetails[0];
+                    $subcat_prefix2=$assetdetails[1];
+                    $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
+                    $series = $assetdetails[2];
+                    $asset_data= array(
+                        'subcat_prefix'=>$subcat_prefix,
+                        'series'=>$series
+                    );
+                    $this->super_model->insert_into("asset_series", $asset_data);
+                    echo "<script>alert('Equipment/Tool successfully Updated!'); 
+                        window.location ='".base_url()."index.php/report/report_main'; </script>";
+                }
             }
         }
     }
@@ -683,6 +776,7 @@ class Report extends CI_Controller {
             $data['model'] =$this->super_model->select_column_where("et_details", "model", "ed_id", $cur->ed_id);
             $data['sn'] =$this->super_model->select_column_where("et_details", "serial_no", "ed_id", $cur->ed_id);
             $data['damage'] =$this->super_model->select_column_where("et_details", "damage", "ed_id", $cur->ed_id);
+            $data['borrowed'] =$this->super_model->select_column_where("et_details", "borrowed", "ed_id", $cur->ed_id);
             $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "ed_id", $cur->ed_id);
             foreach($this->super_model->select_row_where('et_head', 'et_id', $cur->et_id) AS $head){
                 //$qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $head->et_id);

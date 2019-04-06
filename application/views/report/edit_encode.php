@@ -46,8 +46,8 @@
                                     $count = 1; 
                                     $asset = $asset_no;
                                     $x = 1;
-                                    /*for($x=1;$x<=$qty;$x++){*/
-                                        foreach($details AS $d){
+                                    if(!empty($details)){
+                                    foreach($details AS $d){
                                 ?>
                                 <div class="rows">
                                     <div class="col-lg-12">
@@ -240,10 +240,149 @@
                                 $asset=$asset+1; 
                                 $count++;
                                 $x++;
-                            }
-                            //} 
-                            $counter = $count - 1;
+                                }  $counter = $count - 1; }else {
                             ?>
+                            <div class="rows">
+                                    <div class="col-lg-12">
+                                        <div class="card encode_css">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label for="" class="control-label mb-1">Acquisition Date:</label>
+                                                        <input id="" name="acq_date[]" type="date" class="form-control bor-radius5 cc-exp">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="" class="control-label mb-1">Date Issued:</label>
+                                                        <div class="input-group">
+                                                            <input id="" name="date_issued[]" class="form-control bor-radius5 cc-cvc" type="date">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <label for="" class="control-label mb-1">Asset Control Number:</label>
+                                                        <input id="" name="acn[]" type="text" class="form-control bor-radius5 cc-exp" value = "<?php echo $prefix."-".$asset;?>" style = "pointer-events:none;" readonly>
+                                                    </div>     
+                                                    <div class="col-lg-6">
+                                                        <label for="" class="control-label mb-1">Serial Number:</label>
+                                                        <input id="" name="sn[]" type="text" class="form-control bor-radius5 cc-exp" >
+                                                    </div>
+                                                </div>
+                                                <div class="row">                                                 
+                                                    <div class="col-6">
+                                                        <label for="" class="control-label mb-1">Brand:</label>
+                                                        <input id="" name="brand[]" type="text" class="form-control bor-radius5 cc-exp">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="" class="control-label mb-1">Model:</label>
+                                                        <div class="input-group">
+                                                            <input id="" name="model[]" class="form-control bor-radius5 cc-cvc" type="text">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">                                                 
+                                                    <div class="col-6">
+                                                        <label for="" class="control-label mb-1">Type:</label>
+                                                        <input id="" name="type[]" type="text" class="form-control bor-radius5 cc-exp" > 
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <label for="" class="control-label mb-1">Unit Price:</label>
+                                                        <div class="input-group">
+                                                            <input id="" name="price[]" class="form-control bor-radius5 cc-cvc" type="text" autocomplete="off">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <label for="" class="control-label mb-1">Currency:</label>
+                                                        <div class="input-group">
+                                                            <select name="cur[]" class="form-control bor-radius5 cc-cvc">
+                                                                <option value = "">--Select Currency--</option>
+                                                                <?php foreach($currency AS $c){ ?>
+                                                                <option value = "<?php echo $c->currency_id; ?>"><?php echo $c->currency_name;?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">                                                 
+                                                    <div class="col-12">
+                                                        <label for="" class="control-label mb-1">Acquired By:</label>
+                                                        <input name="acquired_by[]" type="text" class="form-control bor-radius5 cc-exp">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="" class="control-label mb-1">Remarks:</label>
+                                                    <textarea name="remarks[]" id="" class="form-control bor-radius5" cols="30" rows="2"></textarea>
+                                                </div>
+                                                <div class="row border-class shadow" >
+                                                    <style type="text/css">
+                                                        #img-check-none1-<?php echo $x; ?>{
+                                                            display:none;
+                                                        }
+                                                         #img-check-none2-<?php echo $x; ?>{
+                                                            display:none;
+                                                        }
+                                                         #img-check-none3-<?php echo $x; ?>{
+                                                            display:none;
+                                                        }
+                                                      
+                                                    </style>
+                                                    <div>
+                                                        <div class="col-lg-4 float-col">
+                                                            <label for="pic1">Picture 1:</label>
+                                                            <input class="form-control"  type="file" name="pic1[]" onchange="readPic1(this, <?php echo $x; ?>);">
+                                                            <div class="thumbnail">
+                                                                <img id="pic1_<?php echo $x; ?>" class="pictures" src="<?php echo base_url().'assets/default/default-img.jpg'; ?>" alt="your image" />
+                                                            </div>
+                                                            <div id="img-check-none1-<?php echo $x; ?>" class="alert alert-danger">
+                                                              <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
+                                                            </div>
+                                                            <!-- <span id="img1-check" class='img-check-note'></span> -->
+                                                        </div> 
+                                                        <div class="col-lg-4 float-col">
+                                                            <label for="pic1">Picture 2:</label>
+                                                            <input class="form-control"  type="file" name="pic2[]" id="img2_<?php echo $x; ?>" data-trigger="<?php echo $count?>" onchange="readPic2(this, <?php echo $x; ?>);">
+                                                            <div class="thumbnail">
+                                                                <img id="pic2_<?php echo $x; ?>" class="pictures" src="<?php echo base_url().'assets/default/default-img.jpg'; ?>" alt="your image" />
+                                                            </div>
+                                                            <div id="img-check-none2-<?php echo $x; ?>" class="alert alert-danger">
+                                                              <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 float-col">
+                                                            <label for="pic1">Picture 3:</label>
+                                                            <input class="form-control"  type="file" name="pic3[]" id="img3_<?php echo $x; ?>" data-trigger="<?php echo $count?>" onchange="readPic3(this, <?php echo $x; ?>);">
+                                                            <div class="thumbnail">
+                                                                <img id="pic3_<?php echo $x; ?>" class="pictures" src="<?php echo base_url().'assets/default/default-img.jpg'; ?>" alt="your image" />
+                                                            </div>
+                                                            <div id="img-check-none3-<?php echo $x; ?>" class="alert alert-danger">
+                                                              <center><small><strong>Warning:</strong> Image too big. Upload images less than 5mb.</small></center>
+                                                            </div>
+                                                        </div>
+
+                                                        <!--<div class="row">
+                                                            <div class="col col-lg-12">
+                                                                <label class="btn btn-danger" >Damage
+                                                                    <input type="checkbox" class="trigger" value="1" name="damage[]" data-trigger="damage" id = "damage" >  
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="bor-radius5 hidden" id = 'damage' style="border:1px solid #fe9393;padding:10px 20px;" >
+                                                            <div class="form-group">
+                                                                <label for="" class="control-label mb-1">Damage of the Unit:</label>
+                                                                <textarea name="dou[]" rows="3" class="form-control"></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="" class="control-label mb-1">Remarks:</label>
+                                                                <textarea name="damage_remarks[]" rows="3" class="form-control"></textarea>
+                                                            </div>
+                                                        </div>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php }  ?>
                             </div>
                             <div class="card-footer">
                                 <center>     

@@ -409,7 +409,7 @@ class Borrow extends CI_Controller {
                                 $this->super_model->update_where('borrow_details', $bdet_data, 'bd_id', $up->bd_id);
                             }
                         }
-                        //echo "<script>alert('Successfully Returned!'); window.location = '".base_url()."index.php/borrow/borrow_list'; </script>";
+                        echo "<script>alert('Successfully Returned!'); window.location = '".base_url()."index.php/borrow/borrow_list'; </script>";
                     }else if($qty == $ret->qty){
                         $data = array(
                             'accountability_id'=>0
@@ -432,7 +432,7 @@ class Borrow extends CI_Controller {
                                 $this->super_model->update_where('borrow_details', $bdet_data, 'bd_id', $up->bd_id);
                             }
                         }
-                        //echo "<script>alert('Successfully Returned!'); window.location = '".base_url()."index.php/borrow/borrow_list'; </script>";
+                        echo "<script>alert('Successfully Returned!'); window.location = '".base_url()."index.php/borrow/borrow_list'; </script>";
                     }
                 }
             }

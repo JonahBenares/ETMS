@@ -16,9 +16,25 @@
  <!-- MAIN CONTENT-->
 <div class="main-content">
     <div class="container-fluid">
+        <form action = '<?php echo base_url(); ?>index.php/repair/unsaved' method = "POST">
+            <?php
+                foreach($rep AS $d){  
+                    $z = 1;
+                    foreach($details AS $r){ 
+                        switch($r){
+                            case($d['ed_id'] == $r['ed_id']):
+            ?>
+            <input type="hidden" name="ed_id<?php echo $z;?>" value = "<?php echo $d['ed_id'];?>">
+            <?php 
+                break;
+                default: 
+                    } $z++; } $counter = $z-1; }  
+            ?>
+            <input type="hidden" id="count" name="count" class="form-control" value = "<?php echo $z;?>">
+            <input type = "submit" class="btn btn-warning btn-sm text-white" id="back" value = "Back">
+        </form>
         <form method = "POST" action = "<?php echo base_url(); ?>index.php/repair/insert_repair">
-             <!-- LOOP HERE -->
-            <?php //$z = 1; for($x=0;$x<$count;$x++){ ?>
+            <!-- LOOP HERE -->
             <?php 
 
                 foreach($rep AS $d){  
@@ -77,8 +93,8 @@
                                     <td>
                                         <label for="" class="control-label mb-1">Assessment:</label>
                                         <br>
-                                        <p><input id="radio" name="repair<?php echo $z;?>" type="radio" value="1" > Repaired</p>
-                                        <p><input id="radio" name="repair<?php echo $z;?>" type="radio" value="2" > Beyond Repair</p>
+                                        <p><input id="radio" name="repair<?php echo $z;?>" type="radio" value="1" required> Repaired</p>
+                                        <p><input id="radio" name="repair<?php echo $z;?>" type="radio" value="2" required> Beyond Repair</p>
                                         <br>
                                         <label for="" class="control-label mb-1">Received by:</label>
                                         <input name="receive" type="text" class="form-control bor-radius5 cc-exp receive" data-trigger="<?php echo $z;?>"  autocomplete = "off"  id = "receive<?php echo $z; ?>">
