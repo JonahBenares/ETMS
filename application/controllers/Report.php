@@ -94,6 +94,13 @@ class Report extends CI_Controller {
         $this->load->view('template/scripts');
     }
 
+    public function inv_rep_itm(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $this->load->view('report/inv_rep_itm');
+        $this->load->view('template/scripts');
+    }
+
     public function generateSubcat(){
         if(!empty($this->input->post('subcat'))){
             $subcat = $this->input->post('subcat');

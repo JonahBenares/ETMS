@@ -3,6 +3,14 @@
         <div class="container-fluid">
             <div class="row">                
                 <div class="col-lg-8 offset-lg-2">
+                    <center>
+                        <div class="m-b-10 btn-group">
+                            <a href="<?php echo base_url(); ?>index.php/report/report_main" class="btn btn-info btn-sm"><span class="fa fa-bars"></span></a>
+                            <a href="<?php echo base_url(); ?>index.php/report/inv_rep" class="btn btn-primary btn-sm active">per Sub Category</a>
+                            <a href="<?php echo base_url(); ?>index.php/report/inv_rep_itm" class="btn btn-primary btn-sm">per Item</a>
+                        </div>
+                    </center>
+                    <hr>
                     <div class="card bor-radius20 shadow">
                         <div class="card-header">
                             <form method='POST' action="<?php echo base_url(); ?>index.php/report/generateSubcat/">                          
@@ -15,7 +23,7 @@
                                         <?php } ?>
                                     </select>
                                    <!--  <a href="<?php echo base_url(); ?>index.php/report/inv_rep_det" class="btn btn-primary ">Generate</a> -->
-                                    <input type="submit" name="generate" id="generate" class="btn btn-primary" value ="Generate">
+                                    <input type="submit" name="generate" id="generate" class="btn btn-success" value ="Generate">
                                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                                 </div>
                             </form>
