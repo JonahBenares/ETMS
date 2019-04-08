@@ -58,9 +58,9 @@
                                             foreach($sub AS $s){ 
                                             //if($s['set_id']==0){
                                         ?>
-                                        <!--<tr>
+                                        <tr>
                                             <td colspan="8"><?php echo $s['set_name'];?></td>
-                                        </tr>-->
+                                        </tr>
                                         <tr>
                                             <td><?php echo $s['cat']; ?></td>
                                             <td><?php echo $s['subcat']; ?></td>
