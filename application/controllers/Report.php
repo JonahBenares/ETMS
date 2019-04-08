@@ -1534,7 +1534,6 @@ class Report extends CI_Controller {
             foreach($this->super_model->select_row_where('et_head', 'accountability_id', $id) AS $sub){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
-                /*$department =$this->super_model->select_column_where("department", "department", "employee_id", $sub->accountability_id);*/
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                 $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $sub->et_id);
