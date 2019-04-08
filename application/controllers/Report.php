@@ -1447,19 +1447,22 @@ class Report extends CI_Controller {
                 $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $sub->et_id);
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
                 $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
-                $data['sub'][] = array(
-                    'set_id'=>$set_id,
-                    'et_id'=>$sub->et_id,
-                    'ed_id'=>$edid,
-                    'set_name'=>$set_name,
-                    'cat'=>$category,
-                    'subcat'=>$subcat,
-                    'unit'=>$unit,
-                    'department'=>$sub->department,
-                    'et_desc'=>$sub->et_desc,
-                    'qty'=>$sub->qty,
-                    'accountability'=>$accountability
-                );
+                $rows = $this->super_model->count_rows_where("et_details","ed_id",$edid);
+                if($rows!=0){
+                    $data['sub'][] = array(
+                        'set_id'=>$set_id,
+                        'et_id'=>$sub->et_id,
+                        'ed_id'=>$edid,
+                        'set_name'=>$set_name,
+                        'cat'=>$category,
+                        'subcat'=>$subcat,
+                        'unit'=>$unit,
+                        'department'=>$sub->department,
+                        'et_desc'=>$sub->et_desc,
+                        'qty'=>$sub->qty,
+                        'accountability'=>$accountability
+                    );
+                }
             }
         }else {
             $data['sub'] = array();
@@ -1494,6 +1497,7 @@ class Report extends CI_Controller {
             $series = $this->super_model->get_max("et_set", "set_id");
             $set_id = $series+1;
         }
+
         $set_data = array(
             'set_id'=>$set_id,
             'set_name'=>$name,
