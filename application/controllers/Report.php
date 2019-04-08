@@ -1530,6 +1530,7 @@ class Report extends CI_Controller {
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
         /*$data['id'] =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $id);*/
         $row=$this->super_model->count_custom_where("et_head","accountability_id = '$id'");
+
         if($row!=0){
             foreach($this->super_model->select_row_where('et_head', 'accountability_id', $id) AS $sub){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
@@ -1538,7 +1539,10 @@ class Report extends CI_Controller {
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                 $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $sub->et_id);
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
-                $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);;
+
+                 //$count_set = $this->super_model->count_distinct("set_id","et_details","et_id='$sub->et_id'");
+                 
                 /*$set_name = $this->super_model->select_column_custom_where('et_set', 'set_name', "set_id = '$set_id' GROUP BY set_id");*/
                 /*$set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
                 $data['count_set'] = $this->super_model->count_rows_where("et_details","set_id",$set_id);*/
