@@ -1,3 +1,5 @@
+<script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/report.js"></script>
 <div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
@@ -13,21 +15,29 @@
                     <hr>
                     <div class="card bor-radius20 shadow">
                         <div class="card-header">
-                            <form method='POST' action="<?php echo base_url(); ?>index.php/report/generateSubcat/">                          
+                            <form method='POST' action="<?php echo base_url(); ?>index.php/report/generateItems/">                          
                                 <div class="bor-radius100 btn-group btn-block ">
                                     <a onclick="history.go(-1);" class="btn btn-default"><span class="fa fa-arrow-left"></span></a>
-                                    <input type="text" name="" class="form-control " placeholder="Enter Item Name">
-                                    <input type="text" name="" class="form-control " placeholder="Enter Set Name">
+                                    <input id="items" name="items" type="text" class="form-control" placeholder="Enter Item Name" autocomplete="off">
+                                    <span id="suggestion-items"></span>
+                                    <select name="set" class="form-control">
+                                        <option value = ''>--Select Set Name--</option>
+                                        <?php foreach($set1 AS $s){ ?>
+                                        <option value = '<?php echo $s->set_id?>'><?php echo $s->set_name?></option>
+                                        <?php }?>
+                                    </select>
+                                    <!-- <input type="text" name="" class="form-control " placeholder="Enter Set Name"> -->
                                    <!--  <a href="<?php echo base_url(); ?>index.php/report/inv_rep_det" class="btn btn-primary ">Generate</a> -->
                                     <input type="submit" name="generate" id="generate" class="btn btn-success" value ="Generate">
                                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
+                                    <input id="items_id" name="items_id" type="hidden" class="form-control">
                                 </div>
                             </form>
                         </div>
                         <div class="card-body" >                            
                             <div class="m-t-1">
-                                <?php if(!empty($subcatid)){?>     
-                                <div class='sufee-alert alert with-close alert-success fade show m-l-30 m-r-30'><span class='btn btn-success disabled'>Filter Applied</span><?php echo $filts ?>, <a href='<?php echo base_url(); ?>index.php/report/inv_rep' class='remove_filter alert-link pull-right btn'><span class="fa fa-times"></span></a></div>                    
+                                <?php if(!empty($item)){?>     
+                                <div class='sufee-alert alert with-close alert-success fade show m-l-30 m-r-30'><span class='btn btn-success disabled'>Filter Applied</span><?php echo $filts ?>, <a href='<?php echo base_url(); ?>index.php/report/inv_rep_itm' class='remove_filter alert-link pull-right btn'><span class="fa fa-times"></span></a></div>                    
                                 <?php } ?>
                                 <table class="table table-borderless table-striped table-earning " id="myTable_peremp">
                                     <thead>
@@ -38,15 +48,17 @@
                                         </tr>
                                     </thead> 
                                     <tbody>
+                                        <?php foreach($itema AS $i){ ?>
                                         <tr>
                                             <td> 
-                                                <a href="<?php echo base_url(); ?>index.php/report/inv_rep_det/" class="btn btn-link" data-toggle="tooltip" data-placement="right" title="View">
-                                                   itm namae
+                                                <a href="<?php echo base_url(); ?>index.php/report/inv_report_itm/<?php echo $i['item_id'];?>/<?php echo $i['set_id'];?>" class="btn btn-link" data-toggle="tooltip" data-placement="right" title="View">
+                                                   <?php echo $i['item']; ?>
                                                 </a>           
                                             </td>
-                                            <td>SET</td>
-                                            <td>99</td>
+                                            <td><?php echo $i['set']; ?></td>
+                                            <td><?php echo $i['count']; ?></td>
                                         </tr>
+                                        <?php } ?>
                                     </tbody>                           
                                 </table>
                             </div>

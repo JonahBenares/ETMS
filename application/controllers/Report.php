@@ -97,7 +97,69 @@ class Report extends CI_Controller {
     public function inv_rep_itm(){  
         $this->load->view('template/header');
         $this->load->view('template/sidebar');
-        $this->load->view('report/inv_rep_itm');
+        $data['set1']=$this->super_model->select_all_order_by("et_set","set_name","ASC");
+        $item=$this->uri->segment(3);
+        $set=$this->uri->segment(4);
+        $data['item']=$item;
+        $data['set']=$set;
+        $sql="";
+        $filter = " ";
+        if($item!='null'){
+            $sql.= " et_id = '$item' AND";
+            $items = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $item);
+            $filter .= "Item Desc - ".$items.", ";
+        }
+
+        if($set!='null'){
+            $sql.= " set_id = '$set' AND";
+            $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set);
+            $filter .= "Set Name - ".$sets.", ";
+        }
+
+        $query=substr($sql,0,-3);
+        $filter=substr($filter, 0, -2);
+        $data['filts'] = $filter;
+        $count=$this->super_model->count_custom_where("et_details", $query);
+        if($count!=0){
+            foreach($this->super_model->select_custom_where("et_details", $query) AS $ss){
+                $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
+                $itemss = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $ss->et_id);
+                $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $ss->set_id);
+                $data['itema'][]= array(
+                    'item_id'=>$ss->et_id,
+                    'set_id'=>$ss->set_id,
+                    'item'=>$itemss,
+                    'set'=>$setss,
+                    'count'=>$counts,
+                );
+            }
+        }else{
+            $data['itema']=array();
+        }
+
+        if(empty($item)){
+            $row=$this->super_model->count_rows("et_head");
+            if($row!=0){
+                foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $ss){
+                    $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
+                    $itemss = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $ss->et_id);
+                    foreach($this->super_model->select_row_where("et_details","et_id",$ss->et_id) AS $r){
+                        $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $r->set_id);
+                        $set_id = $r->set_id;
+                    }
+                    $data['itema'][]= array(
+                        'item_id'=>$ss->et_id,
+                        'set_id'=>$set_id,
+                        'item'=>$itemss,
+                        'set'=>$setss,
+                        'count'=>$counts
+                    );
+                }
+            }else {
+                $data['itema'] = array();
+            }
+        }
+        $this->load->view('report/inv_rep_itm',$data);
         $this->load->view('template/scripts');
     }
 
@@ -111,6 +173,24 @@ class Report extends CI_Controller {
         ?>
        <script>
         window.location.href ='<?php echo base_url(); ?>index.php/report/inv_rep/<?php echo $subcat; ?>'</script> <?php
+    }
+
+    public function generateItems(){
+        if(!empty($this->input->post('items_id'))){
+            $item = $this->input->post('items_id');
+        } else {
+            $item = "null";
+        }
+
+        if(!empty($this->input->post('set'))){
+            $set = $this->input->post('set');
+        } else {
+            $set = "null";
+        }
+
+        ?>
+       <script>
+        window.location.href ='<?php echo base_url(); ?>index.php/report/inv_rep_itm/<?php echo $item; ?>/<?php echo $set; ?>'</script> <?php
     }
 
     public function inv_rep_det(){  
@@ -138,6 +218,54 @@ class Report extends CI_Controller {
             $data['item']=array();
         }
         $this->load->view('report/inv_rep_det',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function inv_report_itm(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $item=$this->uri->segment(3);
+        $set=$this->uri->segment(4);
+        $data['item']=$this->super_model->select_column_where("et_head", "et_desc", "et_id", $item);
+        $data['set']=$this->super_model->select_column_where("et_set", "set_name", "set_id", $set);
+        $sql="";
+        if($item!='null'){
+            $sql.= " et_id = '$item' AND";
+        }
+
+        if($set!='null'){
+            $sql.= " set_id = '$set' AND";
+        }
+
+        $query=substr($sql,0,-3);
+
+        $data['item_name'] = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $item);                     
+        $data['count'] = $this->super_model->count_rows_where('et_details','et_id',$item);
+        $count=$this->super_model->count_custom_where("et_details", $query);
+        if($count!=0){
+            foreach($this->super_model->select_custom_where("et_details", $query) AS $t){
+
+                foreach($this->super_model->select_row_where("et_head","et_id",$t->et_id) AS $a){
+                    $employee = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $a->accountability_id);   
+                    $accountability_id = $a->accountability_id;  
+                    $item = $a->et_desc;   
+                    $qty = $a->qty;   
+                }                  
+                $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $t->et_id);                     
+                $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $t->et_id);                     
+                $data['itema'][]=array(
+                    'item'=>$item,
+                    'damaged'=>$damaged,
+                    'borrowed'=>$borrowed,
+                    'accountability'=>$employee,
+                    'accountability_id'=>$accountability_id,
+                    'qty'=>$qty,
+                );
+            }
+        }else {
+            $data['itema']=array();
+        }
+        $this->load->view('report/inv_report_itm',$data);
         $this->load->view('template/scripts');
     }
 
@@ -2450,6 +2578,25 @@ class Report extends CI_Controller {
                     $total = $det->unit_price*$qty;
             ?>
                    <li onClick="selectItem('<?php echo $itm->et_id; ?>','<?php echo $det->set_id; ?>','<?php echo $det->ed_id; ?>','<?php echo $itm->et_desc; ?>','<?php echo $det->asset_control_no;?>','<?php echo $det->acquisition_date; ?>','<?php echo $det->serial_no; ?>','<?php echo $det->brand; ?>','<?php echo $det->model; ?>','<?php echo $qty; ?>','<?php echo $unit; ?>','<?php echo $det->unit_price; ?>','<?php echo $total; ?>',)"><?php echo $itm->et_desc." - ".$det->brand." - ".$det->serial_no." - ".$det->model; ?></li>
+            <?php 
+                }
+            }
+            echo "<ul>";
+        }
+    }
+
+    public function rep_itm(){
+        $item=$this->input->post('item');
+        $rows=$this->super_model->count_custom_where("et_head","et_desc LIKE '%$item%'");
+        if($rows!=0){
+             echo "<ul id='name-item'>";
+            foreach($this->super_model->select_custom_where("et_head", "et_desc LIKE '%$item%'") AS $itm){ 
+                foreach($this->super_model->select_custom_where("et_details", "et_id ='$itm->et_id'") AS $det){ 
+                    $qty = 1;
+                    $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $itm->unit_id);
+                    $total = $det->unit_price*$qty;
+            ?>
+                   <li onClick="selectItems('<?php echo $itm->et_id; ?>','<?php echo $itm->et_desc; ?>','<?php echo $det->serial_no; ?>','<?php echo $det->brand; ?>','<?php echo $det->model; ?>')"><?php echo $itm->et_desc." - ".$det->brand." - ".$det->serial_no." - ".$det->model; ?></li>
             <?php 
                 }
             }

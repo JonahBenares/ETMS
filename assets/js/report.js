@@ -116,6 +116,24 @@
         });
     });
 
+    var loc= document.getElementById("baseurl").value;
+    var redirect=loc+'/index.php/report/rep_itm';
+    $("#items").keyup(function(){
+        $.ajax({
+            type: "POST",
+            url: redirect,
+            data:'item='+$(this).val(),
+            beforeSend: function(){
+                $("#items").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+            },
+            success: function(data){
+                $("#suggestion-items").show();
+                $("#suggestion-items").html(data);
+                $("#items").css("background","#FFF");
+            }
+        });
+    });
+
 
 
     /*$(document).on('click', '#getID', function(e){
@@ -204,6 +222,15 @@ function selectItem(id,setid,edid,val,acn,date,serial,brand,model,qty,unit,price
     $("#price").val(price);
     $("#total").val(total);
     $("#suggestion-item").hide();
+}
+
+function selectItems(id,val,serial,brand,model) {
+    $("#items_id").val(id);
+    $("#items").val(val+' - '+brand+' - '+serial+' - '+model);
+    $("#serial").val(serial);
+    $("#brand").val(brand);
+    $("#model").val(model);
+    $("#suggestion-items").hide();
 }
 
 function add_item(){
