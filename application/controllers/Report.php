@@ -377,7 +377,6 @@ class Report extends CI_Controller {
         }
         $array = array($from,$to);
         $query=substr($sql, 0, -3);
-
         if($from!='' && $to!='' && $category!='' && $subcat!='' && $department!='' && $item!='' && $brand!='' && $model!='' && $type!='' && $serial!='' && $damage!=''){
             foreach ($this->super_model->select_join_where("et_head", "et_details", $query, "et_id") AS $et){
                 $data['user_id'] =$this->super_model->select_column_where("users", "fullname", "user_id", $et->user_id);
@@ -406,6 +405,7 @@ class Report extends CI_Controller {
                     'qty'=>$et->qty,
                     'unit'=>$unit,
                     'accountability'=>$accountability,
+                    'accountability_id'=>$et->accountability_id,
                     'department'=>$department,
                     'category'=>$category,
                     'subcat'=>$subcat,
@@ -437,7 +437,6 @@ class Report extends CI_Controller {
                 $acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);
                 $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $et->et_id);
                 $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et->et_id);
-                /*$currency =$this->super_model->select_column_where("et_details", "currency", "et_id", $et->et_id);*/
                 $currency_id =$this->super_model->select_column_where("et_details", "currency_id", "et_id", $et->et_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
