@@ -186,6 +186,14 @@ class super_model extends CI_Model
         return $rows;
     }
 
+
+    public function count_custom($q)
+    {
+        $query = $this->db->query($q);
+        $rows=$query->num_rows();
+        return $rows;
+    }
+
     
     public function select_sum($table, $column, $where_col, $where_value)
     {

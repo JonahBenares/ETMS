@@ -19,12 +19,7 @@
                                 <div class="bor-radius100 btn-group btn-block ">
                                     <a onclick="history.go(-1);" class="btn btn-default"><span class="fa fa-arrow-left"></span></a>
                                     <input id="item" name="item" type="text" class="form-control" placeholder="Enter Item Name" autocomplete="off">
-                                    <select name="set" class="form-control">
-                                        <option value = ''>--Select Set Name--</option>
-                                        <?php foreach($set1 AS $s){ ?>
-                                        <option value = '<?php echo $s->set_id?>'><?php echo $s->set_name?></option>
-                                        <?php }?>
-                                    </select>
+                                    <input id="set" name="set" type="text" class="form-control" placeholder="Enter Set Name" autocomplete="off">
                                     <!-- <input type="text" name="" class="form-control " placeholder="Enter Set Name"> -->
                                    <!--  <a href="<?php echo base_url(); ?>index.php/report/inv_rep_det" class="btn btn-primary ">Generate</a> -->
                                     <input type="submit" name="generate" id="generate" class="btn btn-success" value ="Generate">
@@ -38,6 +33,8 @@
                                 <?php if(!empty($filt)){?>     
                                 <div class='sufee-alert alert with-close alert-success fade show m-l-30 m-r-30'><span class='btn btn-success disabled'>Filter Applied</span><?php echo $filt ?>, <a href='<?php echo base_url(); ?>index.php/report/inv_rep_itm' class='remove_filter alert-link pull-right btn'><span class="fa fa-times"></span></a></div>                    
                                 <?php } ?>
+
+                                <?php if(!empty($itema)){ ?>
                                 <table class="table table-borderless table-striped table-earning " id="myTable_peremp">
                                     <thead>
                                         <tr>
@@ -59,9 +56,30 @@
                                             <td align="center"><?php echo $i['avcount']; ?></td>
                                             <td align="center"><?php echo $i['incount']; ?></td>
                                         </tr>
-                                        <?php } ?>
+                                        <?php }
+                                         ?>
                                     </tbody>                           
                                 </table>
+                                <?php } ?>
+                                 <?php if(!empty($setdata)){ ?>
+                                <table class="table table-borderless table-striped table-earning " id="myTable_peremp">
+                                    <thead>
+                                        <tr>
+                                            <th>Set Name</th>
+                                            <th align="center">Count</th>
+                                        </tr>
+                                    </thead> 
+                                    <tbody>
+                                        <?php foreach($setdata AS $s){ ?>
+                                        <tr>
+                                            <td><?php echo $s['set_name']; ?></td>
+                                            <td align="center"><?php echo $s['count']; ?></td>
+                                        </tr>
+                                        <?php }
+                                         ?>
+                                    </tbody>                           
+                                </table>
+                                <?php } ?>
                             </div>
                         </div>
                         
