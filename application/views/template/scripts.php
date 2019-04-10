@@ -119,6 +119,12 @@
             if(conf)
             window.location=anchor.attr("href");
         }
+
+        function confirmationDeleteSet(anchor){
+            var conf = confirm('Are you sure you want to Remove this as a set?');
+            if(conf)
+            window.location=anchor.attr("href");
+        }
         // 
     </script>
     <script>
