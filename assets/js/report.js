@@ -224,12 +224,9 @@ function selectItem(id,setid,edid,val,acn,date,serial,brand,model,qty,unit,price
     $("#suggestion-item").hide();
 }
 
-function selectItems(id,val,serial,brand,model) {
+function selectItems(id,val) {
     $("#items_id").val(id);
-    $("#items").val(val+' - '+brand+' - '+serial+' - '+model);
-    $("#serial").val(serial);
-    $("#brand").val(brand);
-    $("#model").val(model);
+    $("#items").val(val);
     $("#suggestion-items").hide();
 }
 

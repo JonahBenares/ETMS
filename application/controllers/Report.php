@@ -98,7 +98,7 @@ class Report extends CI_Controller {
         $this->load->view('template/header');
         $this->load->view('template/sidebar');
         $data['set1']=$this->super_model->select_all_order_by("et_set","set_name","ASC");
-        $item=$this->uri->segment(3);
+        /*$item=$this->uri->segment(3);
         $set=$this->uri->segment(4);
         $data['item']=$item;
         $data['set']=$set;
@@ -135,30 +135,33 @@ class Report extends CI_Controller {
             }
         }else{
             $data['itema']=array();
-        }
+        }*/
 
-        if(empty($item)){
+        /*if(empty($item)){*/
             $row=$this->super_model->count_rows("et_head");
             if($row!=0){
                 foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $ss){
                     $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
-                    $itemss = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $ss->et_id);
                     foreach($this->super_model->select_row_where("et_details","et_id",$ss->et_id) AS $r){
                         $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $r->set_id);
                         $set_id = $r->set_id;
                     }
+                    $avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
+                    $incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
                     $data['itema'][]= array(
                         'item_id'=>$ss->et_id,
                         'set_id'=>$set_id,
-                        'item'=>$itemss,
+                        'item'=>$ss->et_desc,
                         'set'=>$setss,
-                        'count'=>$counts
+                        'count'=>$counts,
+                        'avcount'=>$avcount,
+                        'incount'=>$incount,
                     );
                 }
             }else {
                 $data['itema'] = array();
             }
-        }
+        //}
         $this->load->view('report/inv_rep_itm',$data);
         $this->load->view('template/scripts');
     }
@@ -266,6 +269,60 @@ class Report extends CI_Controller {
             $data['itema']=array();
         }
         $this->load->view('report/inv_report_itm',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function search_inv_itm(){
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $data['set1']=$this->super_model->select_all_order_by("et_set","set_name","ASC");
+        if(!empty($this->input->post('item'))){
+            $data['item'] = $this->input->post('item');
+        } else {
+            $data['item'] = "null";
+        }
+
+        if(!empty($this->input->post('set'))){
+            $data['set'] = $this->input->post('set');
+        } else {
+            $data['set'] = "null";
+        }
+
+        $sql="";
+        $filter = " ";
+        if(!empty($this->input->post('item'))){
+            $item = $this->input->post('item');
+            $sql.=" et_desc LIKE '%$item%' AND";
+            $filter .= "Item Description - ".$item.", ";
+        }
+
+        if(!empty($this->input->post('set'))){
+            $set = $this->input->post('set');
+            $sql.=" set_id LIKE '%$set%' AND";
+            $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set);
+            $filter .= "Set Name - ".$sets.", ";
+        }
+
+        $query=substr($sql, 0, -3);
+        $data['filt']=substr($filter, 0, -2);
+
+        foreach ($this->super_model->select_join_where("et_head","et_details", $query,'et_id') AS $ss){
+            $avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
+            $incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
+            foreach($this->super_model->select_row_where('et_details','et_id',$ss->et_id) AS $r){
+                $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $r->set_id);
+                $set_id = $r->set_id;
+            }
+            $data['itema'][]= array(
+                'item_id'=>$ss->et_id,
+                'set_id'=>$set_id,
+                'item'=>$ss->et_desc,
+                'set'=>$setss,
+                'avcount'=>$avcount,
+                'incount'=>$incount,
+            );
+        }
+        $this->load->view('report/inv_rep_itm',$data);
         $this->load->view('template/scripts');
     }
 
@@ -1539,10 +1596,8 @@ class Report extends CI_Controller {
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                 $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $sub->et_id);
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
-                $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);;
-
-                 //$count_set = $this->super_model->count_distinct("set_id","et_details","et_id='$sub->et_id'");
-                 
+                $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                //$count_set = $this->super_model->count_distinct("set_id","et_details","et_id='$sub->et_id'"); 
                 /*$set_name = $this->super_model->select_column_custom_where('et_set', 'set_name', "set_id = '$set_id' GROUP BY set_id");*/
                 /*$set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
                 $data['count_set'] = $this->super_model->count_rows_where("et_details","set_id",$set_id);*/
@@ -2593,15 +2648,10 @@ class Report extends CI_Controller {
         $rows=$this->super_model->count_custom_where("et_head","et_desc LIKE '%$item%'");
         if($rows!=0){
              echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("et_head", "et_desc LIKE '%$item%'") AS $itm){ 
-                foreach($this->super_model->select_custom_where("et_details", "et_id ='$itm->et_id'") AS $det){ 
-                    $qty = 1;
-                    $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $itm->unit_id);
-                    $total = $det->unit_price*$qty;
+            foreach($this->super_model->select_custom_where("et_head", "et_desc LIKE '%$item%'") AS $itm){
             ?>
-                   <li onClick="selectItems('<?php echo $itm->et_id; ?>','<?php echo $itm->et_desc; ?>','<?php echo $det->serial_no; ?>','<?php echo $det->brand; ?>','<?php echo $det->model; ?>')"><?php echo $itm->et_desc." - ".$det->brand." - ".$det->serial_no." - ".$det->model; ?></li>
+                   <li onClick="selectItems('<?php echo $itm->et_id; ?>','<?php echo $itm->et_desc; ?>')"><?php echo $itm->et_desc; ?></li>
             <?php 
-                }
             }
             echo "<ul>";
         }
