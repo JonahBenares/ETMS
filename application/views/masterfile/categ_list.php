@@ -59,7 +59,7 @@
                                                      ?>
                                                     <tr>
                                                         <td style = "text-indent:40px;"><?php echo $sub['subcat_name'];?></td>    
-                                                        <td><?php echo $sub['subcat_prefix'];?></td>
+                                                        <td><?php echo $sub['subcat_prefix']." - ".$sub['location'];?></td>
                                                         <td><?php echo $sub['subcat_desc']?></td>
                                                         <td>
                                                             <a href="#" class="btn btn-primary btn-xs bor-radius" data-id="<?php echo $sub['subcat_id']; ?>" data-toggle="modal" id='getSub' data-target="#subcatModal1">

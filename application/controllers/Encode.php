@@ -52,17 +52,19 @@ class Encode extends CI_Controller {
             $department = $this->super_model->select_column_where("employees", "department", "employee_id", $nxt->accountability_id);
             $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $nxt->unit_id);
             $subcat_prefix= $this->super_model->select_column_where('subcategory', 'subcat_prefix', 'subcat_id', $nxt->subcat_id);
+            $location= $this->super_model->select_column_where('subcategory', 'location', 'subcat_id', $nxt->subcat_id);
             $rows=$this->super_model->count_custom_where("asset_series","subcat_prefix = '$subcat_prefix'");
             if(empty($rows)){
                 $next = '1001';
-                $asset_no= $subcat_prefix."-".$next;
+                $asset_no= $subcat_prefix."-".$location."-".$next;
             } else {
                 $series = $this->super_model->get_max_where("asset_series", "series","subcat_prefix = '$subcat_prefix'");
                 $next=$series+1;
-                $asset_no = $subcat_prefix."-".$next;
+                $asset_no = $subcat_prefix."-".$location."-".$next;
             }
 
-             $data['prefix'] = $subcat_prefix;
+            $data['prefix'] = $subcat_prefix;
+            $data['location'] = $location;
             $data['asset_no'] = $next;
 
             $data['head'][] = array(

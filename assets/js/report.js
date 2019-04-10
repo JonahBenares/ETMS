@@ -116,7 +116,7 @@
         });
     });
 
-    var loc= document.getElementById("baseurl").value;
+    /*var loc= document.getElementById("baseurl").value;
     var redirect=loc+'/index.php/report/rep_itm';
     $("#items").keyup(function(){
         $.ajax({
@@ -132,7 +132,7 @@
                 $("#items").css("background","#FFF");
             }
         });
-    });
+    });*/
 
 
 
@@ -224,11 +224,11 @@ function selectItem(id,setid,edid,val,acn,date,serial,brand,model,qty,unit,price
     $("#suggestion-item").hide();
 }
 
-function selectItems(id,val) {
+/*function selectItems(id,val) {
     $("#items_id").val(id);
     $("#items").val(val);
     $("#suggestion-items").hide();
-}
+}*/
 
 function add_item(){
     var loc= document.getElementById("baseurl").value;

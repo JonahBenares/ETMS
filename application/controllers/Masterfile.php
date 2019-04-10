@@ -466,7 +466,7 @@ class Masterfile extends CI_Controller {
         $this->load->view('template/header');
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
-        /*$data['location'] = $this->super_model->select_all('location');*/
+        $data['location'] = $this->super_model->select_all('location');
         $data['cat'] = $this->super_model->select_row_where('category', 'category_id', $id);
         $this->load->view('masterfile/add_subcat',$data);
         $this->load->view('template/scripts');
@@ -476,14 +476,14 @@ class Masterfile extends CI_Controller {
         $prefix = trim($this->input->post('prefix')," ");
         $sub_name = trim($this->input->post('subcat')," ");
         $desc = trim($this->input->post('desc')," ");
-        /*$location = trim($this->input->post('location')," ");*/
+        $location = trim($this->input->post('location')," ");
         $row = $this->super_model->count_rows_where("subcategory","subcat_name",$sub_name);
         if($row!=0){
             echo "<script>alert('$sub_name is already encoded!'); window.opener.location.reload(); window.close();</script>";
         }else {
             $data = array(
                 'category_id'=>$this->input->post('category_id'),
-                /*'location'=>$location,*/
+                'location'=>$location,
                 'subcat_prefix'=>$prefix,
                 'subcat_name'=> $sub_name,
                 'subcat_desc'=> $desc,
@@ -506,7 +506,7 @@ class Masterfile extends CI_Controller {
         $data = array(
             'subcat_name'=>$this->input->post('subcat'),
             'subcat_prefix'=>$this->input->post('prefix'),
-            /*'location'=>$this->input->post('location'),*/
+            'location'=>$this->input->post('location'),
             'subcat_desc'=>$this->input->post('desc'),
         );
         $subid = $this->input->post('subcat_id');
@@ -528,7 +528,7 @@ class Masterfile extends CI_Controller {
                 'subcat_name'=>$s->subcat_name,
                 'subcat_prefix'=>$s->subcat_prefix,
                 'subcat_desc'=>$s->subcat_desc,
-                /*'location'=>$s->location,*/
+                'location'=>$s->location,
             );
         }
         /*$data['subcat'] = $this->super_model->select_all('subcategory');*/

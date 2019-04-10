@@ -15,12 +15,12 @@
                                 <label for="" class="control-label mb-1">Category Name:</label>
                                 <?php foreach($cat AS $cat){ ?>
                                 <input id="" name="category" type="text" class="form-control bor-radius5" style = "pointer-events:none;" value = "<?php echo $cat->category_name;?>">
-                                <!-- <label for="" class="control-label mb-1">Location:</label>
+                                <label for="" class="control-label mb-1">Location:</label>
                                 <select id="" name="location" class="form-control bor-radius5" required="">
                                     <option value = "">--Select Location--</option>
                                     <option value = "BCD">Bacolod</option>  
                                     <option value = "BS">Bago</option>  
-                                </select> -->
+                                </select>
                                 <label for="" class="control-label mb-1">Sub Category Prefix:</label>
                                 <input id="" name="prefix" type="text" class="form-control bor-radius5">
                                 <label for="" class="control-label mb-1">Sub Category Name:</label>
