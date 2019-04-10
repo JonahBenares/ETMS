@@ -47,7 +47,11 @@
                                         <tr>
                                             <?php if($s['set_id']!=0){ ?>
                                             <td align="center" hidden><input type="text" name="etid[]" value='<?php echo $s['et_id']; ?>' disabled></td>
-                                            <td align="center"><input type="checkbox" name ='edid[]' value = '<?php echo $s['ed_id'];?>' disabled></td>
+                                            <td align="center">
+                                                <a href = '<?php echo base_url(); ?>index.php/report/rem_set/<?php echo $s['ed_id'];?>/<?php echo $id;?>' class="btn btn-danger item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Tag as Damage">
+                                                    <i class="fa fa-times"></i>
+                                                </a>
+                                            </td>
                                             <?php } else { ?>
                                             <td align="center" hidden><input type="text" name="etid[]" value='<?php echo $s['et_id']; ?>'></td>
                                             <td align="center"><input type="checkbox" class="multi" name ='edid[]' value = '<?php echo $s['ed_id'];?>'></td>

@@ -299,9 +299,9 @@ class Report extends CI_Controller {
         if(!empty($this->input->post('set'))){
             $set = $this->input->post('set');
             $sql.=" set_name LIKE '%$set%' AND";
-            $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set);
+            //$sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set);
             $q = "INNER JOIN et_set es ON ed.set_id = es.set_id";
-            $filter .= "Set Name - ".$sets.", ";
+            $filter .= "Set Name - ".$set.", ";
         }
 
         $query=substr($sql, 0, -3);
@@ -1724,6 +1724,18 @@ class Report extends CI_Controller {
         }
         ?>
         <script>alert("Successfully Set!"); window.location.href ='<?php echo base_url(); ?>index.php/report/report_sub/<?php echo $id; ?>'</script>
+        <?php
+    }
+
+    public function rem_set(){
+        $edid=$this->uri->segment(3);
+        $id=$this->uri->segment(4);
+        $det_data = array(
+            'set_id'=>0
+        ); 
+        $this->super_model->update_where("et_details", $det_data, "ed_id", $edid);
+        ?>
+        <script>window.location.href ='<?php echo base_url(); ?>index.php/report/report_sub/<?php echo $id; ?>'</script>
         <?php
     }
 
