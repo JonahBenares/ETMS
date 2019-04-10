@@ -314,10 +314,11 @@ function chooseArs(){
     var loc= document.getElementById("baseurl").value;
     var redirect = loc+'index.php/report/getArs';
     var date = document.getElementById("date").value;
+    var ids = document.getElementById("ids").value;
     $.ajax({
             type: 'POST',
             url: redirect,
-            data: 'date='+date,
+            data: 'date='+date+'&ids='+ids,
             success: function(data){
                 $("#ars").html(data);
            }
@@ -328,11 +329,12 @@ function chooseEtdr(){
     var loc= document.getElementById("baseurl").value;
     var redirect = loc+'index.php/report/getEtdr';
     var date = document.getElementById("date").value;
+    var id = document.getElementById("id").value;
     var count = document.getElementById("count").value;
     $.ajax({
         type: 'POST',
         url: redirect,
-        data: 'date='+date,
+        data: 'date='+date+'&id='+id,
         success: function(data){
             $('#etdr').html(data); 
         }

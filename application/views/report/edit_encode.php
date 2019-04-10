@@ -76,7 +76,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-6">
                                                         <label for="" class="control-label mb-1">Asset Control Number:</label>
-                                                        <input id="" name="acn[]" type="text" class="form-control bor-radius5 cc-exp" value = "<?php echo $prefix."-".$asset;?>" style = "pointer-events:none;" readonly>
+                                                        <input id="" name="acn[]" type="text" class="form-control bor-radius5 cc-exp" value = "<?php echo $prefix."-".$location."-".$asset;?>" style = "pointer-events:none;" readonly>
                                                     </div>     
                                                     <div class="col-lg-6">
                                                         <label for="" class="control-label mb-1">Serial Number:</label>

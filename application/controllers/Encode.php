@@ -291,8 +291,9 @@ class Encode extends CI_Controller {
                 $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
                 $subcat_prefix1=$assetdetails[0];
                 $subcat_prefix2=$assetdetails[1];
-                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
-                $series = $assetdetails[2];
+                $subcat_prefix3=$assetdetails[2];
+                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
+                $series = $assetdetails[3];
                 $asset_data= array(
                     'subcat_prefix'=>$subcat_prefix,
                     'series'=>$series

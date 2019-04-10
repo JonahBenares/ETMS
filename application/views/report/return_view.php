@@ -68,7 +68,7 @@
                                 <center>
                                     <input type = "submit" class="btn btn-info btn-sm bor-radius10 btn-block" placeholder="Save" value="Return">
                                     <input type = "hidden" name = "et_id" value="<?php echo $et_id;?>">
-                                    <input type = "hidden" name = "id" value="<?php echo $id;?>">
+                                    <input type = "hidden" id = "ids" name = "id" value="<?php echo $id;?>">
                                     <input type="hidden" id="count" name="count" class="form-control" value = "<?php echo $x;?>">
                                     <input type="hidden" name="user_id" value = "<?php echo $_SESSION['user_id'];?>">
                                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
