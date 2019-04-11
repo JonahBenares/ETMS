@@ -6,15 +6,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card bor-radius shadow">
-                        <div class="card-header">
-                            <a href="<?php echo base_url(); ?>index.php/masterfile/dashboard" class="btn btn-default"><span class="fa fa-arrow-left"></span></a>
-                                <a href="<?php echo base_url(); ?>index.php/report/report_main" class="btn btn-primary">Equipment/Tools</a>
-                                <a href="<?php echo base_url(); ?>index.php/report/report_main_hist" class="btn btn-primary">E/T History</a>
-                                <a href="<?php echo base_url(); ?>index.php/report/report_main_emp" class="btn btn-primary" >E/T per Employee</a>
-                                <a href="<?php echo base_url(); ?>index.php/report/report_main_avail" class="btn btn-primary" >Available E/T <span class="badge badge-light badge-md bor-radius100" ><?php echo number_format($available_qty,0); ?></span></a>
-                                <a href="<?php echo base_url(); ?>index.php/report/inv_rep" class="btn text-white btn-warning" >Inv Report</a>
-                                <a href="<?php echo base_url(); ?>index.php/repair/repair_list" class="btn btn-danger pull-right" >Damaged E/T <span class="badge badge-light badge-md bor-radius100" ><?php echo number_format($damage_qty,0); ?></span></a>
-                        </div>
+                       <?php include 'report_menu.php'; ?>
 
                         <div class="table--no-card m-t-10 m-b-10" >
                             <h2 class="m-l-30 m-b-30 m-t-30">Equipment/Tools per <u>EMPLOYEE</u>

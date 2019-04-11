@@ -348,11 +348,9 @@ class Report extends CI_Controller {
     	$this->load->view('template/header');
     	$this->load->view('template/sidebar');
         $row=$this->super_model->count_custom_where("et_head", "accountability_id!=0");
-        $row_avail=$this->super_model->count_custom_where("et_head", "accountability_id=0");
-        /*foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
-            $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
-        }*/
-        $data['available_qty']=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');
+         $row_avail = $this->row_avail();
+       
+        $data['available_qty']= $this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         /*$data['available_qty']=$this->super_model->select_sum("et_head", "qty", "accountability_id", "0");*/
         $data['cat'] = $this->super_model->select_all_order_by('category', 'category_name', 'ASC');
@@ -951,7 +949,7 @@ class Report extends CI_Controller {
         /*foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
         }*/
-        $data['available_qty']=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');
+        $data['available_qty']=$this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         /*$data['available_qty']=$this->super_model->select_sum("et_head", "qty", "accountability_id", "0");*/
         $row=$this->super_model->count_rows("et_head");
@@ -1114,16 +1112,23 @@ class Report extends CI_Controller {
         $this->load->view('template/scripts');
     }
 
+    public function row_avail(){
+
+         $row_avail=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0' and change_location = '0'",'et_id');
+         return $row_avail;
+    }
+
     public function report_main_avail(){  
         $this->load->view('template/header');
         $this->load->view('template/sidebar');
         $row=$this->super_model->count_custom_where("et_head", "accountability_id!=0");
-        $row_avail=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0' and change_location = '0'",'et_id');
+
+        $row_avail = $this->row_avail();
         /*foreach($this->super_model->select_custom_where("et_head", "accountability_id='0'") AS $check){
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
         }*/
         /*$data['available_qty']=$this->super_model->count_join_where('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');*/
-        $data['available_qty']=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0' and change_location = '0'",'et_id');
+        $data['available_qty']= $this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         if($row_avail!=0){
             //foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
@@ -1177,7 +1182,7 @@ class Report extends CI_Controller {
         /*foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
         }*/
-        $data['available_qty']=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');
+        $data['available_qty']=$this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         /*$data['available_qty']=$this->super_model->select_sum("et_head", "qty", "accountability_id", "0");*/
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
