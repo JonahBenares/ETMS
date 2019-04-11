@@ -989,6 +989,7 @@ class Report extends CI_Controller {
             $data['sn'] =$this->super_model->select_column_where("et_details", "serial_no", "ed_id", $cur->ed_id);
             $data['damage'] =$this->super_model->select_column_where("et_details", "damage", "ed_id", $cur->ed_id);
             $data['borrowed'] =$this->super_model->select_column_where("et_details", "borrowed", "ed_id", $cur->ed_id);
+            $data['changeloc'] =$this->super_model->select_column_where("et_details", "change_location", "ed_id", $cur->ed_id);
             $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "ed_id", $cur->ed_id);
             foreach($this->super_model->select_row_where('et_head', 'et_id', $cur->et_id) AS $head){
                 //$qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $head->et_id);
@@ -1117,15 +1118,16 @@ class Report extends CI_Controller {
         $this->load->view('template/header');
         $this->load->view('template/sidebar');
         $row=$this->super_model->count_custom_where("et_head", "accountability_id!=0");
-        $row_avail=$this->super_model->count_custom_where("et_head", "accountability_id=0");
+        $row_avail=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0' and change_location = '0'",'et_id');
         /*foreach($this->super_model->select_custom_where("et_head", "accountability_id='0'") AS $check){
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
         }*/
         /*$data['available_qty']=$this->super_model->count_join_where('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');*/
-        $data['available_qty']=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');
+        $data['available_qty']=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0' and change_location = '0'",'et_id');
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         if($row_avail!=0){
-            foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
+            //foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
+            foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' and change_location = '0'","et_id") as $et){
                 /*foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$et->et_id'") AS $det){*/
                 $damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
                 $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et->et_id);
@@ -1855,6 +1857,7 @@ class Report extends CI_Controller {
         $date = $this->input->post('date');
         $remarks = $this->input->post('remarks');
         $ars_no = $this->input->post('ars_no');
+        $changeloc = $this->input->post('changeloc');
         $received_by = $this->input->post('rec_id');
         $head_rows = $this->super_model->count_rows("return_head");
         if($head_rows==0){
@@ -1943,6 +1946,7 @@ class Report extends CI_Controller {
                     'department'=>$ret->department,
                     'category_id'=>$ret->category_id,
                     'subcat_id'=>$ret->subcat_id,
+                    'change_location'=>$changeloc,
                     'create_date'=>date("Y-m-d H:i:s"),
                 );
                 if($this->super_model->insert_into("et_head", $et_data)){
@@ -1986,7 +1990,8 @@ class Report extends CI_Controller {
                         $date_issued = $this->super_model->select_column_where("et_details", "date_issued", "ed_id", $edid[$x]);
                         foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid[$x]) AS $det){
                             $det_data = array(
-                                'date_issued'=>''
+                                'date_issued'=>'',
+                                'change_location'=>$changeloc,
                             ); 
                             $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
                         }
@@ -2708,7 +2713,7 @@ class Report extends CI_Controller {
         if($rows!=0){
              echo "<ul id='name-item'>";
             foreach($this->super_model->select_custom_where("et_head", "accountability_id='0' AND et_desc LIKE '%$item%'") AS $itm){
-                foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$itm->et_id'") AS $det){  
+                foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$itm->et_id' AND change_location = '0'") AS $det){  
                     $qty = 1;
                     $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $itm->unit_id);
                     $total = $det->unit_price*$qty;

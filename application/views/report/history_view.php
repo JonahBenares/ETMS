@@ -37,7 +37,7 @@
                                         <tr>
                                             <td colspan="7"><button class="btn btn-danger btn-block btn-lg animated headShake">DAMAGED</button></td>
                                         </tr>
-                                        <?php }else if($ids==0){ ?>
+                                        <?php }else if($ids==0 && $changeloc==0){ ?>
                                         <tr>
                                             <td colspan="7"><button class="btn btn-success btn-block btn-lg animated headShake">Available</button></td>
                                         </tr>
@@ -45,6 +45,10 @@
                                         <tr>
                                             <td colspan="7"><button class="btn btn-warning btn-block btn-lg animated headShake text-white">Borrowed</button></td>
                                         </tr>   
+                                         <?php } else if($ids==0 && $changeloc=='1'){ ?>
+                                        <tr>
+                                            <td colspan="7"><button class="btn btn-info btn-block btn-lg animated headShake text-white">Changed Location</button></td>
+                                        </tr> 
                                         <?php }else { echo ''; } ?>
                                     </table>
 

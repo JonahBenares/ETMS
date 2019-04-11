@@ -31,6 +31,11 @@
                                         <span id="suggestion-receivedby"></span>
                                         <input type="hidden" name="rec_id" id="rec_id" >
                                     </div>
+                                     <div class="col-lg-6 col-md-6">
+                                        <label for="" class="control-label mb-1">Change Location:</label>
+                                        <input id="changeloc" name="changeloc" type="checkbox" class="col-lg-1 form-control" value='1'>
+                                       
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12">
