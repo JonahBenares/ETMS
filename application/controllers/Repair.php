@@ -41,12 +41,14 @@ class Repair extends CI_Controller {
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
                     $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $det->et_id);
                     $empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $det->et_id);
+                    $repair =$this->super_model->select_column_where("repair_details", "assessment", "ed_id", $det->ed_id);
                     $data['damage'][] = array(
                         /*'et_id'=>$et->et_id,*/
                         'ed_id'=>$det->ed_id,
                         'empid'=>$empid,
                         'damaged'=>$det->damage,
                         'beyond_repair'=>$det->beyond_repair,
+                        'repair'=>$repair,
                         'asset_control'=>$det->asset_control_no,
                         'acquisition_date'=>$det->acquisition_date,
                         'serial_no'=>$det->serial_no,

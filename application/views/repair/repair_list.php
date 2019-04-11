@@ -36,7 +36,7 @@
                                             <td><?php echo $d['brand'];?></td>
                                             <td><?php echo $d['model'];?></td>
                                             <td><?php echo $d['serial_no'];?></td>
-                                            <td><?php if($d['beyond_repair']==1){ echo 'Beyond Repair';}else { echo 'Repaired'; }?></td>
+                                            <td><?php if($d['beyond_repair']==1){ echo 'Beyond Repair';}else if($d['repair']==1){ echo 'Repaired'; }?></td>
                                         </tr>
                                         <?php $x++; } }?>                                        
                                     </tbody>
