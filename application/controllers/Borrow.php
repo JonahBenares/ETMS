@@ -73,24 +73,34 @@ class Borrow extends CI_Controller {
             $bh_id=$maxid+1;
         }
 
+        foreach($this->super_model->select_row_where("employees","employee_id", $this->input->post('borrow_id')) AS $l){
+            $location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
+            if($location == 'Bacolod'){
+                $location = 'BCD';
+            }else {
+                $location = 'BS';
+            }
+        }
+
         $date = $this->input->post('date');
         $date_format = date("Y-m",strtotime($date));
         $prefix= $this->super_model->select_column_custom_where("borrow_head", "borrow_series", "borrowed_date LIKE '$date_format%'");
         //secho $prefix;
         $rows=$this->super_model->count_custom_where("borrow_head","borrow_series = '$prefix'");
         if($rows==0){
-            $borrow_no= $date_format."-1001";
+            $borrow_no= $location."-".$date_format."-1001";
         } else {
             $series = $this->super_model->get_max("borrow_series", "series","borrow_prefix = '$prefix'");
             $next=$series+1;
-            $borrow_no = $date_format."-".$next;
+            $borrow_no = $location."-".$date_format."-".$next;
         }
 
         $borrowdetails=explode("-", $borrow_no);
         $borrow_prefix1=$borrowdetails[0];
         $borrow_prefix2=$borrowdetails[1];
-        $borrow_prefix=$borrow_prefix1."-".$borrow_prefix2;
-        $series = $borrowdetails[2];
+        $borrow_prefix3=$borrowdetails[2];
+        $borrow_prefix=$borrow_prefix1."-".$borrow_prefix2."-".$borrow_prefix3;
+        $series = $borrowdetails[3];
         $borrow_data= array(
             'borrow_prefix'=>$borrow_prefix,
             'series'=>$series
@@ -639,22 +649,32 @@ class Borrow extends CI_Controller {
             $damage_done = $this->input->post('damage_done'.$x);
             $receipt = $this->input->post('receipt'.$x);
             $recommendation = $this->input->post('recommendation'.$x);
+
+            foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
+                $location1 = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
+                if($location1 == 'Bacolod'){
+                    $location1 = 'BCD';
+                }else {
+                    $location1 = 'BS';
+                }
+            }
             $date_format = date("Y-m",strtotime($date));
             $prefix= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
-            //secho $prefix;
             $rows=$this->super_model->count_custom_where("damage_info","etdr_no = '$prefix'");
             if($rows==0){
-                $etdr_no= $date_format."-1001";
+                $etdr_no= $location1."-".$date_format."-1001";
             } else {
                 $series = $this->super_model->get_max("damage_series", "series","damge_prefix = '$prefix'");
                 $next=$series+1;
-                $etdr_no = $date_format."-".$next;
+                $etdr_no = $location1."-".$date_format."-".$next;
             }
+
             $damagedetails=explode("-", $etdr_no);
             $damage_prefix1=$damagedetails[0];
             $damage_prefix2=$damagedetails[1];
-            $damage_prefix=$damage_prefix1."-".$damage_prefix2;
-            $series = $damagedetails[2];
+            $damage_prefix3=$damagedetails[2];
+            $damage_prefix=$damage_prefix1."-".$damage_prefix2."-".$damage_prefix3;
+            $series = $damagedetails[3];
             $damage_data= array(
                 'damage_prefix'=>$damage_prefix,
                 'series'=>$series
@@ -724,16 +744,18 @@ class Borrow extends CI_Controller {
         $prefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
         $rows=$this->super_model->count_custom_where("return_head","atf_no = '$prefix'");
         if($rows==0){
-            $atf_no= $atf_format."-1001";
+            $atf_no= $location1."-".$atf_format."-1001";
         } else {
             $series = $this->super_model->get_max("atf_series", "series","atf_prefix = '$prefix'");
             $next=$series+1;
-            $atf_no = $atf_format."-".$next;
+            $atf_no = $location1."-".$atf_format."-".$next;
         }
 
         $atfdetails=explode("-", $atf_no);
-        $atf_prefix=$atfdetails[0];
-        $series = $atfdetails[1];
+        $atf_prefix1=$atfdetails[0];
+        $atf_prefix2=$atfdetails[1];
+        $atf_prefix=$atf_prefix1."-".$atf_prefix2;
+        $series = $atfdetails[2];
 
         $atf_data= array(
             'atf_prefix'=>$atf_prefix,
@@ -747,11 +769,11 @@ class Borrow extends CI_Controller {
         //secho $prefix;
         $rows=$this->super_model->count_custom_where("return_head","ars_no = '$prefix'");
         if($rows==0){
-            $ars_no= $date_format."-1001";
+            $ars_no= $location1."-".$date_format."-1001";
         } else {
             $series = $this->super_model->get_max("returned_series", "series","prefix = '$prefix'");
             $next=$series+1;
-            $ars_no = $date_format."-".$next;
+            $ars_no = $location1."-".$date_format."-".$next;
         }
 
         $returnhead_data = array(
@@ -770,7 +792,8 @@ class Borrow extends CI_Controller {
             $assetdetails=explode("-", $ars);
             $subcat_prefix1=$assetdetails[0];
             $subcat_prefix2=$assetdetails[1];
-            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
+            $subcat_prefix3=$assetdetails[2];
+            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
             $series = $assetdetails[2];
             $ars_data= array(
                 'prefix'=>$subcat_prefix,
