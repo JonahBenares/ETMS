@@ -245,7 +245,7 @@
                             </button>
                         </form> -->
                         <div class="header-button">
-                            <div class="noti-wrap">
+                           <!--  <div class="noti-wrap">
                                 <div class="noti__item js-item-menu">
                                     <i class="zmdi zmdi-comment-more"></i>
                                     <span class="quantity">1</span>
@@ -356,7 +356,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="account-wrap">
                                 <div class="account-item clearfix js-item-menu">
                                     <div class="image">
@@ -376,10 +376,10 @@
                                                 <h5 class="name">
                                                     <a href="#"><?php echo $fullname;?></a>
                                                 </h5>
-                                                <span class="email">johndoe@example.com</span>
+                                               <!--  <span class="email">johndoe@example.com</span> -->
                                             </div>
                                         </div>
-                                        <div class="account-dropdown__body">
+                                        <!-- <div class="account-dropdown__body">
                                             <div class="account-dropdown__item">
                                                 <a href="#">
                                                     <i class="zmdi zmdi-account"></i>Account</a>
@@ -392,7 +392,7 @@
                                                 <a href="#">
                                                     <i class="zmdi zmdi-money-box"></i>Billing</a>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="account-dropdown__footer">
                                             <a href="<?php echo base_url(); ?>index.php/masterfile/user_logout">
                                                 <i class="zmdi zmdi-power"></i>Logout</a>

@@ -126,7 +126,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="copyright">
-                        <p>Copyright © <script>document.write(new Date().getFullYear())</script> Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                       
                         <p>EQUIPMENT AND TOOLS MANAGEMENT SYSTEM</p>
                     </div>
                 </div>
