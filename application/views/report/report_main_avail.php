@@ -52,7 +52,7 @@
                                         <td><?php echo $a['category']; ?></td>
                                         <td><?php echo $a['subcat']; ?></td>
                                         <td>
-                                            <a href="<?php echo base_url(); ?>index.php/report/view_more/<?php echo $a['et_id']; ?>" class="btn btn-link pull-left" target="_blank" data-toggle="tooltip" data-placement="left" title="View">
+                                            <a href="<?php echo base_url(); ?>index.php/report/view_more/<?php echo $a['et_id']; ?>" class="btn btn-link pull-left" data-toggle="tooltip" data-placement="left" title="View">
                                             <?php echo $a['et_desc']; ?>
                                              </a>
                                             
