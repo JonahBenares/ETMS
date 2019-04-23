@@ -113,11 +113,31 @@
                                                 </div>
                                                 <div class="row"> 
                                                     <div class="col-6">
+                                                        <label for="" class="control-label mb-1">Placement:</label>
+                                                        <select name="placement[]" class="form-control bor-radius5 cc-cvc">
+                                                            <option value = "">--Select Placement--</option>
+                                                            <?php foreach($placement AS $p){ ?>
+                                                            <option value = "<?php echo $p->placement_id; ?>"><?php echo $p->placement_name;?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>                                                
+                                                    <div class="col-6">
+                                                        <label for="" class="control-label mb-1">Rack:</label>
+                                                        <select name="rack[]" class="form-control bor-radius5 cc-cvc">
+                                                            <option value = "">--Select Rack--</option>
+                                                            <?php foreach($rack AS $r){ ?>
+                                                            <option value = "<?php echo $r->rack_id; ?>"><?php echo $r->rack_name;?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row"> 
+                                                    <div class="col-6">
                                                         <label for="" class="control-label mb-1">Physical Condition:</label>
                                                         <select name="condition[]" class="form-control bor-radius5 cc-cvc">
                                                             <option value = "">--Select Physical Condition--</option>
-                                                            <?php foreach($condition AS $c){ ?>
-                                                            <option value = "<?php echo $c->physical_id; ?>"><?php echo $c->condition_name;?></option>
+                                                            <?php foreach($condition AS $co){ ?>
+                                                            <option value = "<?php echo $co->physical_id; ?>"><?php echo $co->condition_name;?></option>
                                                             <?php } ?>
                                                         </select>
                                                     </div>                                                

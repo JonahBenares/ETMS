@@ -130,7 +130,7 @@
                                                         <label for="" class="control-label mb-1">Currency:</label>
                                                         <div class="input-group">
                                                             <!-- <input id="" name="cur[]" value = "<?php echo $d['currency'];?>" class="form-control bor-radius5 cc-cvc" type="text"> -->
-                                                            <?php if(!empty($d['currency'])){ ?>
+                                                            <?php if($d['currency']!=0){ ?>
                                                             <select name="cur[]" style = "pointer-events: none" class="form-control bor-radius5 cc-cvc">
                                                                 <option value = "">--Select Currency--</option>
                                                                 <?php foreach($currency AS $c){ ?>
@@ -150,9 +150,51 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-6">
-                                                        <label for="" class="control-label mb-1">Currency:</label>
+                                                        <label for="" class="control-label mb-1">Placement:</label>
                                                         <div class="input-group">
-                                                            <?php if(!empty($d['physical'])){ ?>
+                                                            <?php if($d['placement']!=0){ ?>
+                                                            <select name="placement[]" style = "pointer-events: none" class="form-control bor-radius5 cc-cvc">
+                                                                <option value = "">--Select Placement--</option>
+                                                                <?php foreach($placement AS $ca){ ?>
+                                                                <option value = "<?php echo $ca->placement_id; ?>" <?php echo (($d['placement'] == $ca->placement_id) ? ' selected' : '');?>><?php echo $ca->placement_name;?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                            <?php } else { ?>
+                                                            <select name="placement[]" class="form-control bor-radius5 cc-cvc">
+                                                                <option value = "">--Select Placement--</option>
+                                                                <?php foreach($placement AS $ca){ ?>
+                                                                <option value = "<?php echo $ca->placement_id; ?>"><?php echo $ca->placement_name;?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                            <?php } ?>
+                                                        </div>
+                                                    </div>                                                 
+                                                    <div class="col-6">
+                                                        <label for="" class="control-label mb-1">Rack:</label>
+                                                        <div class="input-group">
+                                                            <?php if($d['rack']!=0){ ?>
+                                                            <select name="rack[]" style = "pointer-events: none" class="form-control bor-radius5 cc-cvc">
+                                                                <option value = "">--Select Rack--</option>
+                                                                <?php foreach($rack AS $c){ ?>
+                                                                <option value = "<?php echo $c->rack_id; ?>" <?php echo (($d['rack'] == $c->rack_id) ? ' selected' : '');?>><?php echo $c->rack_name;?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                            <?php } else { ?>
+                                                            <select name="rack[]" class="form-control bor-radius5 cc-cvc">
+                                                                <option value = "">--Select Rack--</option>
+                                                                <?php foreach($rack AS $c){ ?>
+                                                                <option value = "<?php echo $c->rack_id; ?>"><?php echo $c->rack_name;?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                            <?php } ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label for="" class="control-label mb-1">Physical Condition:</label>
+                                                        <div class="input-group">
+                                                            <?php if($d['physical']!=0){ ?>
                                                             <select name="condition[]" style = "pointer-events: none" class="form-control bor-radius5 cc-cvc">
                                                                 <option value = "">--Select Physical Condition--</option>
                                                                 <?php foreach($condition AS $c){ ?>

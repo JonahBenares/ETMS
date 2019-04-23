@@ -45,6 +45,8 @@ class Encode extends CI_Controller {
         $data['qty'] = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
         $data['currency'] = $this->super_model->select_all_order_by('currency', 'currency_name', 'ASC');
         $data['condition'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
+        $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
+        $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $x=1;
         foreach($this->super_model->select_row_where("et_head","et_id",$id) AS $nxt){
             $category = $this->super_model->select_column_where("category", "category_name", "category_id", $nxt->category_id);
@@ -287,6 +289,8 @@ class Encode extends CI_Controller {
                 'remarks'=>$this->input->post('remarks['.$x.']'),
                 'currency_id'=>$this->input->post('cur['.$x.']'),
                 'physical_id'=>$this->input->post('condition['.$x.']'),
+                'placement_id'=>$this->input->post('placement['.$x.']'),
+                'rack_id'=>$this->input->post('rack['.$x.']'),
                 'picture1'=>$filename1,
                 'picture2'=>$filename2,
                 'picture3'=>$filename3
