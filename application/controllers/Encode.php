@@ -44,6 +44,9 @@ class Encode extends CI_Controller {
         $id=$this->uri->segment(3);   
         $data['qty'] = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
         $data['currency'] = $this->super_model->select_all_order_by('currency', 'currency_name', 'ASC');
+        $data['condition'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
+        $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
+        $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $x=1;
         foreach($this->super_model->select_row_where("et_head","et_id",$id) AS $nxt){
             $category = $this->super_model->select_column_where("category", "category_name", "category_id", $nxt->category_id);
@@ -54,13 +57,14 @@ class Encode extends CI_Controller {
             $subcat_prefix= $this->super_model->select_column_where('subcategory', 'subcat_prefix', 'subcat_id', $nxt->subcat_id);
             $location= $this->super_model->select_column_where('subcategory', 'location', 'subcat_id', $nxt->subcat_id);
             $rows=$this->super_model->count_custom_where("asset_series","subcat_prefix = '$subcat_prefix'");
-            if(empty($rows)){
+            if($rows==0){
                 $next = '1001';
                 $asset_no= $subcat_prefix."-".$location."-".$next;
             } else {
                 $series = $this->super_model->get_max_where("asset_series", "series","subcat_prefix = '$subcat_prefix'");
                 $next=$series+1;
                 $asset_no = $subcat_prefix."-".$location."-".$next;
+
             }
 
             $data['prefix'] = $subcat_prefix;
@@ -164,6 +168,7 @@ class Encode extends CI_Controller {
                 $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
                 $price = $this->super_model->select_column_where("et_details", "unit_price", "ed_id", $det->ed_id);
                 $brand = $this->super_model->select_column_where("et_details", "brand", "ed_id", $det->ed_id);
+                $type = $this->super_model->select_column_where("et_details", "type", "ed_id", $det->ed_id);
                 $model = $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id);
                 $serial = $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
@@ -184,6 +189,7 @@ class Encode extends CI_Controller {
                     'currency'=>$currency,
                     'qty'=>$qty,
                     'item'=>$item,
+                    'type'=>$type,
                     'brand'=>$brand,
                     'serial'=>$serial,
                     'model'=>$model,
@@ -282,6 +288,9 @@ class Encode extends CI_Controller {
                 'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
                 'remarks'=>$this->input->post('remarks['.$x.']'),
                 'currency_id'=>$this->input->post('cur['.$x.']'),
+                'physical_id'=>$this->input->post('condition['.$x.']'),
+                'placement_id'=>$this->input->post('placement['.$x.']'),
+                'rack_id'=>$this->input->post('rack['.$x.']'),
                 'picture1'=>$filename1,
                 'picture2'=>$filename2,
                 'picture3'=>$filename3
@@ -291,11 +300,12 @@ class Encode extends CI_Controller {
                 $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
                 $subcat_prefix1=$assetdetails[0];
                 $subcat_prefix2=$assetdetails[1];
-                $subcat_prefix3=$assetdetails[2];
-                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
+                $location=$assetdetails[2];
+                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
                 $series = $assetdetails[3];
                 $asset_data= array(
                     'subcat_prefix'=>$subcat_prefix,
+                    'location'=>$location,
                     'series'=>$series
                 );
                 $this->super_model->insert_into("asset_series", $asset_data);

@@ -637,6 +637,186 @@ class Masterfile extends CI_Controller {
         }
     }
 
+    public function physical_list(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $data['physical'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
+        $this->load->view('masterfile/physical_list',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function insert_physical(){
+        $condition = trim($this->input->post('condition')," ");
+        $row = $this->super_model->count_rows_where("physical_condition","condition_name",$condition);
+        if($row!=0){
+            echo "<script>alert('$condition is already encoded!'); 
+                    window.location ='".base_url()."index.php/masterfile/physical_list'; </script>";
+        }else {
+            $data = array(
+                'condition_name'=>$condition
+            );
+            if($this->super_model->insert_into("physical_condition", $data)){
+               echo "<script>alert('Successfully Added!'); 
+                    window.location ='".base_url()."index.php/masterfile/physical_list'; </script>";
+            }
+        }
+    }
+
+    public function physical_update(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        $data['physical'] = $this->super_model->select_row_where('physical_condition', 'physical_id', $id);
+        $this->load->view('masterfile/physical_update',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function update_physical(){
+        $data = array(
+            'condition_name'=>$this->input->post('condition')
+        );
+        $physical_id = $this->input->post('physical_id');
+            if($this->super_model->update_where('physical_condition', $data, 'physical_id', $physical_id)){
+            echo "<script>alert('Successfully Updated!'); 
+                window.location ='".base_url()."index.php/masterfile/physical_list'; </script>";
+        }
+    }
+
+    public function delete_physical(){
+        $id=$this->uri->segment(3);
+        $row = $this->super_model->count_rows_where("et_details","physical_id",$id);
+        if($row!=0){
+            echo "<script>alert('You cannot delete this record!'); 
+                    window.location ='".base_url()."index.php/masterfile/physical_list'; </script>";
+        }else{
+            if($this->super_model->delete_where('physical_condition', 'physical_id', $id)){
+                echo "<script>alert('Succesfully Deleted'); 
+                    window.location ='".base_url()."index.php/masterfile/physical_list'; </script>";
+            }
+        }
+    }
+
+    public function rack_list(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
+        $this->load->view('masterfile/rack_list',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function insert_rack(){
+        $rack = trim($this->input->post('rack')," ");
+        $row = $this->super_model->count_rows_where("rack","rack_name",$rack);
+        if($row!=0){
+            echo "<script>alert('$rack is already encoded!'); 
+                    window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+        }else {
+            $data = array(
+                'rack_name'=>$rack
+            );
+            if($this->super_model->insert_into("rack", $data)){
+               echo "<script>alert('Successfully Added!'); 
+                    window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+            }
+        }
+    }
+
+    public function rack_update(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        $data['rack'] = $this->super_model->select_row_where('rack', 'rack_id', $id);
+        $this->load->view('masterfile/rack_update',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function update_rack(){
+        $data = array(
+            'rack_name'=>$this->input->post('rack')
+        );
+        $rack_id = $this->input->post('rack_id');
+            if($this->super_model->update_where('rack', $data, 'rack_id', $rack_id)){
+            echo "<script>alert('Successfully Updated!'); 
+                window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+        }
+    }
+
+    public function delete_rack(){
+        $id=$this->uri->segment(3);
+        $row = $this->super_model->count_rows_where("et_details","rack_id",$id);
+        if($row!=0){
+            echo "<script>alert('You cannot delete this record!'); 
+                    window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+        }else{
+            if($this->super_model->delete_where('rack', 'rack_id', $id)){
+                echo "<script>alert('Succesfully Deleted'); 
+                    window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+            }
+        }
+    }
+
+    public function placement_list(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
+        $this->load->view('masterfile/placement_list',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function insert_placement(){
+        $placement = trim($this->input->post('placement')," ");
+        $row = $this->super_model->count_rows_where("placement","placement_name",$placement);
+        if($row!=0){
+            echo "<script>alert('$placement is already encoded!'); 
+                    window.location ='".base_url()."index.php/masterfile/placement_list'; </script>";
+        }else {
+            $data = array(
+                'placement_name'=>$placement
+            );
+            if($this->super_model->insert_into("placement", $data)){
+               echo "<script>alert('Successfully Added!'); 
+                    window.location ='".base_url()."index.php/masterfile/placement_list'; </script>";
+            }
+        }
+    }
+
+    public function placement_update(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        $data['placement'] = $this->super_model->select_row_where('placement', 'placement_id', $id);
+        $this->load->view('masterfile/placement_update',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function update_placement(){
+        $data = array(
+            'placement_name'=>$this->input->post('placement')
+        );
+        $placement_id = $this->input->post('placement_id');
+            if($this->super_model->update_where('placement', $data, 'placement_id', $placement_id)){
+            echo "<script>alert('Successfully Updated!'); 
+                window.location ='".base_url()."index.php/masterfile/placement_list'; </script>";
+        }
+    }
+
+    public function delete_placement(){
+        $id=$this->uri->segment(3);
+        $row = $this->super_model->count_rows_where("et_details","placement_id",$id);
+        if($row!=0){
+            echo "<script>alert('You cannot delete this record!'); 
+                    window.location ='".base_url()."index.php/masterfile/placement_list'; </script>";
+        }else{
+            if($this->super_model->delete_where('placement', 'placement_id', $id)){
+                echo "<script>alert('Succesfully Deleted'); 
+                    window.location ='".base_url()."index.php/masterfile/placement_list'; </script>";
+            }
+        }
+    }
+
     public function uom_list(){  
         $this->load->view('template/header');
         $this->load->view('template/sidebar');

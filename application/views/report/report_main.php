@@ -15,9 +15,9 @@
                                         <span class="fa fa-filter"></span> Filter
                                     </button>
                                     <?php if(!empty($filt)){ ?>
-                                    <a href = "<?php echo base_url(); ?>index.php/report/export_equipment/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo $item;?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>" class="btn btn-sm btn-info"><span class="fa fa-report"></span>Export to Excel</a>
+                                    <a href = "<?php echo base_url(); ?>index.php/report/export_equipment/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo $item;?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $rack;?>" class="btn btn-sm btn-info"><span class="fa fa-report"></span>Export to Excel</a>
 
-                                    <a href = "<?php echo base_url(); ?>index.php/report/report_print/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo $item;?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>" class="btn btn-sm btn-info"><span class="fa fa-print"></span> Print</a>
+                                    <a href = "<?php echo base_url(); ?>index.php/report/report_print/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo $item;?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $rack;?>" class="btn btn-sm btn-info"><span class="fa fa-print"></span> Print</a>
                                     <?php }else { ?>
                                     <a href = "<?php echo base_url(); ?>index.php/report/export_equipment" class="btn btn-sm btn-info"><span class="fa fa-report"></span>Export to Excel</a>
                                     
@@ -74,10 +74,31 @@
                                                                 <td><p>Item Description:</p>
                                                                     <input type="text" id="item" name="item" class="form-control bor-radius10">
                                                                 </td>
-                                                            </tr>                                                            
-                                                            <tr>
-                                                                <td><p>Damage</p><input type="checkbox" name="damage" id="damage" value='1'></td>
                                                             </tr>
+                                                            <tr>
+                                                                <td><p>Physical Condition :</p>
+                                                                    <select name="condition" class="form-control bor-radius5">
+                                                                        <option value=''>-- Select Physical Condition --</option>
+                                                                       <?php 
+                                                                            foreach ($condition AS $con) {
+                                                                        ?>
+                                                                        <option value="<?php echo $con->physical_id; ?>"><?php echo $con->condition_name;?></option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                            </tr> 
+                                                            <tr>
+                                                                <td><p>Placement :</p>
+                                                                    <select name="placement" class="form-control bor-radius5">
+                                                                        <option value=''>-- Select Placement --</option>
+                                                                       <?php 
+                                                                            foreach ($placement AS $p) {
+                                                                        ?>
+                                                                        <option value="<?php echo $p->placement_id; ?>"><?php echo $p->placement_name;?></option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                            </tr>                                                           
                                                         </table>
                                                     </div>
                                                     <div class="col-lg-6">
@@ -106,6 +127,21 @@
                                                                 <td><p>Serial No. :</p>
                                                                     <input type="text" id="serial_no" name="serial_no" class="form-control bor-radius10">
                                                                 </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><p>Rack :</p>
+                                                                    <select name="rack" class="form-control bor-radius5">
+                                                                        <option value=''>-- Select Rack --</option>
+                                                                       <?php 
+                                                                            foreach ($rack AS $r) {
+                                                                        ?>
+                                                                        <option value="<?php echo $r->rack_id; ?>"><?php echo $r->rack_name;?></option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                            </tr> 
+                                                            <tr>
+                                                                <td><p>Damage</p><input type="checkbox" name="damage" id="damage" value='1'></td>
                                                             </tr>
                                                         </table>
                                                     </div>

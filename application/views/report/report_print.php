@@ -101,6 +101,9 @@
                     <td class="thead">Accountability</td>
                     <td class="thead">Status</td>
                     <td class="thead">Department</td>
+                    <td class="thead">Placement</td>
+                    <td class="thead">Rack</td>
+                    <td class="thead" align="center">Physical Condition</td>
                     <td class="thead" align="center">Total Cost</td>
                     <td class="thead">Remarks</td>
                 </tr>
@@ -131,6 +134,9 @@
                         <td><?php echo $r['accountability'];?></td>
                         <td><?php echo $status;?></td>
                         <td><?php echo $r['department'];?></td>
+                        <td><?php echo $r['placement'];?></td>
+                        <td><?php echo $r['rack'];?></td>
+                        <td align="center"><?php echo $r['condition'];?></td>
                         <td align="center"><?php echo $r['total'];?></td>
                         <td><?php echo $r['remarks'];?></td>
                     </tr>

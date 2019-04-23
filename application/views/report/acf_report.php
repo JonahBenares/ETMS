@@ -82,7 +82,11 @@
                 <tr>                
                     <td class="main-tab" width="10%" align="center"><strong>AAF #</strong></td>
                     <td class="main-tab" width="20%" align="center"><strong>Date Issued</strong></td>
-                    <td class="main-tab" width="40%" align="center"><strong>Item</strong></td>                    
+                    <td class="main-tab" width="10%" align="center"><strong>Item</strong></td>                    
+                    <td class="main-tab" width="10%" align="center"><strong>Brand</strong></td>                    
+                    <td class="main-tab" width="10%" align="center"><strong>Type</strong></td>                    
+                    <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>                    
+                    <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                    
                     <td class="main-tab" width="7%" align="center"><strong>Qty</strong></td>
                     <td class="main-tab" width="7%" align="center"><strong>U/M</strong></td>
                     <td class="main-tab" width="7%" align="center"><strong>Date Return</strong></td>
@@ -99,7 +103,11 @@
                     <tr>
                         <td class="main-tab" align="center"><?php echo $det['asset_control_no'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['date_issued'];?></td>
-                        <td class="main-tab" align="center"><?php echo $det['item']." - ".$det['brand']." - ".$det['serial']." - ".$det['model'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['item'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['brand'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['type'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['model'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['serial'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
                         <td class="main-tab" align="center"><?php echo $return_date;?></td>
@@ -112,12 +120,12 @@
                         else { 
                     ?>
                     <tr>
-                        <td class="main-tab" align="center" colspan='9'><center>No Data Available.</center></td>
+                        <td class="main-tab" align="center" colspan='11'><center>No Data Available.</center></td>
                     </tr>
                     <?php } ?>
                 </tr>
                 <tr>
-                    <td class="main-tab" colspan="9"><center>***nothing follows***</center></td>
+                    <td class="main-tab" colspan="11"><center>***nothing follows***</center></td>
                 </tr>   
             </table>
             <br>

@@ -140,7 +140,11 @@
                         <td id="dngr" class="main-tab" width="1%" align="center"><strong>Damage</strong></td>
                         <td class="main-tab" width="5%" align="center"><strong>Returned Qty</strong></td>
                         <td class="main-tab" width="5%" align="center"><strong>Borrowed Qty</strong></td>
-                        <td class="main-tab" width="45%" align="center"><strong>Item Description</strong></td>                    
+                        <td class="main-tab" width="15%" align="center"><strong>Item</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Brand</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Type</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                    
                         <td class="main-tab" width="20%" align="center"><strong>Uom</strong></td>
                     </tr>
 
@@ -158,8 +162,11 @@
                             <td class="main-tab" align="center">
                                 <input type="text " class="form-control" value = "<?php echo $r['borrowed_qty'];?>">
                             </td>
-                           <!-- <input type = "hidden" name = "ed_id<?php echo $x;?>" value = "<?php echo $r['ed_id'];?>"> -->
-                            <td class="main-tab" align="center"><input type = "hidden" name = "et_id<?php echo $x;?>" value = "<?php echo $r['et_id'];?>"><input type = "hidden" name = "ed_id<?php echo $x;?>" value = "<?php echo $r['ed_id'];?>"><?php echo $r['item']." - ".$r['serial'];?></td>
+                            <td class="main-tab" align="center"><input type = "hidden" name = "et_id<?php echo $x;?>" value = "<?php echo $r['et_id'];?>"><input type = "hidden" name = "ed_id<?php echo $x;?>" value = "<?php echo $r['ed_id'];?>"><?php echo $r['item'];?></td>
+                            <td class="main-tab" align="center"><?php echo $r['brand']?></td>
+                            <td class="main-tab" align="center"><?php echo $r['type']?></td>
+                            <td class="main-tab" align="center"><?php echo $r['model']?></td>
+                            <td class="main-tab" align="center"><?php echo $r['serial']?></td>
                             <td class="main-tab" align="center"><?php echo $r['unit']?></td>
                         </tr>
                         <input type="hidden" id="b_id" name="b_id" value = "<?php echo $r['bh_id'];?>">
@@ -168,11 +175,11 @@
                         <?php }else { ?>
                         <tr>
                             <td id="dngr"></td>
-                            <td class="main-tab" align="center" colspan='4'><center>No Data Available.</center></td>
+                            <td class="main-tab" align="center" colspan='9'><center>No Data Available.</center></td>
                         </tr>
                         <?php } ?>
                         <tr>
-                            <td class="main-tab" colspan="5"><center>***nothing follows***</center></td>
+                            <td class="main-tab" colspan="9"><center>***nothing follows***</center></td>
                         </tr>  
                     </tbody> 
                 </table>

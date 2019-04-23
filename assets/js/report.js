@@ -206,12 +206,13 @@ function selectAssign(emp_id,emp,dept,position,aaf_no, children,type) {
     $("#suggestion-assign").hide();
 }
 
-function selectItem(id,setid,edid,val,acn,date,serial,brand,model,qty,unit,price,total) {
+function selectItem(id,setid,edid,val,acn,date,type,serial,brand,model,qty,unit,price,total) {
     $("#item_id").val(id);
     $("#ed_id").val(edid);
     $("#set_id").val(setid);
-    $("#item").val(val+' - '+brand+' - '+serial+' - '+model);
-    /*$("#item").val(val);*/
+    $("#type").val(type);
+    //$("#item").val(val+' - '+brand+' - '+serial+' - '+model);
+    $("#item").val(val);
     $("#acn").val(acn);
     $("#acq_date").val(date);
     $("#serial").val(serial);
@@ -234,6 +235,7 @@ function add_item(){
     var loc= document.getElementById("baseurl").value;
     var redirect=loc+'/index.php/report/getitem';
     var item =$('#item').val();
+    var type =$('#type').val();
     var itemid =$('#item_id').val();
     var edid =$('#ed_id').val();
     var setid =$('#set_id').val();
@@ -258,7 +260,7 @@ function add_item(){
         $.ajax({
             type: "POST",
             url:redirect,
-            data: "itemid="+itemid+"&setid="+setid+"&edid="+edid+"&item="+item+"&count="+count+"&acn="+acn+"&acq_date="+acq_date+"&serial="+serial+"&model="+model+"&brand="+brand+"&qty="+qty+"&unit="+unit+"&price="+price+"&total="+total,
+            data: "itemid="+itemid+"&setid="+setid+"&edid="+edid+"&item="+item+"&count="+count+"&acn="+acn+"&acq_date="+acq_date+"&type="+type+"&serial="+serial+"&model="+model+"&brand="+brand+"&qty="+qty+"&unit="+unit+"&price="+price+"&total="+total,
             success: function(html){
                 //alert(html);
                 $('#item_body').append(html);
