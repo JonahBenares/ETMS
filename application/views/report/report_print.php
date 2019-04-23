@@ -102,6 +102,7 @@
                     <td class="thead">Status</td>
                     <td class="thead">Department</td>
                     <td class="thead" align="center">Total Cost</td>
+                    <td class="thead" align="center">Physical Condition</td>
                     <td class="thead">Remarks</td>
                 </tr>
                 <tbody>
@@ -132,6 +133,7 @@
                         <td><?php echo $status;?></td>
                         <td><?php echo $r['department'];?></td>
                         <td align="center"><?php echo $r['total'];?></td>
+                        <td align="center"><?php echo $r['condition'];?></td>
                         <td><?php echo $r['remarks'];?></td>
                     </tr>
                     <?php } ?>

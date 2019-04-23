@@ -125,7 +125,11 @@
                     <tr>                
                         <td class="main-tab" width="20%" align="center"><strong>Asset #</strong></td>
                         <td class="main-tab" width="10%" align="center"><strong>Acquisition Date</strong></td>
-                        <td class="main-tab" width="40%" align="center"><strong>Description</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Item</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Brand</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Type</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                    
                         <td class="main-tab" width="7%" align="center"><strong>Qty</strong></td>
                         <td class="main-tab" width="7%" align="center"><strong>U/M</strong></td>
                         <td class="main-tab" width="7%" align="center"><strong>Cost</strong></td>
@@ -142,7 +146,11 @@
                         <tr>
                             <td class="main-tab" align="center"><?php echo $det['acn_no'];?></td>
                             <td class="main-tab" align="center"><?php echo $det['date'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['item']." - ".$det['brand']." - ".$det['serial']." - ".$det['model'];?></td>
+                            <td class="main-tab" align="center"><?php echo $det['item'];?></td>
+                            <td class="main-tab" align="center"><?php echo $det['brand'];?></td>
+                            <td class="main-tab" align="center"><?php echo $det['type'];?></td>
+                            <td class="main-tab" align="center"><?php echo $det['model'];?></td>
+                            <td class="main-tab" align="center"><?php echo $det['serial'];?></td>
                             <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                             <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
                             <td class="main-tab" align="center"><?php echo $det['price']." <small>".$det['currency']."</small>";?></td>
@@ -155,12 +163,12 @@
                             } else { 
                         ?>
                         <tr>
-                            <td class="main-tab" align="center" colspan='9'><center>No Data Available.</center></td>
+                            <td class="main-tab" align="center" colspan='11'><center>No Data Available.</center></td>
                         </tr>
                         <?php } ?>
                     </tr>
                     <tr>
-                        <td class="main-tab" colspan="9"><center>***nothing follows***</center></td>
+                        <td class="main-tab" colspan="11"><center>***nothing follows***</center></td>
                     </tr>  
                 </table>
                 <br>
@@ -201,13 +209,18 @@
                         </td> 
                         <td></td>
                         <td style="border-bottom:1px solid #000">
+                            <?php if($type == 2){ ?>
+                                <?php foreach($child as $c){ echo  $c['emp'].", <br>"; }?>
+                            <?php } else { ?>
+                                <textarea class="select" type="" name="" value="" ><?php echo  $name;?></textarea>
+                            <?php } ?>
                             <!-- <select class="select">
                                 <option></option>
                                 <?php foreach($employee AS $emp){ ?>
                                     <option value = "$emp->employee_id"><?php echo $emp->employee_name;?></option>
                                 <?php } ?>
                             </select> -->
-                            <input class="select" id = "receive_by" type="text" name="" value = "<?php echo $name;?>">
+                            <!-- <input class="select" id = "receive_by" type="text" name="" value = "<?php echo $name;?>"> -->
                         </td>
                         <td></td>
                     </tr>

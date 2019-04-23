@@ -91,7 +91,11 @@
                 <tr>                
                     <td class="main-tab" width="7%" align="center"><strong>Qty</strong></td>
                     <td class="main-tab" width="7%" align="center"><strong>U/M</strong></td>
-                    <td class="main-tab" width="40%" align="center"><strong>Description</strong></td>                    
+                    <td class="main-tab" width="10%" align="center"><strong>Item</strong></td>                    
+                    <td class="main-tab" width="10%" align="center"><strong>Brand</strong></td>                    
+                    <td class="main-tab" width="10%" align="center"><strong>Type</strong></td>                    
+                    <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>                    
+                    <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                    
                     <td class="main-tab" width="7%" align="center"><strong>Unit Cost</strong></td>
                     <td class="main-tab" width="8%" align="center"><strong>Total</strong></td>
                 </tr>
@@ -105,7 +109,11 @@
                     <tr>
                         <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
-                        <td class="main-tab" align="center"><?php echo $det['item']." - ".$det['brand']." - ".$det['serial']." - ".$det['model'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['item'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['brand'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['type'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['model'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['serial'];?></td>
                         <td class="main-tab" align="center"><?php if($det['set_id']==0){ echo $det['price']."<small> ".$det['currency']."</small>"; }?></td>
                         <td class="main-tab" align="center"><?php if($det['set_id']==0){ echo number_format($det['total'],2)."<small> ".$det['currency']."</small>"; }?></td>
                     </tr>
@@ -148,7 +156,7 @@
                     <td></td>
                     <td style="border-bottom:1px solid #000">
                         <?php if($type == 2){ ?>
-                            <textarea class="select" type="" name="" value="" ><?php foreach($child as $c){ echo  $c['emp'].', '; }?></textarea>
+                            <?php foreach($child as $c){ echo  $c['emp'].", <br>"; }?>
                         <?php } else { ?>
                             <textarea class="select" type="" name="" value="" ><?php echo  $name;?></textarea>
                         <?php } ?>

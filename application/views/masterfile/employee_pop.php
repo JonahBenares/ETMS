@@ -15,7 +15,7 @@
                                             <td width="20%"><label for="" class="control-label mb-1">Employee Name</label></td>
                                             <td width="5%">:</td>
                                             <td>
-                                                <input id="employee" name="employee" type="text" class="form-control bor-radius5" placeholder="" autocomplete="off">
+                                                <input id="employee" name="employee" type="text" class="form-control bor-radius5" placeholder="" autocomplete="off" required>
                                                 <span id="suggestion-employee"></span>
                                                 <input type="hidden" name="employee_id" id="employee_id">
                                             </td>

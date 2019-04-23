@@ -348,12 +348,13 @@ class Report extends CI_Controller {
     	$this->load->view('template/header');
     	$this->load->view('template/sidebar');
         $row=$this->super_model->count_custom_where("et_head", "accountability_id!=0");
-         $row_avail = $this->row_avail();
+        $row_avail = $this->row_avail();
        
         $data['available_qty']= $this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         /*$data['available_qty']=$this->super_model->select_sum("et_head", "qty", "accountability_id", "0");*/
         $data['cat'] = $this->super_model->select_all_order_by('category', 'category_name', 'ASC');
+        $data['condition'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
 
         /*$from=$this->uri->segment(3);
         $data['from']=$this->uri->segment(3);
@@ -528,6 +529,7 @@ class Report extends CI_Controller {
         $type=str_replace("%20"," ",$this->uri->segment(11));
         $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
+        $condition=$this->uri->segment(14);
         $sql="";
         $filter = " ";
 
@@ -583,9 +585,16 @@ class Report extends CI_Controller {
             $sql.=" et_details.damage = '$damage' AND";
             $filter .= "Damage Items, ";
         }
+
+        if($condition!='null'){
+            $sql.=" et_details.physical_id = '$condition' AND";
+            $physical = $this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $condition);
+            $filter .= "Sub Category - ".$physical.", ";
+        }
+
         $array = array($from,$to);
         $query=substr($sql, 0, -3);
-        if($from!='' && $to!='' && $category!='' && $subcat!='' && $department!='' && $item!='' && $brand!='' && $model!='' && $type!='' && $serial!='' && $damage!=''){
+        if($from!='' && $to!='' && $category!='' && $subcat!='' && $department!='' && $item!='' && $brand!='' && $model!='' && $type!='' && $serial!='' && $damage!='' && $condition!=''){
             foreach ($this->super_model->select_join_where("et_head", "et_details", $query, "et_id") AS $et){
                 $data['user_id'] =$this->super_model->select_column_where("users", "fullname", "user_id", $et->user_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
@@ -600,6 +609,8 @@ class Report extends CI_Controller {
                 $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et->et_id);
                 $currency_id =$this->super_model->select_column_where("et_details", "currency_id", "et_id", $et->et_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
+                $physical_id =$this->super_model->select_column_where("et_details", "physical_id", "et_id", $et->et_id);
+                $condition = $this->super_model->select_column_where("physical_condition", "condition_name", "physical_id", $physical_id);
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
@@ -622,6 +633,7 @@ class Report extends CI_Controller {
                     'date_issued'=>$date_issued,
                     'unit_price'=>$unit_price,
                     'currency'=>$currency,
+                    'condition'=>$condition,
                     'brand'=>$brand,
                     'remarks'=>$remarks,
                     'total'=>$total,
@@ -647,6 +659,8 @@ class Report extends CI_Controller {
                 $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et->et_id);
                 $currency_id =$this->super_model->select_column_where("et_details", "currency_id", "et_id", $et->et_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
+                $physical_id =$this->super_model->select_column_where("et_details", "physical_id", "et_id", $et->et_id);
+                $condition = $this->super_model->select_column_where("physical_condition", "condition_name", "physical_id", $physical_id);
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
@@ -669,6 +683,7 @@ class Report extends CI_Controller {
                     'date_issued'=>$date_issued,
                     'unit_price'=>$unit_price,
                     'currency'=>$currency,
+                    'condition'=>$condition,
                     'brand'=>$brand,
                     'remarks'=>$remarks,
                     'total'=>$total,
@@ -693,6 +708,7 @@ class Report extends CI_Controller {
         $edid=$this->uri->segment(4); 
         $data['qty'] = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
         $data['currency'] = $this->super_model->select_all_order_by('currency', 'currency_name', 'ASC');
+        $data['condition'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
         $x=1;
         foreach($this->super_model->select_row_where("et_head","et_id",$id) AS $nxt){
             $category = $this->super_model->select_column_where("category", "category_name", "category_id", $nxt->category_id);
@@ -741,6 +757,7 @@ class Report extends CI_Controller {
                         'type'=>$det->type,
                         'price'=>$det->unit_price,
                         'currency'=>$det->currency_id,
+                        'physical'=>$det->physical_id,
                         'acquired_by'=>$det->acquired_by,
                         'remarks'=>$det->remarks,
                         'picture1'=>$det->picture1,
@@ -836,6 +853,7 @@ class Report extends CI_Controller {
                     'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
                     'remarks'=>$this->input->post('remarks['.$x.']'),
                     'currency_id'=>$this->input->post('cur['.$x.']'),
+                    'physical_id'=>$this->input->post('condition['.$x.']'),
                 );
 
                 if($this->super_model->update_where("et_details", $data, "ed_id", $edid)){
@@ -919,6 +937,7 @@ class Report extends CI_Controller {
                     'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
                     'remarks'=>$this->input->post('remarks['.$x.']'),
                     'currency_id'=>$this->input->post('cur['.$x.']'),
+                    'physical_id'=>$this->input->post('condition['.$x.']'),
                     'picture1'=>$filename1,
                     'picture2'=>$filename2,
                     'picture3'=>$filename3
@@ -1490,6 +1509,12 @@ class Report extends CI_Controller {
             $data['damage'] = "null";
         } 
 
+        if(!empty($this->input->post('condition'))){
+            $data['condition'] = $this->input->post('condition');
+        } else {
+            $data['condition'] = "null";
+        }
+
 
         $sql="";
         $filter = " ";
@@ -1558,6 +1583,13 @@ class Report extends CI_Controller {
             $damage = $this->input->post('damage');
             $sql.=" et_details.damage = '$damage' AND";
             $filter .= "Damage Items, ";
+        }
+
+        if(!empty($this->input->post('condition'))){
+            $condition = $this->input->post('condition');
+            $sql.=" et_details.physical_id = '$condition' AND";
+            $physical = $this->super_model->select_column_where("physical_condition", "condition_name", "physical_id", $condition);
+            $filter .= "Physical Condition - ".$physical.", ";
         }
 
         $query=substr($sql, 0, -3);
@@ -2859,6 +2891,7 @@ class Report extends CI_Controller {
                 $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
                 $price = $this->super_model->select_column_where("et_details", "unit_price", "ed_id", $det->ed_id);
                 $brand = $this->super_model->select_column_where("et_details", "brand", "ed_id", $det->ed_id);
+                $type = $this->super_model->select_column_where("et_details", "type", "ed_id", $det->ed_id);
                 $model = $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id);
                 $serial = $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id);
                 $set_id = $this->super_model->select_column_where("et_details", "set_id", "ed_id", $det->ed_id);
@@ -2877,6 +2910,7 @@ class Report extends CI_Controller {
                     'qty'=>$qty,
                     'item'=>$item,
                     'brand'=>$brand,
+                    'type'=>$type,
                     'serial'=>$serial,
                     'model'=>$model,
                     'price'=>$price,
@@ -3173,6 +3207,7 @@ class Report extends CI_Controller {
                 $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
                 $price = $this->super_model->select_column_where("et_details", "unit_price", "ed_id", $det->ed_id);
                 $brand = $this->super_model->select_column_where("et_details", "brand", "ed_id", $det->ed_id);
+                $type = $this->super_model->select_column_where("et_details", "type", "ed_id", $det->ed_id);
                 $model = $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id);
                 $serial = $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id);
                 $qty = '1';
@@ -3189,6 +3224,7 @@ class Report extends CI_Controller {
                     'asset_control_no'=>$asset_control_no,
                     'item'=>$item,
                     'brand'=>$brand,
+                    'type'=>$type,
                     'serial'=>$serial,
                     'model'=>$model,
                     'price'=>$price,
@@ -3603,7 +3639,8 @@ class Report extends CI_Controller {
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M2', "Office / Department");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N2', "Unit Cost");
         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O2', "Total Cost");
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P2', "Remarks");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P2', "Physical Condition");
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q2', "Remarks");
         $styleArray = array(
           'borders' => array(
             'allborders' => array(
@@ -3624,6 +3661,7 @@ class Report extends CI_Controller {
         $type=str_replace("%20"," ",$this->uri->segment(11));
         $serial=str_replace("%20"," ",$this->uri->segment(12));
         $damage=$this->uri->segment(13);
+        $condition=$this->uri->segment(14);
         $sql="";
         $filter = " ";
 
@@ -3679,11 +3717,18 @@ class Report extends CI_Controller {
             $sql.=" et_details.damage = '$damage' AND";
             $filter .= "Damage Items, ";
         }
+
+        if($condition!='null'){
+            $sql.=" et_details.physical_id = '$condition' AND";
+            $physical = $this->super_model->select_column_where("physical_condition", "condition_name", "physical_id", $condition);
+            $filter .= "Physical Condition - ".$physical.", ";
+        }
+
         $array = array($from,$to);
         $query=substr($sql, 0, -3);
 
         /*foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0') AS $et){*/
-        if($from!='' && $to!='' && $category!='' && $subcat!='' && $department!='' && $item!='' && $brand!='' && $model!='' && $type!='' && $serial!='' && $damage!=''){
+        if($from!='' && $to!='' && $category!='' && $subcat!='' && $department!='' && $item!='' && $brand!='' && $model!='' && $type!='' && $serial!='' && $damage!='' && $condition!=''){
             foreach ($this->super_model->select_join_where("et_head", "et_details", $query, "et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -3697,6 +3742,8 @@ class Report extends CI_Controller {
                 $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et->et_id);
                 $currency_id =$this->super_model->select_column_where("et_details", "currency_id", "et_id", $et->et_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
+                $physical_id =$this->super_model->select_column_where("et_details", "physical_id", "et_id", $et->et_id);
+                $condition = $this->super_model->select_column_where("physical_condition", "condition_name", "physical_id", $physical_id);
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
@@ -3731,7 +3778,8 @@ class Report extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.$num, $department);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N'.$num, $unit_price.' '.$currency);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O'.$num, $total.' '.$currency);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P'.$num, $remarks);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P'.$num, $condition);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q'.$num, $remarks);
                 /*$objPHPExcel->getActiveSheet()->mergeCells('A'.$num.":B".$num);
                 $objPHPExcel->getActiveSheet()->mergeCells('C'.$num.":D".$num);
                 $objPHPExcel->getActiveSheet()->mergeCells('E'.$num.":F".$num);
@@ -3743,11 +3791,11 @@ class Report extends CI_Controller {
                 $objPHPExcel->getActiveSheet()->mergeCells('U'.$num.":V".$num);
                 $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.":X".$num);
                 $objPHPExcel->getActiveSheet()->mergeCells('AA'.$num.":AD".$num);*/
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":P".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('Q'.$num.":R".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('Y'.$num.":Z".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":Q".$num)->applyFromArray($styleArray);
+                /*$objPHPExcel->getActiveSheet()->getStyle('Q'.$num.":R".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);*/
+                $objPHPExcel->getActiveSheet()->getStyle('N'.$num.":O".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
-                $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":P".$num,'admin');
+                $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":Q".$num,'admin');
                 $num++;
             }
         }else {
@@ -3765,6 +3813,8 @@ class Report extends CI_Controller {
                 /*$currency =$this->super_model->select_column_where("et_details", "currency", "et_id", $et->et_id);*/
                 $currency_id =$this->super_model->select_column_where("et_details", "currency_id", "et_id", $et->et_id);
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
+                $physical_id =$this->super_model->select_column_where("et_details", "physical_id", "et_id", $et->et_id);
+                $condition = $this->super_model->select_column_where("physical_condition", "condition_name", "physical_id", $physical_id);
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
@@ -3800,7 +3850,8 @@ class Report extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.$num, $department);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N'.$num, $unit_price.' '.$currency);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O'.$num, $total.' '.$currency);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P'.$num, $remarks);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P'.$num, $condition);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q'.$num, $remarks);
                 /*$objPHPExcel->getActiveSheet()->mergeCells('A'.$num.":B".$num);
                 $objPHPExcel->getActiveSheet()->mergeCells('C'.$num.":D".$num);
                 $objPHPExcel->getActiveSheet()->mergeCells('E'.$num.":F".$num);
@@ -3812,11 +3863,11 @@ class Report extends CI_Controller {
                 $objPHPExcel->getActiveSheet()->mergeCells('U'.$num.":V".$num);
                 $objPHPExcel->getActiveSheet()->mergeCells('W'.$num.":X".$num);
                 $objPHPExcel->getActiveSheet()->mergeCells('AA'.$num.":AD".$num);*/
-                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":P".$num)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle('Q'.$num.":R".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                $objPHPExcel->getActiveSheet()->getStyle('Y'.$num.":Z".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":Q".$num)->applyFromArray($styleArray);
+                /*$objPHPExcel->getActiveSheet()->getStyle('Q'.$num.":R".$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);*/
+                $objPHPExcel->getActiveSheet()->getStyle('N'.$num.":O".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
-                $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":P".$num,'admin');
+                $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":Q".$num,'admin');
                 $num++;
             }
         }
@@ -3832,9 +3883,9 @@ class Report extends CI_Controller {
         $objPHPExcel->getActiveSheet()->mergeCells('U2:V2');
         $objPHPExcel->getActiveSheet()->mergeCells('W2:X2');
         $objPHPExcel->getActiveSheet()->mergeCells('AA2:AD2');*/
-        $objPHPExcel->getActiveSheet()->getStyle('A2:P2')->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:P2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('A2:P2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:Q2')->applyFromArray($styleArray);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:Q2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('A2:Q2')->getFont()->setBold(true)->setName('Arial')->setSize(9.5);
         $objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true)->setName('Arial Black')->setSize(12);
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         if (file_exists($exportfilename))

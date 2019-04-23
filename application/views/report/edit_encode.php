@@ -148,8 +148,28 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">                                                 
-                                                    <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label for="" class="control-label mb-1">Currency:</label>
+                                                        <div class="input-group">
+                                                            <?php if(!empty($d['physical'])){ ?>
+                                                            <select name="condition[]" style = "pointer-events: none" class="form-control bor-radius5 cc-cvc">
+                                                                <option value = "">--Select Physical Condition--</option>
+                                                                <?php foreach($condition AS $c){ ?>
+                                                                <option value = "<?php echo $c->physical_id; ?>" <?php echo (($d['physical'] == $c->physical_id) ? ' selected' : '');?>><?php echo $c->condition_name;?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                            <?php } else { ?>
+                                                            <select name="condition[]" class="form-control bor-radius5 cc-cvc">
+                                                                <option value = "">--Select Physical Condition--</option>
+                                                                <?php foreach($condition AS $c){ ?>
+                                                                <option value = "<?php echo $c->physical_id; ?>"><?php echo $c->condition_name;?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                            <?php } ?>
+                                                        </div>
+                                                    </div>                                                 
+                                                    <div class="col-6">
                                                         <label for="" class="control-label mb-1">Acquired By:</label>
                                                         <?php if(!empty($d['acquired_by'])){ ?>
                                                         <input name="acquired_by[]" readonly="" value = "<?php echo $d['acquired_by'];?>" type="text" class="form-control bor-radius5 cc-exp">
