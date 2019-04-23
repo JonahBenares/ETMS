@@ -131,7 +131,7 @@ class Borrow extends CI_Controller {
                     $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $itm->unit_id);
                     $total = $det->unit_price*$qty;
             ?>
-                   <li onClick="selectItem('<?php echo $itm->et_id; ?>','<?php echo $det->ed_id; ?>','<?php echo $itm->et_desc; ?>','1','<?php echo $det->asset_control_no;?>','<?php echo $det->serial_no; ?>','<?php echo $det->brand; ?>','<?php echo $det->model; ?>','<?php echo $unit; ?>')"><?php echo $itm->et_desc." - ".$det->brand." - ".$det->serial_no." - ".$det->model; ?></li>
+                   <li onClick="selectItem('<?php echo $itm->et_id; ?>','<?php echo $det->ed_id; ?>','<?php echo $itm->et_desc; ?>','1','<?php echo $det->asset_control_no;?>','<?php echo $det->type; ?>','<?php echo $det->serial_no; ?>','<?php echo $det->brand; ?>','<?php echo $det->model; ?>','<?php echo $unit; ?>')"><?php echo $itm->et_desc." - ".$det->brand." - ".$det->type." - ".$det->serial_no." - ".$det->model; ?></li>
             <?php 
                 }
             }
@@ -145,6 +145,7 @@ class Borrow extends CI_Controller {
         }
         $acn=$this->input->post('acn');
         $serial=$this->input->post('serial');
+        $type=$this->input->post('type');
         $model=$this->input->post('model');
         $brand=$this->input->post('brand');
         /*$unit=$this->input->post('unit');*/
@@ -153,6 +154,7 @@ class Borrow extends CI_Controller {
             'et_id'=>$this->input->post('itemid'),
             'ed_id'=>$this->input->post('edid'),
             'brand'=>$brand,
+            'type'=>$type,
             'serial'=>$serial,
             'model'=>$model,
             'unit'=>$unit,
@@ -291,6 +293,7 @@ class Borrow extends CI_Controller {
                 foreach($this->super_model->custom_query("SELECT * FROM borrow_details WHERE bh_id = '$head->bh_id' AND returned = '0'") AS $det){
                     $item = $this->super_model->select_column_where('et_head', 'et_desc', 'et_id', $det->et_id);
                     $brand = $this->super_model->select_column_where('et_details', 'brand', 'ed_id', $det->ed_id); 
+                    $type = $this->super_model->select_column_where('et_details', 'type', 'ed_id', $det->ed_id); 
                     $model = $this->super_model->select_column_where('et_details', 'model', 'ed_id', $det->ed_id);
                     $serial = $this->super_model->select_column_where('et_details', 'serial_no', 'ed_id', $det->ed_id);
                     foreach($this->super_model->select_row_where("et_head","et_id",$det->et_id) AS $un){
@@ -301,6 +304,7 @@ class Borrow extends CI_Controller {
                         'et_id'=>$det->et_id,
                         'ed_id'=>$det->ed_id,
                         'item'=>$item,
+                        'type'=>$type,
                         'brand'=>$brand,
                         'serial'=>$serial,
                         'model'=>$model,

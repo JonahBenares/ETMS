@@ -123,7 +123,11 @@
                     <tr>                
                         <td class="main-tab" width="20%" align="center"><strong>Asset #</strong></td>
                         <td class="main-tab" width="5%" align="center"><strong>Qty</strong></td>
-                        <td class="main-tab" width="45%" align="center"><strong>Item Description</strong></td>                    
+                        <td class="main-tab" width="15%" align="center"><strong>Item</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Brand</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Type</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                    
                         <td class="main-tab" width="20%" align="center"><strong>Uom</strong></td>
                         <td class="main-tab hid" width="5%" align="center"><strong>Action</strong></td>
                     </tr>
@@ -140,7 +144,7 @@
                             <td class="main-tab" align="center" colspan='5'><center>No Data Available.</center></td>
                         </tr> -->
                     <tr>
-                        <td class="main-tab" colspan="5"><center>***nothing follows***</center></td>
+                        <td class="main-tab" colspan="9"><center>***nothing follows***</center></td>
                     </tr>   
                 </table>
     
@@ -183,6 +187,7 @@
                     <input type='hidden' name='ed_id' id='ed_id'>
                     <input type='hidden' name='acn' id='acn'>
                     <input type='hidden' name='serial' id='serial'>
+                    <input type='hidden' name='type' id='type'>
                     <input type='hidden' name='model' id='model'>
                     <input type='hidden' name='brand' id='brand'>
                     <input type='hidden' name='unit' id='unit'>

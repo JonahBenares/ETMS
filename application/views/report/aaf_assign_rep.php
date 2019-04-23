@@ -129,7 +129,11 @@
                     <tr>                
                         <td class="main-tab" width="20%" align="center"><strong>Asset #</strong></td>
                         <td class="main-tab" width="10%" align="center"><strong>Acquisition Date</strong></td>
-                        <td class="main-tab" width="40%" align="center"><strong>Description</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Item</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Brand</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Type</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>                    
+                        <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                    
                         <td class="main-tab" width="7%" align="center"><strong>Qty</strong></td>
                         <td class="main-tab" width="7%" align="center"><strong>U/M</strong></td>
                         <td class="main-tab" width="7%" align="center"><strong>Cost</strong></td>
@@ -153,7 +157,7 @@
                         </tr>
                     </tr> -->
                     <tr>
-                        <td class="main-tab" colspan="9"><center>***nothing follows***</center></td>
+                        <td class="main-tab" colspan="12"><center>***nothing follows***</center></td>
                     </tr>   
                 </table>
                 <br>
@@ -210,6 +214,7 @@
                 <input type='hidden' name='item_id' id='item_id'>
                 <input type='hidden' name='ed_id' id='ed_id'>
                 <input type='hidden' name='set_id' id='set_id'>
+                <input type='hidden' name='type' id='type'>
                 <input type='hidden' name='acn' id='acn'>
                 <input type='hidden' name='acq_date' id='acq_date'>
                 <input type='hidden' name='serial' id='serial'>

@@ -69,11 +69,13 @@ function selectReturn(employee_id,series,date,val) {
     $("#suggestion-return").hide();
 }
 
-function selectItem(id,edid,val,qty,acn,serial,brand,model,unit) {
+function selectItem(id,edid,val,qty,acn,type,serial,brand,model,unit) {
     $("#item_id").val(id);
     $("#qty").val(qty);
     $("#ed_id").val(edid);
-    $("#item").val(val+' - '+brand+' - '+serial+' - '+model);
+    $("#type").val(type);
+    //$("#item").val(val+' - '+brand+' - '+serial+' - '+model);
+    $("#item").val(val);
     $("#acn").val(acn);
     $("#serial").val(serial);
     $("#brand").val(brand);
@@ -86,6 +88,7 @@ function add_item(){
     var loc= document.getElementById("baseurl").value;
     var redirect=loc+'/index.php/borrow/getitem';
     var item =$('#item').val();
+    var type =$('#type').val();
     var itemid =$('#item_id').val();
     var bh_id =$('#bh_id').val();
     var edid =$('#ed_id').val();
@@ -107,7 +110,7 @@ function add_item(){
         $.ajax({
             type: "POST",
             url:redirect,
-            data: "itemid="+itemid+"&bh_id="+bh_id+"&edid="+edid+"&item="+item+"&count="+count+"&acn="+acn+"&serial="+serial+"&model="+model+"&brand="+brand+"&qty="+qty+"&unit="+unit,
+            data: "itemid="+itemid+"&bh_id="+bh_id+"&edid="+edid+"&item="+item+"&count="+count+"&acn="+acn+"&type="+type+"&serial="+serial+"&model="+model+"&brand="+brand+"&qty="+qty+"&unit="+unit,
             success: function(html){
                 //alert(html);
                 $('#item_body').append(html);
