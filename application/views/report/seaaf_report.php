@@ -89,8 +89,8 @@
             <table width="100%" class="table-bordered">
                 <tr>                
                     <td class="main-tab" width="10%" align="center"><strong>Asset #</strong></td>
-                    <td class="main-tab" width="20%" align="center"><strong>Acquisition Date</strong></td>
-                    <td class="main-tab" width="10%" align="center"><strong>Item</strong></td>  
+                    <td class="main-tab" width="10%" align="center"><strong>Acquisition Date</strong></td>
+                    <td class="main-tab" width="20%" align="center"><strong>Item</strong></td>  
                     <td class="main-tab" width="10%" align="center"><strong>Brand</strong></td>
                     <td class="main-tab" width="10%" align="center"><strong>Type</strong></td>
                     <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>
@@ -120,12 +120,12 @@
                     </tr>
                 <?php } } else { ?> 
                     <tr>
-                        <td class="main-tab" align="center" colspan='9'><center>No Data Available.</center></td>
+                        <td class="main-tab" align="center" colspan='11'><center>No Data Available.</center></td>
                     </tr>
                 <?php } ?>
                 </tr>
                 <tr>
-                    <td class="main-tab" colspan="9"><center>***nothing follows***</center></td>
+                    <td class="main-tab" colspan="11"><center>***nothing follows***</center></td>
                 </tr>  
             </table>
             <br>
