@@ -3229,6 +3229,8 @@ class Report extends CI_Controller {
                 foreach($this->super_model->select_row_where('et_details', 'et_id', $aaf->et_id) AS $det){
                     $total=$qty*$det->unit_price;
                     $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
+                    $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$det->set_id);
+                    $set_total=$qty*$set_price;
                     $data['details'][] = array(
                         'set_id'=>$det->set_id,
                         'acquisition_date'=>$det->acquisition_date,
@@ -3238,7 +3240,13 @@ class Report extends CI_Controller {
                         'qty'=>$qty,
                         'date_issued'=>$det->date_issued,
                         'unit_price'=>$det->unit_price,
+                        'brand'=>$det->brand,
+                        'type'=>$det->type,
+                        'model'=>$det->model,
+                        'serial'=>$det->serial_no,
                         'currency'=>$currency,
+                        'set_price'=>$set_price,
+                        'set_total'=>$set_total,
                         'total'=>$total
                     );
                 }

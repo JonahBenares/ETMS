@@ -90,7 +90,11 @@
                 <tr>                
                     <td class="main-tab" width="10%" align="center"><strong>Asset #</strong></td>
                     <td class="main-tab" width="20%" align="center"><strong>Acquisition Date</strong></td>
-                    <td class="main-tab" width="40%" align="center"><strong>Description</strong></td>                    
+                    <td class="main-tab" width="10%" align="center"><strong>Item</strong></td>  
+                    <td class="main-tab" width="10%" align="center"><strong>Brand</strong></td>
+                    <td class="main-tab" width="10%" align="center"><strong>Type</strong></td>
+                    <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>
+                    <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                  
                     <td class="main-tab" width="7%" align="center"><strong>Qty</strong></td>
                     <td class="main-tab" width="7%" align="center"><strong>U/M</strong></td>
                     <td class="main-tab" width="7%" align="center"><strong>Cost</strong></td>
@@ -105,10 +109,14 @@
                         <td class="main-tab" align="center"><?php echo $det['asset_control_no'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['acquisition_date'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['et_desc'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['brand'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['type'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['model'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['serial'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
-                        <td class="main-tab" align="center"><?php if($det['set_id']==0){ echo $det['unit_price']."<small> ".$det['currency']."</small>"; } ?></td>
-                        <td class="main-tab" align="center"><?php if($det['set_id']==0){ echo number_format($det['total'],2); }?></td>
+                        <td class="main-tab" align="center"><?php if($det['set_id']==0){ echo $det['unit_price']."<small> ".$det['currency']."</small>"; }else{ echo $det['set_price']; } ?></td>
+                        <td class="main-tab" align="center"><?php if($det['set_id']==0){ echo number_format($det['total'],2); }else { echo number_format($det['set_total'],2); }?></td>
                     </tr>
                 <?php } } else { ?> 
                     <tr>
