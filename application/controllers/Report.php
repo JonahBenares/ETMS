@@ -2409,7 +2409,7 @@ class Report extends CI_Controller {
                             $det_data = array(
                                 'et_id'=>$new_etid,
                                 'date_issued'=>'',
-                                'damage'=>1
+                                //'damage'=>1
                             ); 
                             $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
                         }
@@ -2448,7 +2448,7 @@ class Report extends CI_Controller {
                             foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid[$x]) AS $det){
                                 $det_data = array(
                                     'date_issued'=>'',
-                                    'damage'=>1
+                                    //'damage'=>1
                                 ); 
                                 $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
                             }
@@ -2525,6 +2525,12 @@ class Report extends CI_Controller {
             $date_format = date("Y-m",strtotime($date));
             $prefix= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
             //secho $prefix;
+            foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid) AS $det){
+                $det_data = array(
+                    'damage'=>1
+                ); 
+                $this->super_model->update_where("et_details", $det_data, "ed_id", $edid);
+            }
 
             foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
                 $location1 = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
@@ -2770,7 +2776,7 @@ class Report extends CI_Controller {
         $this->load->view('template/header');  
         $user = $_SESSION['user_id'];
         $data['employee'] = $this->super_model->select_all_order_by("employees","employee_name","ASC"); 
-        $data['user_id'] = $this->super_model->select_column_where("users", "username", "user_id", $user);
+        $data['user_id'] = $this->super_model->select_column_where("users", "fullname", "user_id", $user);
         $this->load->view('report/aaf_assign_rep',$data);
         $this->load->view('template/scripts');
     }
@@ -3213,13 +3219,13 @@ class Report extends CI_Controller {
         $data['aaf_no'] =$this->super_model->select_column_where("employees", "aaf_no", "employee_id", $id);
         $row=$this->super_model->count_rows_where("et_head","accountability_id",$id);
         if($row!=0){
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$id) AS $em){
+                $data['child'][] = array( 
+                    'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
+                );
+            }
             foreach($this->super_model->select_row_where('et_head','accountability_id',$id) AS $aaf){
                 $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $aaf->accountability_id); 
-                foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$aaf->accountability_id) AS $em){
-                    $data['child'][] = array( 
-                        'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
-                    );
-                }
                 $data['date_issued'] =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $aaf->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $aaf->unit_id);
                 $data['user_id'] =$this->super_model->select_column_where("users", "fullname", "user_id", $aaf->user_id);

@@ -195,7 +195,7 @@
                     <tr>
                         <td></td>
                         <td>
-                            <input class="select" type="" name="" value="Asset Management Assistant" >
+                            <input class="select" type="" name="" value="" >
                         </td>
                         <td></td>
                         <td></td>

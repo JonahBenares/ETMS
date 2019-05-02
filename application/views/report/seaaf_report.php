@@ -145,15 +145,15 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td style="border-bottom:1px solid #000">
-                        <input class="select" type="" name="" value="<?php echo $user_id;?>">
+                    <td style="border-bottom:1px solid #000" align = "center">
+                        <?php echo $user_id;?>
                     </td> 
                     <td></td>
-                    <td style="border-bottom:1px solid #000">
+                    <td style="border-bottom:1px solid #000" align = "center">
                         <?php if($type == 2){ ?>
-                            <textarea class="select" type="" name="" value="" ><?php if(!empty($child)){  foreach($child as $c){ echo  $c['emp'].', '; } } ?></textarea>
+                            <?php if(!empty($child)){  foreach($child as $c){ echo  $c['emp'].', <br>'; } } ?>
                         <?php } else { ?>
-                            <textarea class="select" type="" name="" value="" ><?php echo  $employee;?></textarea>
+                            <?php echo  $employee;?>
                         <?php } ?>
                     </td>
                     <td></td>
@@ -161,7 +161,7 @@
                 <tr>
                     <td></td>
                     <td>
-                        <input class="select" type="" name="" value="Asset Management Assistant" >
+                        <input class="select" type="" name="" value="" >
                     </td>
                     <td></td>
                     <td></td>

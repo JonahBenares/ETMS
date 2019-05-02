@@ -92,8 +92,9 @@
                                         <div class="row">                                                 
                                             <div class="col-6">
                                                 <label for="" class="control-label mb-1">Checked By:</label>
-                                                <input name="checked_by" type="text" class="form-control bor-radius5 cc-exp checked" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "checked<?php echo $x; ?>" value = "<?php echo $checked_by;?>" style = "pointer-events: none;">
-                                                <input type="hidden" name="checked_id<?php echo $x;?>" id="checked_id<?php echo $x;?>" value = "<?php echo $checked_name; ?>">
+                                                <input name="checked_by" type="text" class="form-control bor-radius5 cc-exp checked" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "checked<?php echo $x; ?>">
+                                                <span id="suggestion-checked<?php echo $x;?>"></span>
+                                                <input type="hidden" name="checked_id<?php echo $x;?>" id="checked_id<?php echo $x;?>" >
                                             </div>
                                             <div class="col-6">
                                                 <label for="x_card_code" class="control-label mb-1">Submitted By:</label>
@@ -105,8 +106,9 @@
                                         <div class="row">                                                 
                                             <div class="col-6">
                                                 <label for="" class="control-label mb-1">Noted By:</label>
-                                                <input name="noted_by" type="text" class="form-control bor-radius5 cc-exp noted" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "noted<?php echo $x; ?>" value = "<?php echo $noted_by;?>" style = "pointer-events: none;">
-                                                <input type="hidden" name="noted_id<?php echo $x;?>" id="noted_id<?php echo $x;?>" value = "<?php echo $noted_id; ?>">
+                                                <input name="noted_by" type="text" class="form-control bor-radius5 cc-exp noted" data-trigger="<?php echo $x;?>"  autocomplete = "off"  id = "noted<?php echo $x; ?>" >
+                                                <span id="suggestion-noted<?php echo $x;?>"></span>
+                                                <input type="hidden" name="noted_id<?php echo $x;?>" id="noted_id<?php echo $x;?>">
                                             </div>
                                         </div>
                                     </div>

@@ -233,17 +233,17 @@
                     </td> 
                     <td></td>
                     <td>
-                        <center><p>Asset Management Assistant</p></center>
+                        <center><p><!-- Asset Management Assistant --></p></center>
                     </td>
                     <td></td>
                     <td>
-                        <center><p>Plant Manager</p></center>
+                        <center><p><!-- Plant Manager --></p></center>
                     </td>
                     <td></td>
                 </tr>
             </table>
             <hr>
-            <small>printed by: <?php echo $user_id;?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
+            <small>printed by: <?php echo $_SESSION['fullname'];?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
             <br>
             <br>
             <br>
