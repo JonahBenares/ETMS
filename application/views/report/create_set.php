@@ -16,7 +16,7 @@
                         <form action="<?php echo base_url(); ?>index.php/report/insert_set" method = "POST">
                             <div class=" table--no-card " id="table_peret">    
                                 <div class="row m-b-20">
-                                    <div class = "col-lg-4 offset-lg-2">
+                                    <div class = "col-lg-4">
                                         <label>Set Name:</label>
                                         <input type = "text" class = "form-control bor-radius20" name = "name" required="">
                                     </div>
@@ -24,6 +24,10 @@
                                         <label>Set Price:</label>
                                         <input type = "text" class = "form-control bor-radius20" name = "price">
                                     </div>  
+                                    <div class = "col-lg-4">
+                                        <label>Set Serial No.:</label>
+                                        <input type = "text" class = "form-control bor-radius20" name = "serial">
+                                    </div> 
                                 </div>                      
                                 <table class="table table-bordersed dataTable table-striped table-earning" >
                                     <thead>

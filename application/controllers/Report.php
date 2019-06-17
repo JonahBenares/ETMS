@@ -1804,6 +1804,7 @@ class Report extends CI_Controller {
         $edid = $this->input->post('edid');
         $name = $this->input->post('name');
         $price = $this->input->post('price');
+        $serial = $this->input->post('serial');
         $checked =count($edid);
         $rows_et=$this->super_model->count_rows("et_set");
         if($rows_et==0){
@@ -1817,6 +1818,7 @@ class Report extends CI_Controller {
             'set_id'=>$set_id,
             'set_name'=>$name,
             'set_price'=>$price,
+            'set_serial_no'=>$serial,
         );
         $this->super_model->insert_into("et_set", $set_data);
 
