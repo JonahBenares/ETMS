@@ -1686,7 +1686,7 @@ class Report extends CI_Controller {
                     'et_desc'=>$et->et_desc,
                     'qty'=>$et->qty,
                     'accountability'=>$accountability,
-                    'employee_id'=>$et->accountability_id
+                    'empid'=>$et->accountability_id,
                 );
         }
         foreach($this->super_model->select_all_order_by("employees", "employee_name", "ASC") AS $emp){
