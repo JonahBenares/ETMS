@@ -14,6 +14,7 @@
                                     <!-- <a href="<?php echo base_url(); ?>index.php/repair/repair_list" class="btn btn-primary text-white ">
                                         <span class="fa fa-wrench"></span> Repair
                                     </a> -->
+                                    <a href="<?php echo base_url(); ?>index.php/report/create_set_avail" class="btn btn-warning text-white bor-radius20 pull-right">Create Set</a>
                                     <a href="<?php echo base_url(); ?>index.php/report/aaf_assign_rep" class="btn btn-success">
                                         Assign
                                     </a>

@@ -42,8 +42,9 @@ class Repair extends CI_Controller {
                     $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $det->et_id);
                     $empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $det->et_id);
                     $repair =$this->super_model->select_column_where("repair_details", "assessment", "ed_id", $det->ed_id);
+                    $damage_id =$this->super_model->select_column_where("damage_info", "damage_id", "et_id", $det->et_id);
                     $data['damage'][] = array(
-                        /*'et_id'=>$et->et_id,*/
+                        'damage_id'=>$damage_id,
                         'ed_id'=>$det->ed_id,
                         'empid'=>$empid,
                         'damaged'=>$det->damage,

@@ -23,6 +23,7 @@
                                             <th>Model</th>
                                             <th>Serial No.</th>
                                             <th>Status</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -37,6 +38,11 @@
                                             <td><?php echo $d['model'];?></td>
                                             <td><?php echo $d['serial_no'];?></td>
                                             <td><?php if($d['beyond_repair']==1){ echo 'Beyond Repair';}else if($d['repair']==1){ echo 'Repaired'; }?></td>
+                                            <td  align="center">
+                                                <a href="<?php echo base_url(); ?>index.php/report/damage_report/<?php echo $d['damage_id']?>" class="btn btn-warning text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
+                                            </td>
                                         </tr>
                                         <?php $x++; } }?>                                        
                                     </tbody>

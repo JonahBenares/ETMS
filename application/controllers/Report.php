@@ -307,15 +307,27 @@ class Report extends CI_Controller {
         $query=substr($sql, 0, -3);
         $data['filt']=substr($filter, 0, -2);
 
-       // foreach ($this->super_model->select_join_where("et_head","et_details", $query,'et_id') AS $ss){
-       // echo "SELECT eh.et_desc, eh.et_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id " . $q. " WHERE ".$query . "<br>";
-      // /  echo "SELECT eh.et_desc, eh.et_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id " . $q. " WHERE ".$query;
+        if(!empty($this->input->post('item')) && !empty($this->input->post('set'))){
+            foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id INNER JOIN et_set es ON ed.set_id = es.set_id WHERE ".$query) AS $ss){
 
+                $avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
+                $incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
+                foreach($this->super_model->select_row_where('et_details','et_id',$ss->et_id) AS $r){
+                    $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $r->set_id);
+                    $set_id = $r->set_id;
+                }
+                $data['itema'][]= array(
+                    'item_id'=>$ss->et_id,
+                    'set_id'=>$set_id,
+                    'item'=>$ss->et_desc,
+                    'set'=>$setss,
+                    'avcount'=>$avcount,
+                    'incount'=>$incount,
+                );
+            }
+        }else if(!empty($this->input->post('item'))){
+            foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id  WHERE ".$query) AS $ss){
 
-      if(!empty($this->input->post('item'))){
-          foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id WHERE ".$query) AS $ss){
-
-            
                 $avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
                 $incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
                 foreach($this->super_model->select_row_where('et_details','et_id',$ss->et_id) AS $r){
@@ -332,14 +344,30 @@ class Report extends CI_Controller {
                 );
             }
         } 
-        if(!empty($this->input->post('set'))){
-              $count_set = $this->super_model->count_custom("SELECT DISTINCT(ed.set_id) FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id " . $q. " WHERE ".$query);
-             
-               $data['setdata'][]= array(
-                    'set_name'=>$this->input->post('set'),
-                     'count'=>$count_set
+
+        if(!empty($this->input->post('set')) && empty($this->input->post('item'))){
+            foreach($this->super_model->custom_query("SELECT eh.et_desc, eh.et_id FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id INNER JOIN et_set es ON ed.set_id = es.set_id WHERE ".$query." GROUP BY set_name") AS $ss){
+
+                $count_set = $this->super_model->count_custom("SELECT DISTINCT(ed.set_id) FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id " . $q. " WHERE ".$query);
+                foreach($this->super_model->select_row_where('et_details','et_id',$ss->et_id) AS $r){
+                    $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $r->set_id);
+                    $set_id = $r->set_id;
+                }
+                $data['itema'][]= array(
+                    'set'=>$setss,
+                    'count'=>$count_set,
                 );
+            }
         }
+
+        /*if(!empty($this->input->post('set'))){
+            $count_set = $this->super_model->count_custom("SELECT DISTINCT(ed.set_id) FROM et_head eh INNER JOIN et_details ed ON eh.et_id = ed.et_id " . $q. " WHERE ".$query);
+             
+            $data['setdata'][]= array(
+                'set_name'=>$this->input->post('set'),
+                'count'=>$count_set
+            );
+        }*/
         $this->load->view('report/inv_rep_itm',$data);
         $this->load->view('template/scripts');
     }
@@ -349,7 +377,7 @@ class Report extends CI_Controller {
     	$this->load->view('template/sidebar');
         $row=$this->super_model->count_custom_where("et_head", "accountability_id!=0");
         $row_avail = $this->row_avail();
-       
+        $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']= $this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         /*$data['available_qty']=$this->super_model->select_sum("et_head", "qty", "accountability_id", "0");*/
@@ -1004,6 +1032,7 @@ class Report extends CI_Controller {
         /*foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
         }*/
+        $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']=$this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         /*$data['available_qty']=$this->super_model->select_sum("et_head", "qty", "accountability_id", "0");*/
@@ -1183,6 +1212,7 @@ class Report extends CI_Controller {
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
         }*/
         /*$data['available_qty']=$this->super_model->count_join_where('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');*/
+        $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']= $this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         if($row_avail!=0){
@@ -1231,12 +1261,158 @@ class Report extends CI_Controller {
         $this->load->view('template/scripts');
     }
 
+    public function row_set_avail(){
+         $row_set_avail=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0' and change_location = '0' AND set_id!='0'",'et_id');
+         return $row_set_avail;
+    }
+
+    public function report_set_avail(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $row=$this->super_model->count_custom_where("et_head", "accountability_id!=0");
+
+        $row_set_avail = $this->row_set_avail();
+        /*foreach($this->super_model->select_custom_where("et_head", "accountability_id='0'") AS $check){
+            $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
+        }*/
+        /*$data['available_qty']=$this->super_model->count_join_where('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');*/
+        $data['available_set_qty']= $this->row_set_avail();
+        $data['available_qty']= $this->row_avail();
+        $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
+        if($row_set_avail!=0){
+            //foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
+            foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' and change_location = '0' AND set_id!='0'","et_id") as $et){
+                /*foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$et->et_id'") AS $det){*/
+                $damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
+                $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et->et_id);
+                $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
+                $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
+                $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
+                $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $et->et_id);
+                $empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $et->et_id);
+                /*$brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
+                $serial =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
+                $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
+                $acn =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
+                $acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);*/
+                $ed_id =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $et->et_id);
+                if($damage==0){
+                    $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et->et_id);
+                    $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                    $data['avail'][] = array(
+                        'et_id'=>$et->et_id,
+                        'ed_id'=>$ed_id,
+                        'empid'=>$empid,
+                        'unit'=>$unit,
+                        'damaged'=>$damage,
+                        'department'=>$et->department,
+                        'et_desc'=>$et->et_desc,
+                        'category'=>$category,
+                        'subcat'=>$subcat,
+                        'qty'=>$qty,
+                        'set_name'=>$set_name,
+                        'set_id'=>$set_id,
+                        /*'serial_no'=>$serial,
+                        'asset_control'=>$acn,
+                        'acquisition_date'=>$acquisition_date,
+                        'brand'=>$brand
+                        'model'=>$model,*/
+                    );
+                }
+                //}
+            }
+        }else {
+            $data['avail'] = array();
+        }
+
+        $this->load->view('report/report_set_avail',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function set_print_avail(){  
+        $this->load->view('template/header');
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        $row=$this->super_model->count_rows_where("et_head","accountability_id",'0');
+        if($row!=0){
+            foreach($this->super_model->select_row_where('et_head','accountability_id','0') AS $aaf){
+                $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $aaf->accountability_id); 
+                foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$aaf->accountability_id) AS $em){
+                    $data['child'][] = array( 
+                        'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
+                    );
+                }
+                $data['date_issued'] =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $aaf->et_id);
+                $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $aaf->unit_id);
+                $data['user_id'] =$this->super_model->select_column_where("users", "fullname", "user_id", $_SESSION['user_id']);
+                $data['username'] =$this->super_model->select_column_where("users", "fullname", "user_id", $aaf->user_id);
+                $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $aaf->accountability_id);
+                $data['department'] =$aaf->department;
+                $qty = 1;
+                if(!isset($id)){
+                    foreach($this->super_model->select_custom_where('et_details', "et_id = '$aaf->et_id' AND set_id != '0' ORDER BY set_id DESC") AS $det){
+                        $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
+                        $set_price = $this->super_model->select_column_where("et_set", "set_price", "set_id", $det->set_id);
+                        $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $det->set_id);
+                        $set_lot = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $det->set_id);
+                        $total=$qty*$set_price;
+                        $data['details'][] = array(
+                            'set_id'=>$det->set_id,
+                            'acquisition_date'=>$det->acquisition_date,
+                            'asset_control_no'=>$det->asset_control_no,
+                            'et_desc'=>$aaf->et_desc,
+                            'unit'=>$unit,
+                            'qty'=>$qty,
+                            'date_issued'=>$det->date_issued,
+                            'unit_price'=>$set_price,
+                            'set_name'=>$set_name,
+                            'set_lot'=>$set_lot,
+                            'currency'=>$currency,
+                            'total'=>$total
+                        );
+                    }
+                }else {
+                    foreach($this->super_model->select_custom_where('et_details', "et_id = '$aaf->et_id' AND set_id = '$id' ORDER BY set_id DESC") AS $det){
+                        $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
+                        $set_price = $this->super_model->select_column_where("et_set", "set_price", "set_id", $det->set_id);
+                        $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $det->set_id);
+                        $set_lot = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $det->set_id);
+                        $total=$qty*$set_price;
+                        $data['details'][] = array(
+                            'set_id'=>$det->set_id,
+                            'acquisition_date'=>$det->acquisition_date,
+                            'asset_control_no'=>$det->asset_control_no,
+                            'et_desc'=>$aaf->et_desc,
+                            'unit'=>$unit,
+                            'qty'=>$qty,
+                            'date_issued'=>$det->date_issued,
+                            'unit_price'=>$set_price,
+                            'set_name'=>$set_name,
+                            'set_lot'=>$set_lot,
+                            'currency'=>$currency,
+                            'total'=>$total
+                        );
+                    }
+                }
+            }
+        }else {
+            $data['details'] = array();
+            $data['department'] =  '';
+            $data['type'] =  '';
+            $data['date_issued'] =  '';
+            $data['user_id'] =  '';
+        }
+        $this->load->view('report/set_print_avail',$data);
+        $this->load->view('template/scripts');
+    }
+
     public function report_main_emp(){  
         $this->load->view('template/header');
         $this->load->view('template/sidebar');
         /*foreach($this->super_model->select_custom_where("et_head", "accountability_id=0") AS $check){
             $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
         }*/
+        $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']=$this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         /*$data['available_qty']=$this->super_model->select_sum("et_head", "qty", "accountability_id", "0");*/
@@ -1842,6 +2018,93 @@ class Report extends CI_Controller {
         $this->super_model->update_where("et_details", $det_data, "ed_id", $edid);
         ?>
         <script>window.location.href ='<?php echo base_url(); ?>index.php/report/report_sub/<?php echo $id; ?>'</script>
+        <?php
+    }
+
+    public function create_set_avail(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        /*$data['id'] =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $id);*/
+        $row=$this->super_model->count_custom_where("et_head","accountability_id = '0'");
+        if($row!=0){
+            foreach($this->super_model->select_row_where('et_head', 'accountability_id', '0') AS $sub){
+                $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
+                $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
+                $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
+                /*$department =$this->super_model->select_column_where("department", "department", "employee_id", $sub->accountability_id);*/
+                $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
+                $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
+                $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $sub->et_id);
+                $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
+                $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                $rows = $this->super_model->count_rows_where("et_details","ed_id",$edid);
+                if($rows!=0){
+                    $data['sub'][] = array(
+                        'set_id'=>$set_id,
+                        'et_id'=>$sub->et_id,
+                        'ed_id'=>$edid,
+                        'set_name'=>$set_name,
+                        'cat'=>$category,
+                        'subcat'=>$subcat,
+                        'unit'=>$unit,
+                        'department'=>$sub->department,
+                        'et_desc'=>$sub->et_desc,
+                        'qty'=>$sub->qty,
+                        'accountability'=>$accountability
+                    );
+                }
+            }
+        }else {
+            $data['sub'] = array();
+        }
+        $this->load->view('report/create_set_avail',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function insert_set_avail(){
+        /*$etid = $this->input->post('etid');*/
+        /*$id=$this->input->post('id');*/
+        $count = $this->input->post('count');
+        $edid = $this->input->post('edid');
+        $name = $this->input->post('name');
+        $price = $this->input->post('price');
+        $serial = $this->input->post('serial');
+        $checked =count($edid);
+        $rows_et=$this->super_model->count_rows("et_set");
+        if($rows_et==0){
+            $set_id= 1;
+        } else {
+            $series = $this->super_model->get_max("et_set", "set_id");
+            $set_id = $series+1;
+        }
+
+        $set_data = array(
+            'set_id'=>$set_id,
+            'set_name'=>$name,
+            'set_price'=>$price,
+            'set_serial_no'=>$serial,
+        );
+        $this->super_model->insert_into("et_set", $set_data);
+
+        for($x=0;$x<$checked;$x++){
+            $det_data = array(
+                'set_id'=>$set_id
+            ); 
+            $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
+        }
+        ?>
+        <script>alert("Successfully Set!"); window.location.href ='<?php echo base_url(); ?>index.php/report/report_main_avail'</script>
+        <?php
+    }
+
+    public function rem_set_avail(){
+        $edid=$this->uri->segment(3);
+        $det_data = array(
+            'set_id'=>0
+        ); 
+        $this->super_model->update_where("et_details", $det_data, "ed_id", $edid);
+        ?>
+        <script>window.location.href ='<?php echo base_url(); ?>index.php/report/create_set_avail'</script>
         <?php
     }
 

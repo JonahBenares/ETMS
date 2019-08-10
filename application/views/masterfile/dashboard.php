@@ -100,6 +100,7 @@
                                 <center><a class="rep_names" href="<?php echo base_url(); ?>index.php/report/report_main_hist">E/T History</a></center>
                                 <center><a class="rep_names" href="<?php echo base_url(); ?>index.php/report/report_main_emp">E/T per Employee</a></center>
                                 <center><a class="rep_names" href="<?php echo base_url(); ?>index.php/report/report_main_avail">Available E/T</a></center>
+                                <center><a class="rep_names" href="<?php echo base_url(); ?>index.php/report/report_set_avail">Available Set E/T</a></center>
                                 <center><a class="rep_names borbot" href="<?php echo base_url(); ?>index.php/repair/repair_list">Damaged E/T</a></center>
                             </div>
                         </div>                            
