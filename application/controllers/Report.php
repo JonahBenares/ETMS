@@ -4270,4 +4270,9 @@ class Report extends CI_Controller {
         header('Content-Disposition: attachment; filename="Equipment Tools.xlsx"');
         readfile($exportfilename);
     }
+    public function damage_report_blank(){  
+        $this->load->view('template/header'); 
+        $this->load->view('report/damage_report_blank');
+        $this->load->view('template/scripts');
+    }
 }

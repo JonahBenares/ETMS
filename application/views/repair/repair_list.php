@@ -8,7 +8,8 @@
                     <div class="card bor-radius shadow">
                         <div class="card-header">
                             <a href="<?php echo base_url(); ?>index.php/masterfile/dashboard" class="btn btn-default"><span class="fa fa-arrow-left"></span></a>
-                            <a><h4 class="m-l-5 m-b-10">Damaged E/T </h4></a>                   
+                            <a><h4 class="m-l-5 m-b-10">Damaged E/T  </h4></a> 
+                            <a href="<?php echo base_url(); ?>index.php/report/damage_report_blank" class="btn btn-sm btn-danger pull-right animated headShake infinite">PRINT <b>BLANK</b> E/T DAMAGE REPORT</a>
                         </div>
                         <form  action="<?php echo base_url(); ?>index.php/repair/insert_redirect" method="POST">
                             <div class="table--no-card m-b-1" >
