@@ -1834,6 +1834,7 @@ class Report extends CI_Controller {
         $data['filt']=substr($filter, 0, -2);
        
         /*$data['available_qty']=$this->super_model->select_sum("et_head", "qty", "accountability_id", "0");*/
+        $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         $data['cat'] = $this->super_model->select_all_order_by('category', 'category_name', 'ASC');
