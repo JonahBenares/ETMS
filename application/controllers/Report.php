@@ -4001,7 +4001,14 @@ class Report extends CI_Controller {
         $category=$this->uri->segment(5);
         $subcat=$this->uri->segment(6);
         $department=str_replace("%20"," ",$this->uri->segment(7));
-        $item=str_replace("%20"," ",$this->uri->segment(8));
+        if(stripos($this->uri->segment(8), "%20%20") !== false) {
+            $item=str_replace("%20%20",", ",$this->uri->segment(8));
+        } else if(stripos($this->uri->segment(8), "%20") !== false) {
+            $item=str_replace("%20"," ",$this->uri->segment(8));
+        }else{
+            $item=$this->uri->segment(8);
+        }
+        //$item=str_replace("%20"," ",$this->uri->segment(8));
         $brand=str_replace("%20"," ",$this->uri->segment(9));
         $model=str_replace("%20"," ",$this->uri->segment(10));
         $type=str_replace("%20"," ",$this->uri->segment(11));
@@ -4086,9 +4093,10 @@ class Report extends CI_Controller {
         }
         $array = array($from,$to);
         $query=substr($sql, 0, -3);
-
+        $filter=substr($filter, 0, -2);
         /*foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0') AS $et){*/
-        if($from!='' && $to!='' && $category!='' && $subcat!='' && $department!='' && $item!='' && $brand!='' && $model!='' && $type!='' && $serial!='' && $damage!='' && $condition!='' && $placement!='' && $rack!=''){
+        //if($from!='' && $to!='' && $category!='' && $subcat!='' && $department!='' && $item!='' && $brand!='' && $model!='' && $type!='' && $serial!='' && $damage!='' && $condition!='' && $placement!='' && $rack!=''){
+        if($filter!=''){
             foreach ($this->super_model->select_join_where("et_head", "et_details", $query, "et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
