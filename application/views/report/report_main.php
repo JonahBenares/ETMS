@@ -190,6 +190,9 @@
                                                 <a class="btn btn-primary text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update" href="<?php echo base_url(); ?>index.php/report/edit_encode/<?php echo $m['et_id'];?>">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
+                                                <a href = "<?php echo base_url(); ?>index.php/report/encode_report/<?php echo $m['et_id'];?>" class="btn btn-warning text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
                                                 <a class="btn btn-success text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Return" onClick="viewReturn(<?php echo $m['empid'];?>,<?php echo $m['et_id'];?>)">
                                                     <i class="fa fa-refresh"></i>
                                                 </a>
