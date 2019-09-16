@@ -546,6 +546,69 @@ class Report extends CI_Controller {
         $this->load->view('template/scripts');
     }
 
+    public function encode_report(){  
+        $this->load->view('template/header');
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        foreach($this->super_model->select_row_where('et_head','et_id',$id) AS $et){
+            $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $et->accountability_id); 
+            $data['employee_no'] = $this->super_model->select_column_where("employees", "aaf_no", "employee_id", $et->accountability_id); 
+            foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$et->accountability_id) AS $em){
+                $data['child'][] = array( 
+                    'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
+                );
+            }
+            $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
+            $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $et->accountability_id);
+            foreach($this->super_model->select_row_where('et_details','et_id',$et->et_id) AS $det){
+                $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
+                $price = $this->super_model->select_column_where("et_details", "unit_price", "ed_id", $det->ed_id);
+                $brand = $this->super_model->select_column_where("et_details", "brand", "ed_id", $det->ed_id);
+                $type = $this->super_model->select_column_where("et_details", "type", "ed_id", $det->ed_id);
+                $model = $this->super_model->select_column_where("et_details", "model", "ed_id", $det->ed_id);
+                $serial = $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $det->ed_id);
+                $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
+                $qty = '1';
+                $total = $qty * $price;
+                $data['date_issued'] = $det->date_issued;
+                foreach($this->super_model->select_row_where('et_head','et_id',$det->et_id) AS $u){
+                    $unit = $this->super_model->select_column_where('unit', 'unit_name', 'unit_id', $u->unit_id);
+                    $data['user_id'] =$this->super_model->select_column_where("users", "fullname", "user_id", $u->user_id);
+                    $data['department'] =$u->department;
+                }
+                $data['details'][] = array(
+                    'et_id'=>$det->et_id,
+                    'ed_id'=>$det->ed_id,
+                    'acn_no'=>$det->asset_control_no,
+                    'date'=>$det->acquisition_date,
+                    'date_issued'=>$det->date_issued,
+                    'currency'=>$currency,
+                    'qty'=>$qty,
+                    'item'=>$item,
+                    'type'=>$type,
+                    'brand'=>$brand,
+                    'serial'=>$serial,
+                    'model'=>$model,
+                    'price'=>$price,
+                    'total'=>$total,
+                    'unit'=>$unit
+                );
+                foreach($this->super_model->select_row_where("et_details", "ed_id", $det->ed_id) AS $et_rem){
+                    $data['remarks_it'][] = array(
+                        'ed_id'=>$et_rem->ed_id,
+                        'remarks'=>$et_rem->remarks
+                    );
+                }
+            }
+            $data['head'][] = array(
+                'et_id'=>$et->et_id,
+            ); 
+              
+        }
+        $this->load->view('report/encode_report',$data);
+        $this->load->view('template/scripts');
+    }
+
     public function report_print(){  
         $this->load->view('template/header_report');
         $from=$this->uri->segment(3);
