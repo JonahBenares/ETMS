@@ -38,15 +38,21 @@
                                 <table class="table table-borderless table-striped table-earning " id="myTable_peremp">
                                     <thead>
                                         <tr>
+                                            <?php if(empty($item) && empty($set) || $set=='null' || $item!='null' && $set!='null'){ ?>
                                             <th>Item Name</th>
                                             <th>Set Name</th>
                                             <th align="center">Available</th>
                                             <th align="center">In-Use</th>
+                                            <?php } else { ?>
+                                            <th>Set Name</th>
+                                            <th align="center">Set Count</th>
+                                            <?php } ?>
                                         </tr>
                                     </thead> 
                                     <tbody>
                                         <?php foreach($itema AS $i){ ?>
                                         <tr>
+                                            <?php if(empty($item) && empty($set) || $set=='null' || $item!='null' && $set!='null'){ ?>
                                             <td> 
                                                 <a href="<?php echo base_url(); ?>index.php/report/inv_report_itm/<?php echo $i['item_id'];?>/<?php echo $i['set_id'];?>" class="btn btn-link" style="white-space: normal!important;text-align: left" data-toggle="tooltip" data-placement="right" title="View">
                                                    <?php echo $i['item']; ?>
@@ -55,13 +61,16 @@
                                             <td><?php echo $i['set']; ?></td>
                                             <td align="center"><?php echo $i['avcount']; ?></td>
                                             <td align="center"><?php echo $i['incount']; ?></td>
+                                            <?php } else { ?>
+                                            <td><?php echo $i['set']; ?></td>
+                                            <td align="center"><?php echo $i['count']; ?></td>
+                                            <?php } ?>
                                         </tr>
-                                        <?php }
-                                         ?>
+                                        <?php } ?>
                                     </tbody>                           
                                 </table>
                                 <?php } ?>
-                                 <?php if(!empty($setdata)){ ?>
+                                <!-- <?php if(!empty($setdata)){ ?>
                                 <table class="table table-borderless table-striped table-earning " id="myTable_peremp">
                                     <thead>
                                         <tr>
@@ -79,7 +88,7 @@
                                          ?>
                                     </tbody>                           
                                 </table>
-                                <?php } ?>
+                                <?php } ?> -->
                             </div>
                         </div>
                         

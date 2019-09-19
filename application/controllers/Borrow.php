@@ -131,7 +131,7 @@ class Borrow extends CI_Controller {
                     $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $itm->unit_id);
                     $total = $det->unit_price*$qty;
             ?>
-                   <li onClick="selectItem('<?php echo $itm->et_id; ?>','<?php echo $det->ed_id; ?>','<?php echo $itm->et_desc; ?>','1','<?php echo $det->asset_control_no;?>','<?php echo $det->type; ?>','<?php echo $det->serial_no; ?>','<?php echo $det->brand; ?>','<?php echo $det->model; ?>','<?php echo $unit; ?>')"><?php echo $itm->et_desc." - ".$det->brand." - ".$det->type." - ".$det->serial_no." - ".$det->model; ?></li>
+                   <li onClick="selectItem('<?php echo $itm->et_id; ?>','<?php echo $det->ed_id; ?>','<?php echo htmlentities($itm->et_desc); ?>','1','<?php echo $det->asset_control_no;?>','<?php echo $det->type; ?>','<?php echo $det->serial_no; ?>','<?php echo $det->brand; ?>','<?php echo $det->model; ?>','<?php echo $unit; ?>')"><?php echo $itm->et_desc." - ".$det->brand." - ".$det->type." - ".$det->serial_no." - ".$det->model; ?></li>
             <?php 
                 }
             }

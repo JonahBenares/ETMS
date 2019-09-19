@@ -8,7 +8,8 @@
                     <div class="card bor-radius shadow">
                         <div class="card-header">
                             <a href="<?php echo base_url(); ?>index.php/masterfile/dashboard" class="btn btn-default"><span class="fa fa-arrow-left"></span></a>
-                            <a><h4 class="m-l-5 m-b-10">Damaged E/T </h4></a>                   
+                            <a><h4 class="m-l-5 m-b-10">Damaged E/T  </h4></a> 
+                            <a href="<?php echo base_url(); ?>index.php/report/damage_report_blank" class="btn btn-sm btn-danger pull-right animated headShake infinite">PRINT <b>BLANK</b> E/T DAMAGE REPORT</a>
                         </div>
                         <form  action="<?php echo base_url(); ?>index.php/repair/insert_redirect" method="POST">
                             <div class="table--no-card m-b-1" >
@@ -23,6 +24,7 @@
                                             <th>Model</th>
                                             <th>Serial No.</th>
                                             <th>Status</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -37,6 +39,11 @@
                                             <td><?php echo $d['model'];?></td>
                                             <td><?php echo $d['serial_no'];?></td>
                                             <td><?php if($d['beyond_repair']==1){ echo 'Beyond Repair';}else if($d['repair']==1){ echo 'Repaired'; }?></td>
+                                            <td  align="center">
+                                                <a href="<?php echo base_url(); ?>index.php/report/damage_report/<?php echo $d['damage_id']?>" class="btn btn-warning text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
+                                            </td>
                                         </tr>
                                         <?php $x++; } }?>                                        
                                     </tbody>
