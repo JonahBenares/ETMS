@@ -212,7 +212,7 @@
                                                         </div>
                                                     </div>                                                 
                                                     <div class="col-6">
-                                                        <label for="" class="control-label mb-1">Acquired By:</label>
+                                                        <label for="" class="control-label mb-1">Acquired From:</label>
                                                         <?php if(!empty($d['acquired_by'])){ ?>
                                                         <input name="acquired_by[]" readonly="" value = "<?php echo $d['acquired_by'];?>" type="text" class="form-control bor-radius5 cc-exp">
                                                         <?php } else { ?>
