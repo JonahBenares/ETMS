@@ -7,6 +7,7 @@
     <title>Print</title>
 </head>
 <style type="text/css">
+    body,p,h5{font-size: 12px!important}
     @media print{
         .hid{
             display: none;
@@ -32,6 +33,7 @@
     }
     p, .main-tab, h5, label.nomarg{
         color:#000;
+        font-family: Arial, Helvetica, sans-serif;
     }
     .select {
        text-align-last: center;
@@ -49,6 +51,7 @@
         #print, #printhide{
             display: none;
         }
+        body,p,h5{font-size: 12px!important;}
     }
 </style>
 <body style="padding-top:20px">
@@ -74,14 +77,14 @@
             <div class="col-lg-12" style="margin:10px 0px 10px">
                 <table width="100%">
                     <tr>
-                        <td width="13%"><h5 class="nomarg">Employee</h5></td>
+                        <td width="10%"><h5 class="nomarg">Employee</h5></td>
                         <td width="40%" style="border-bottom: 1px solid #999">
                             <!-- <input type="text" style="width: 100%"> -->
                             <input type="text" id = "assign" name = "assigned" autocomplete="off" style="width: 100%" value = "<?php echo $name;?>">
                         </td>
                         <td width="4%"></td>
-                        <td width="13%"><h5 class="nomarg pull-right">Employee No.</h5></td>
-                        <td colspan="3" style="border-bottom: 1px solid #999">
+                        <td width="10%"><h5 class="nomarg">Employee No.</h5></td>
+                        <td width="40%" style="border-bottom: 1px solid #999">
                             <input type="text" name = "aaf_no" id ="aaf_no" style="width: 100%" value = "<?php echo $employee_no;?>">
                         </td>
                     </tr>
@@ -89,6 +92,11 @@
                         <td><h5 class="nomarg">Position</h5></td>
                         <td style="border-bottom: 1px solid #999">
                             <input type="text" name = "position" id = "position" style="width: 100%" value = "<?php echo $position;?>">
+                        </td>
+                        <td></td>
+                        <td><h5 class="nomarg">Department</h5></td>
+                        <td style="border-bottom: 1px solid #999">
+                            <input type="text" name = "department" id = "department" style="width: 100%" value = "<?php echo $department;?>">
                         </td>
                     </tr>
                     <!-- <tr>
@@ -98,10 +106,7 @@
                         </td>
                     </tr> -->
                     <tr>
-                        <td><h5 class="nomarg">Department</h5></td>
-                        <td style="border-bottom: 1px solid #999">
-                            <input type="text" name = "department" id = "department" style="width: 100%" value = "<?php echo $department;?>">
-                        </td>
+                        
                     </tr>              
                 </table>
             </div>
@@ -124,16 +129,16 @@
             <div class="col-lg-12">
                 <table width="100%" class="table-bordered">
                     <tr>                
-                        <td class="main-tab" width="20%" align="center"><strong>Asset #</strong></td>
-                        <td class="main-tab" width="10%" align="center"><strong>Acquisition Date</strong></td>
-                        <td class="main-tab" width="10%" align="center"><strong>Item</strong></td>                    
+                        <td class="main-tab" width="7%" align="center"><strong>Asset #</strong></td>
+                        <td class="main-tab" width="6%" align="center"><strong>Acq Date</strong></td>
+                        <td class="main-tab" width="20%" align="center"><strong>Item</strong></td>                    
                         <td class="main-tab" width="10%" align="center"><strong>Brand</strong></td>                    
-                        <td class="main-tab" width="10%" align="center"><strong>Type</strong></td>                    
+                        <!-- <td class="main-tab" width="2%" align="center"><strong>Type</strong></td>       -->              
                         <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>                    
                         <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                    
-                        <td class="main-tab" width="7%" align="center"><strong>Qty</strong></td>
-                        <td class="main-tab" width="7%" align="center"><strong>U/M</strong></td>
-                        <td class="main-tab" width="7%" align="center"><strong>Cost</strong></td>
+                        <td class="main-tab" width="3%" align="center"><strong>Qty</strong></td>
+                        <td class="main-tab" width="4%" align="center"><strong>U/M</strong></td>
+                        <td class="main-tab" width="8%" align="center"><strong>Cost</strong></td>
                         <td class="main-tab" width="8%" align="center"><strong>Total</strong></td>
                     </tr>
                     <tr>
@@ -145,17 +150,17 @@
                                             case($head['et_id'] == $det['et_id']):
                         ?>
                         <tr>
-                            <td class="main-tab" align="center"><?php echo $det['acn_no'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['date'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['item'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['brand'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['type'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['model'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['serial'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['price']." <small>".$det['currency']."</small>";?></td>
-                            <td class="main-tab" align="center"><?php echo number_format($det['price'],2)." <small>".$det['currency']."</small>";?></td>
+                            <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['acn_no'];?></td>
+                            <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['date'];?></td>
+                            <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['item'];?></td>
+                            <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['brand'];?></td>
+                            <!-- <td class="main-tab" align="center"><?php echo $det['type'];?></td> -->
+                            <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['model'];?></td>
+                            <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['serial'];?></td>
+                            <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['qty'];?></td>
+                            <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['unit'];?></td>
+                            <td class="main-tab" align="center" style="font-size: 11px">999999<?php echo $det['price']." <small>".$det['currency']."</small>";?></td>
+                            <td class="main-tab" align="center" style="font-size: 11px">999999<?php echo number_format($det['price'],2)." <small>".$det['currency']."</small>";?></td>
                         </tr>
                         <?php   
                             break;
