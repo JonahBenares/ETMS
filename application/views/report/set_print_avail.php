@@ -78,7 +78,12 @@
                 <tr>
                 <?php 
                     if(!empty($details)){ 
+
+                      $a=0;
                         foreach($details AS $det){ 
+                            if($det['set_id']!=0){
+                                $a++;
+                            }
                 ?>
                     <tr>
                         <td class="main-tab" align="center"><?php echo $det['asset_control_no'];?></td>
@@ -88,8 +93,10 @@
                         <td class="main-tab" align="center"><?php echo $det['et_desc'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
-                        <td class="main-tab" align="center"><?php echo $det['unit_price']; ?></td>
-                        <td class="main-tab" align="center"><?php echo number_format($det['total'],2); ?></td>
+                        <?php if($a==0 || $a==1){ ?>
+                        <td class="main-tab" align="center" <?php if($a==1) echo " rowspan='".$count_set."'"; ?>><?php echo $det['unit_price']; ?></td>
+                        <td class="main-tab" align="center" <?php if($a==1) echo " rowspan='".$count_set."'"; ?>><?php echo number_format($det['total'],2); ?></td>
+                        <?php } ?>
                     </tr>
                 <?php } } else { ?> 
                     <tr>

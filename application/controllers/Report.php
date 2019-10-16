@@ -2445,6 +2445,8 @@ class Report extends CI_Controller {
         $id=$this->uri->segment(3);
         $row=$this->super_model->count_rows_where("et_head","accountability_id",'0');
         if($row!=0){
+             $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND set_id !='0'");
+             $data['count_set']=$count_set;
             foreach($this->super_model->select_row_where('et_head','accountability_id','0') AS $aaf){
                 $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $aaf->accountability_id); 
                 foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$aaf->accountability_id) AS $em){
