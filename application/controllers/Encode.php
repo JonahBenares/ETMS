@@ -47,6 +47,7 @@ class Encode extends CI_Controller {
         //$data['condition'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
         $data['company'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
+        $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
         $x=1;
         foreach($this->super_model->select_row_where("et_head","et_id",$id) AS $nxt){
             $category = $this->super_model->select_column_where("category", "category_name", "category_id", $nxt->category_id);
@@ -292,6 +293,7 @@ class Encode extends CI_Controller {
                     'physical_condition'=>$this->input->post('condition['.$x.']'),
                     'placement_id'=>$this->input->post('placement['.$x.']'),
                     'company_id'=>$this->input->post('company['.$x.']'),
+                    'rack_id'=>$this->input->post('rack['.$x.']'),
                     'picture1'=>$filename1,
                     'picture2'=>$filename2,
                     'picture3'=>$filename3
@@ -337,6 +339,7 @@ class Encode extends CI_Controller {
                     'physical_condition'=>$this->input->post('condition['.$x.']'),
                     'placement_id'=>$this->input->post('placement['.$x.']'),
                     'company_id'=>$this->input->post('company['.$x.']'),
+                    'rack_id'=>$this->input->post('rack['.$x.']'),
                     'picture1'=>$filename1,
                     'picture2'=>$filename2,
                     'picture3'=>$filename3,

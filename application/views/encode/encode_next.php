@@ -132,7 +132,22 @@
                                                     </div>
                                                 </div>
                                                 <div class="row"> 
+                                                    <div class = "col-6">
+                                                        <label for="" class="control-label mb-1">Rack:</label>
+                                                        <select name="rack[]" class="form-control bor-radius5 cc-cvc">
+                                                            <option value = "">--Select Rack--</option>
+                                                            <?php foreach($rack AS $ra){ ?>
+                                                            <option value = "<?php echo $ra->rack_id; ?>"><?php echo $ra->rack_name;?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>                                   
                                                     <div class="col-6">
+                                                        <label for="" class="control-label mb-1">Supplier:</label>
+                                                        <input name="acquired_by[]" type="text" class="form-control bor-radius5 cc-exp">
+                                                    </div>
+                                                </div>
+                                                <div class = "row">
+                                                    <div class="col-12">
                                                         <label for="" class="control-label mb-1">Physical Condition:</label>
                                                         <input type="text" name="condition[]" class="form-control bor-radius5 cc-cvc">
                                                         <!-- <select name="condition[]" class="form-control bor-radius5 cc-cvc">
@@ -141,11 +156,7 @@
                                                             <option value = "<?php echo $co->physical_id; ?>"><?php echo $co->condition_name;?></option>
                                                             <?php } ?>
                                                         </select> -->
-                                                    </div>                                                
-                                                    <div class="col-6">
-                                                        <label for="" class="control-label mb-1">Supplier:</label>
-                                                        <input name="acquired_by[]" type="text" class="form-control bor-radius5 cc-exp">
-                                                    </div>
+                                                    </div> 
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="" class="control-label mb-1">Remarks:</label>
