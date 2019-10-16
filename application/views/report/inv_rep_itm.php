@@ -10,6 +10,7 @@
                             <a href="<?php echo base_url(); ?>index.php/report/report_main" class="btn btn-info btn-sm"><span class="fa fa-bars"></span></a>
                             <a href="<?php echo base_url(); ?>index.php/report/inv_rep" class="btn btn-primary btn-sm">per Sub Category</a>
                             <a href="<?php echo base_url(); ?>index.php/report/inv_rep_itm" class="btn btn-primary btn-sm active">per Item</a>
+                            <a href="<?php echo base_url(); ?>index.php/report/inv_rep_overall" class="btn btn-warning btn-sm active" style ="color:white;">Overall Item Report</a>
                         </div>
                     </center>
                     <hr>

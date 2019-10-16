@@ -81,7 +81,7 @@
     <div class="scroll" style="position: absolute;" >
         <div  style="position: fixed;width: 100%" id="btn_print" >
             <center>
-                <a class="btn btn-lg btn-warning text-white" href = '<?php echo base_url(); ?>index.php/report/report_main'  style="width:20%">Back</a>
+                <a class="btn btn-lg btn-warning text-white" href = '<?php echo base_url(); ?>index.php/report/report_draft'  style="width:20%">Back</a>
                 <button class="btn btn-lg btn-info" style="width:70%;" onclick="printDiv('printableArea')">Print</button>
             </center>
         </div>

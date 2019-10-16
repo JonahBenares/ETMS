@@ -25,13 +25,13 @@
                         </div>
                         <div class="overview__inner" id="mas_list">
                             <div class="list_master">
-                                <center><a class="names borbot" href="<?php echo base_url(); ?>index.php/masterfile/physical_list">Physical Condition</a></center>
+                                <!-- <center><a class="names borbot" href="<?php echo base_url(); ?>index.php/masterfile/physical_list">Physical Condition</a></center> -->
                                 <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/categ_list">Category</a></center>
                                 <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/emp_inclusion_list">Office</a></center>
                                 <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/employee_list">Employee</a></center>
                                 <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/loc_list">Location</a></center>
                                 <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/placement_list">Placement</a></center>
-                                <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/rack_list">Rack</a></center>
+                                <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/company_list">Company</a></center>
                                 <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/currency_list">Currency</a></center>
                                 <center><a class="names borbot" href="<?php echo base_url(); ?>index.php/masterfile/uom_list">UOM</a></center>
                             </div>
@@ -97,10 +97,12 @@
                         <div class="overview__inner" id="rep_list">
                             <div class="list_master">
                                 <center><a class="rep_names" href="<?php echo base_url(); ?>index.php/report/report_main">Equipment/Tools</a></center>
+                                <center><a class="rep_names" href="<?php echo base_url(); ?>index.php/report/report_draft">E/T Drafts</a></center>
                                 <center><a class="rep_names" href="<?php echo base_url(); ?>index.php/report/report_main_hist">E/T History</a></center>
                                 <center><a class="rep_names" href="<?php echo base_url(); ?>index.php/report/report_main_emp">E/T per Employee</a></center>
                                 <center><a class="rep_names" href="<?php echo base_url(); ?>index.php/report/report_main_avail">Available E/T</a></center>
                                 <center><a class="rep_names" href="<?php echo base_url(); ?>index.php/report/report_set_avail">Available Set E/T</a></center>
+                                <center><a class="rep_names borbot" href="<?php echo base_url(); ?>index.php/report/returned_list">Returned E/T</a></center>
                                 <center><a class="rep_names borbot" href="<?php echo base_url(); ?>index.php/repair/repair_list">Damaged E/T</a></center>
                             </div>
                         </div>                            

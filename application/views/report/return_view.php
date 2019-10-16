@@ -33,8 +33,29 @@
                                     </div>
                                      <div class="col-lg-6 col-md-6">
                                         <label for="" class="control-label mb-1">Change Location:</label>
-                                        <input id="changeloc" name="changeloc" type="checkbox" class="col-lg-1 form-control" value='1'>
-                                       
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="10%"><input id="changeloc" name="changeloc" type="checkbox" class="form-control" style="width: 0%" value='1'></td>
+                                                <td width="90%">
+                                                    <select class = "form-control" name = "location_id">
+                                                        <option value="">--Select Location--</option>
+                                                        <?php foreach($location AS $loc){ ?>
+                                                        <option value="<?php echo $loc->location_id; ?>"><?php echo $loc->location_name; ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!-- <div class = "row">
+                                            <div class = "col-lg-3">
+                                                <input id="changeloc" name="changeloc" type="checkbox" class="" value='1'>
+                                            </div>
+                                            <div class = "col-lg-3">
+                                                <select class = "">
+                                                    <option></option>
+                                                </select>
+                                            </div>
+                                        </div> -->
                                     </div>
                                 </div>
                                 <div class="row">

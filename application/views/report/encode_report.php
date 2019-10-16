@@ -53,6 +53,12 @@
         }
         body,p,h5{font-size: 12px!important;}
     }
+    .cancel{
+        background-image: url('<?php echo base_url(); ?>assets/images/cancel.png')!important;
+        background-repeat:no-repeat!important;
+        background-size: contain!important;
+        background-position: center center!important;
+    }
 </style>
 <body style="padding-top:20px">
     <div class="container">
@@ -73,7 +79,7 @@
                 </td>
             </tr>
         </table>
-        <form id='Assignform'>
+        <form id='Assignform' class="<?php echo ($save_temp!=0) ? 'cancel' : '';?>">
             <div class="col-lg-12" style="margin:10px 0px 10px">
                 <table width="100%">
                     <tr>
@@ -159,8 +165,8 @@
                             <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['serial'];?></td>
                             <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['qty'];?></td>
                             <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['unit'];?></td>
-                            <td class="main-tab" align="center" style="font-size: 11px">999999<?php echo $det['price']." <small>".$det['currency']."</small>";?></td>
-                            <td class="main-tab" align="center" style="font-size: 11px">999999<?php echo number_format($det['price'],2)." <small>".$det['currency']."</small>";?></td>
+                            <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['price']." <small>".$det['currency']."</small>";?></td>
+                            <td class="main-tab" align="center" style="font-size: 11px"><?php echo number_format($det['price'],2)." <small>".$det['currency']."</small>";?></td>
                         </tr>
                         <?php   
                             break;

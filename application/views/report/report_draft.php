@@ -1,6 +1,30 @@
 <script src="<?php echo base_url(); ?>assets/js/report.js"></script>
  <!-- MAIN CONTENT-->
-
+<div class="modal fade" id="mediumModal" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mediumModalLabel">Cancel Draft</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method = "POST" action="<?php echo base_url();?>index.php/report/cancel_draft">
+                    <div class="form-group">
+                        <label for="" class="control-label mb-1">Cancel Reason:</label>
+                        <textarea name="reason" type="text" class="form-control bor-radius5"></textarea>
+                    </div>
+                    <input type="hidden" name = "et_id" id = "et_id">
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+                </form>
+            </div>                                        
+        </div>
+    </div>
+</div>
 <div class="main-content ">
     <div class="">
         <div class="container-fluid">
@@ -9,19 +33,19 @@
                     <div class="card bor-radius shadow">
                        <?php include 'report_menu.php'; ?>
                         <div class=" table--no-card m-t-10 m-b-10">
-                            <h2 class="m-l-30 m-b-30 m-t-30">Equipment / Tools
+                            <h2 class="m-l-30 m-b-30 m-t-30">Equipment / Tools Drafts
                                 <div class="pull-right m-r-10">
                                     <button type="button" class="btn btn-sm btn-info " data-toggle="modal" data-target="#largeModal">
                                         <span class="fa fa-filter"></span> Filter
                                     </button>
                                     <?php if(!empty($filt)){ ?>
-                                    <a href = "<?php echo base_url(); ?>index.php/report/export_equipment/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo $item;?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $company;?>" class="btn btn-sm btn-info"><span class="fa fa-report"></span>Export to Excel</a>
+                                    <a href = "<?php echo base_url(); ?>index.php/report/export_equipment_draft/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo $item;?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $company;?>" class="btn btn-sm btn-info"><span class="fa fa-report"></span>Export to Excel</a>
 
-                                    <a href = "<?php echo base_url(); ?>index.php/report/report_print/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo $item;?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $company;?>" class="btn btn-sm btn-info"><span class="fa fa-print"></span> Print</a>
+                                    <a href = "<?php echo base_url(); ?>index.php/report/report_print_draft/<?php echo $from;?>/<?php echo $to;?>/<?php echo $category;?>/<?php echo $subcat;?>/<?php echo $department;?>/<?php echo $item;?>/<?php echo $brand;?>/<?php echo $model;?>/<?php echo $item_type;?>/<?php echo $serial_no;?>/<?php echo $damage;?>/<?php echo $condition;?>/<?php echo $placement;?>/<?php echo $company;?>" class="btn btn-sm btn-info"><span class="fa fa-print"></span> Print</a>
                                     <?php }else { ?>
-                                    <a href = "<?php echo base_url(); ?>index.php/report/export_equipment" class="btn btn-sm btn-info"><span class="fa fa-report"></span>Export to Excel</a>
+                                    <a href = "<?php echo base_url(); ?>index.php/report/export_equipment_draft" class="btn btn-sm btn-info"><span class="fa fa-report"></span>Export to Excel</a>
                                     
-                                    <a href = "<?php echo base_url(); ?>index.php/report/report_print" target="_blank" class="btn btn-sm btn-info"><span class="fa fa-print"></span> Print</a>
+                                    <a href = "<?php echo base_url(); ?>index.php/report/report_print_draft" target="_blank" class="btn btn-sm btn-info"><span class="fa fa-print"></span> Print</a>
                                     <?php } ?>
                                 </div>                                
                             </h2>
@@ -188,21 +212,19 @@
                                         <td><?php echo $m['department']; ?></td>
                                         <td>                                            
                                             <div class="table-data-feature">
-                                                <a class="btn btn-primary text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update" href="<?php echo base_url(); ?>index.php/report/edit_encode/<?php echo $m['et_id'];?>">
+                                                <a class="btn btn-primary text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update" href="<?php echo base_url(); ?>index.php/report/edit_encode_draft/<?php echo $m['et_id'];?>">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
                                                 <a href = "<?php echo base_url(); ?>index.php/report/encode_report/<?php echo $m['et_id'];?>" class="btn btn-warning text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
                                                     <i class="fa fa-print"></i>
                                                 </a>
-                                                <a class="btn btn-success text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Return" onClick="viewReturn(<?php echo $m['empid'];?>,<?php echo $m['et_id'];?>)">
+                                                <a href="javascript:void(0)" data-toggle="modal" data-id = '<?php echo $m['et_id']; ?>' id ="updateReminder_button" data-target="#mediumModal" class="btn btn-danger text-white item btn-sm" title="Cancel Draft"><span class="fa fa-times"></span></a>
+                                                <!-- <a class="btn btn-success text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Return" onClick="viewReturn(<?php echo $m['empid'];?>,<?php echo $m['et_id'];?>)">
                                                     <i class="fa fa-refresh"></i>
                                                 </a>
-                                                <!-- <a class="btn btn-warning text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Transfer"  onClick="transferPop(<?php echo $m['empid'];?>,<?php echo $m['et_id'];?>)">
-                                                    <i class="fa fa-reply"></i>
-                                                </a> -->
                                                 <a class="btn btn-danger item btn-sm text-white" onClick="tagAsDamage(<?php echo $m['empid'];?>,<?php echo $m['et_id'];?>)" data-toggle="tooltip" data-placement="top" title="Tag as Damage">
                                                     <i class="fa fa-times"></i>
-                                                </a>
+                                                </a> -->
                                             </div>
                                         </td>
                                     </tr>

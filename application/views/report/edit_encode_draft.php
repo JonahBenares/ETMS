@@ -486,7 +486,7 @@
                                 <center>     
                                     <!-- <i class="fa fa-dot-circle-o"></i> -->
                                     <input type="hidden" name="count" id = "count" value = "<?php echo $counter;?>">
-                                    <input type = "submit" class="btn btn-success btn-md bor-radius10 btn-block  " value="Submit">  
+                                    <input type = "submit" class="btn btn-success btn-md bor-radius10 btn-block" name ="saved" value="Submit">  
                                     <input type="hidden" name="user_id" value = "<?php echo $_SESSION['user_id'];?>">
                                     <input type="hidden" name="et_id" value = "<?php echo $id;?>">
                                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">                         

@@ -18,6 +18,7 @@
                                     <a href="<?php echo base_url(); ?>index.php/report/aaf_assign_rep" class="btn btn-success">
                                         Assign
                                     </a>
+                                    <a href = "<?php echo base_url(); ?>index.php/report/report_print_avail" class="btn btn-info"><span class="fa fa-print"></span> Print</a>
                                 </div>
                                 
                             </h2>

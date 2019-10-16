@@ -44,8 +44,8 @@ class Encode extends CI_Controller {
         $id=$this->uri->segment(3);   
         $data['qty'] = $this->super_model->select_column_where("et_head", "qty", "et_id", $id);
         $data['currency'] = $this->super_model->select_all_order_by('currency', 'currency_name', 'ASC');
-        $data['condition'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
-        $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
+        //$data['condition'] = $this->super_model->select_all_order_by('physical_condition', 'condition_name', 'ASC');
+        $data['company'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['placement'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $x=1;
         foreach($this->super_model->select_row_where("et_head","et_id",$id) AS $nxt){
@@ -156,7 +156,8 @@ class Encode extends CI_Controller {
         $id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('et_head','et_id',$id) AS $et){
             $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $et->accountability_id); 
-            $data['employee_no'] = $this->super_model->select_column_where("employees", "aaf_no", "employee_id", $et->accountability_id); 
+            $data['employee_no'] = $this->super_model->select_column_where("employees", "aaf_no", "employee_id", $et->accountability_id);
+            $data['save_temp']=$et->save_temp;
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$et->accountability_id) AS $em){
                 $data['child'][] = array( 
                     'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
@@ -274,45 +275,86 @@ class Encode extends CI_Controller {
                // $z++;        
         //    }
 
-            
-            $data = array(
-                'et_id'=>$this->input->post('et_id'),
-                'acquisition_date'=>$this->input->post('acq_date['.$x.']'),
-                'date_issued'=>$this->input->post('date_issued['.$x.']'),
-                'asset_control_no'=>$this->input->post('acn['.$x.']'),
-                'serial_no'=>$this->input->post('sn['.$x.']'),
-                'brand'=>$this->input->post('brand['.$x.']'),
-                'model'=>$this->input->post('model['.$x.']'),
-                'type'=>$this->input->post('type['.$x.']'),
-                'unit_price'=>$this->input->post('price['.$x.']'),
-                'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
-                'remarks'=>$this->input->post('remarks['.$x.']'),
-                'currency_id'=>$this->input->post('cur['.$x.']'),
-                'physical_id'=>$this->input->post('condition['.$x.']'),
-                'placement_id'=>$this->input->post('placement['.$x.']'),
-                'rack_id'=>$this->input->post('rack['.$x.']'),
-                'picture1'=>$filename1,
-                'picture2'=>$filename2,
-                'picture3'=>$filename3
-            );
-        
-            if($this->super_model->insert_into("et_details", $data)){
-                $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
-                $subcat_prefix1=$assetdetails[0];
-                $subcat_prefix2=$assetdetails[1];
-                $location=$assetdetails[2];
-                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
-                $series = $assetdetails[3];
-                $asset_data= array(
-                    'subcat_prefix'=>$subcat_prefix,
-                    'location'=>$location,
-                    'series'=>$series
+            if($this->input->post('saved')=='Submit'){  
+                $data = array(
+                    'et_id'=>$this->input->post('et_id'),
+                    'acquisition_date'=>$this->input->post('acq_date['.$x.']'),
+                    'date_issued'=>$this->input->post('date_issued['.$x.']'),
+                    'asset_control_no'=>$this->input->post('acn['.$x.']'),
+                    'serial_no'=>$this->input->post('sn['.$x.']'),
+                    'brand'=>$this->input->post('brand['.$x.']'),
+                    'model'=>$this->input->post('model['.$x.']'),
+                    'type'=>$this->input->post('type['.$x.']'),
+                    'unit_price'=>$this->input->post('price['.$x.']'),
+                    'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
+                    'remarks'=>$this->input->post('remarks['.$x.']'),
+                    'currency_id'=>$this->input->post('cur['.$x.']'),
+                    'physical_condition'=>$this->input->post('condition['.$x.']'),
+                    'placement_id'=>$this->input->post('placement['.$x.']'),
+                    'company_id'=>$this->input->post('company['.$x.']'),
+                    'picture1'=>$filename1,
+                    'picture2'=>$filename2,
+                    'picture3'=>$filename3
                 );
-                $this->super_model->insert_into("asset_series", $asset_data);
+            
+                if($this->super_model->insert_into("et_details", $data)){
+                    $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
+                    $subcat_prefix1=$assetdetails[0];
+                    $subcat_prefix2=$assetdetails[1];
+                    $location=$assetdetails[2];
+                    $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
+                    $series = $assetdetails[3];
+                    $asset_data= array(
+                        'subcat_prefix'=>$subcat_prefix,
+                        'location'=>$location,
+                        'series'=>$series
+                    );
+                    $this->super_model->insert_into("asset_series", $asset_data);
 
-                echo "<script>alert('Equipment/Tool successfully Added!'); 
-                    window.location ='".base_url()."index.php/encode/encode_report/$id'; </script>";
+                    $data_up = array(
+                        'save_temp'=>0,
+                    );
+
+                    $this->super_model->update_where("et_head", $data_up, "et_id", $id);
+
+                    echo "<script>alert('Equipment/Tool successfully Added!'); 
+                        window.location ='".base_url()."index.php/encode/encode_report/$id'; </script>";
+                }
+            }else {
+                $data = array(
+                    'et_id'=>$this->input->post('et_id'),
+                    'acquisition_date'=>$this->input->post('acq_date['.$x.']'),
+                    'date_issued'=>$this->input->post('date_issued['.$x.']'),
+                    'asset_control_no'=>$this->input->post('acn['.$x.']'),
+                    'serial_no'=>$this->input->post('sn['.$x.']'),
+                    'brand'=>$this->input->post('brand['.$x.']'),
+                    'model'=>$this->input->post('model['.$x.']'),
+                    'type'=>$this->input->post('type['.$x.']'),
+                    'unit_price'=>$this->input->post('price['.$x.']'),
+                    'acquired_by'=>$this->input->post('acquired_by['.$x.']'),
+                    'remarks'=>$this->input->post('remarks['.$x.']'),
+                    'currency_id'=>$this->input->post('cur['.$x.']'),
+                    'physical_condition'=>$this->input->post('condition['.$x.']'),
+                    'placement_id'=>$this->input->post('placement['.$x.']'),
+                    'company_id'=>$this->input->post('company['.$x.']'),
+                    'picture1'=>$filename1,
+                    'picture2'=>$filename2,
+                    'picture3'=>$filename3,
+                );
+            
+                if($this->super_model->insert_into("et_details", $data)){
+                    $data_up = array(
+                        'save_temp'=>1,
+                    );
+
+                    $this->super_model->update_where("et_head", $data_up, "et_id", $id);
+                    echo "<script>alert('Equipment/Tool successfully Added!'); 
+                        window.location ='".base_url()."index.php/encode/encode_report/$id'; </script>";
+                }
             }
+
+
+
         }
     }
 

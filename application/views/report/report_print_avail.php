@@ -81,7 +81,7 @@
     <div class="scroll" style="position: absolute;" >
         <div  style="position: fixed;width: 100%" id="btn_print" >
             <center>
-                <a class="btn btn-lg btn-warning text-white" href = '<?php echo base_url(); ?>index.php/report/report_main'  style="width:20%">Back</a>
+                <a class="btn btn-lg btn-warning text-white" href = '<?php echo base_url(); ?>index.php/report/report_main_avail'  style="width:20%">Back</a>
                 <button class="btn btn-lg btn-info" style="width:70%;" onclick="printDiv('printableArea')">Print</button>
             </center>
         </div>
@@ -98,7 +98,7 @@
                     <td class="thead">Qty</td>
                     <td class="thead">UOM</td>
                     <td class="thead">Date Issue</td>
-                    <td class="thead">Accountability</td>
+                    <!-- <td class="thead">Accountability</td> -->
                     <td class="thead">Status</td>
                     <td class="thead">Department</td>
                     <td class="thead">Placement</td>
@@ -131,7 +131,7 @@
                         <td><?php echo $r['qty'];?></td>
                         <td><?php echo $r['unit'];?></td>
                         <td><?php echo $r['date_issued'];?></td>
-                        <td><?php echo $r['accountability'];?></td>
+                        <!-- <td><?php echo $r['accountability'];?></td> -->
                         <td><?php echo $status;?></td>
                         <td><?php echo $r['department'];?></td>
                         <td><?php echo $r['placement'];?></td>

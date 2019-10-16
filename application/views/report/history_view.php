@@ -157,14 +157,20 @@
                                 <table class="table table-bordered table-striped table-earning">
                                     <thead class="btn-dark">
                                         <tr>
-                                            <td width="70%">Received By</td>
+                                            <td width="">JO No.</td>
+                                            <td width="">Repair Price</td>
+                                            <td width="">Supplier</td>
+                                            <td width="">Received By</td>
                                             <td align = "right">Repair Date</td>
-                                            <td width="10%" align="center">Qty</td>
+                                            <td width="" align="center">Qty</td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php foreach($repair AS $to){ ?>
                                         <tr>
+                                            <td><?php echo $to['jo_no']; ?></td>
+                                            <td><?php echo $to['repair_price']; ?></td>
+                                            <td><?php echo $to['supplier']; ?></td>
                                             <td><?php echo $to['receive_by']; ?></td>
                                             <td align="right"><?php echo $to['repair_date']; ?></td>
                                             <td align="right">

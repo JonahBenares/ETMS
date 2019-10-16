@@ -139,6 +139,12 @@
       window.print();
     }
     </script>
+    <script type="text/javascript">
+        $(document).on("click", "#updateReminder_button", function () {
+            var et_id = $(this).attr("data-id");
+            $("#et_id").val(et_id);
+        });
+    </script>
     
 </body>
 

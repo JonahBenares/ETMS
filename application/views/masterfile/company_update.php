@@ -8,18 +8,18 @@
                     <div class="card bor-radius shadow">
                         <div class="card-header">
                             <a onclick="history.go(-1);" class="btn btn-default"><span class="fa fa-arrow-left"></span></a>
-                            <strong>UPDATE</strong> Physical Condition
+                            <strong>UPDATE</strong> Company
                         </div>
-                        <form action="<?php echo base_url(); ?>index.php/masterfile/update_rack" method="POST">
+                        <form action="<?php echo base_url(); ?>index.php/masterfile/update_company" method="POST">
                             <div class="card-body card-block">
-                                <label for="" class="control-label mb-1">Physical Condition:</label>
-                                <?php foreach($rack AS $dep){ ?>  
-                                <input id="" name="rack" type="text" value = "<?php echo $dep->rack_name;?>"  class="form-control bor-radius5" placeholder="">
+                                <label for="" class="control-label mb-1">Company:</label>
+                                <?php foreach($company AS $dep){ ?>  
+                                <input id="" name="company" type="text" value = "<?php echo $dep->company_name;?>"  class="form-control bor-radius5" placeholder="">
                             </div>
                             <div class="card-footer">
                                 <center>
                                     <input type = "submit" class="btn btn-info btn-sm bor-radius10 btn-block" placeholder="Update" value="update">
-                                    <input type = "hidden" name = "rack_id" value="<?php echo $id; ?>">
+                                    <input type = "hidden" name = "company_id" value="<?php echo $id; ?>">
                                 </center>
                             </div>
                             <?php } ?>

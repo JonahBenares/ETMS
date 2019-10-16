@@ -1,6 +1,7 @@
  <div class="card-header">
     <a href="<?php echo base_url(); ?>index.php/masterfile/dashboard" class="btn btn-default"><span class="fa fa-arrow-left"></span></a>
     <a href="<?php echo base_url(); ?>index.php/report/report_main" class="btn btn-primary">Equipment/Tools</a>
+    <a href="<?php echo base_url(); ?>index.php/report/report_draft" class="btn btn-primary">E/T Drafts</a>
     <a href="<?php echo base_url(); ?>index.php/report/report_main_hist" class="btn btn-primary">E/T History</a>
     <a href="<?php echo base_url(); ?>index.php/report/report_main_emp" class="btn btn-primary" >E/T per Employee</a>
     <a href="<?php echo base_url(); ?>index.php/report/report_main_avail" class="btn btn-primary" >Available E/T <span class="badge badge-light badge-md bor-radius100" ><?php echo number_format($available_qty,0); ?></span></a>
