@@ -4612,6 +4612,8 @@ class Report extends CI_Controller {
                 $data['department'] =$aaf->department;
                 $qty = 1;
                 foreach($this->super_model->select_row_where('et_details', 'et_id', $aaf->et_id) AS $det){
+                    $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '$id' AND set_id !='0'");
+                    $data['count_set']=$count_set;
                     $total=$qty*$det->unit_price;
                     $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
                     $set_price = $this->super_model->select_column_where("et_set","set_price",'set_id',$det->set_id);
@@ -4632,7 +4634,8 @@ class Report extends CI_Controller {
                         'currency'=>$currency,
                         'set_price'=>$set_price,
                         'set_total'=>$set_total,
-                        'total'=>$total
+                        'total'=>$total,
+                        
                     );
                 }
             }
