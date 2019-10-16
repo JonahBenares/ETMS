@@ -187,7 +187,8 @@ class Masterfile extends CI_Controller {
         $aaf_no = trim($this->input->post('aaf_no')," ");
         $row = $this->super_model->count_rows_where("employees","employee_name",$employee);
         if($row!=0){
-            echo "<script>alert('$employee is already encoded!'); window.location ='".base_url()."index.php/masterfile/employee_list';</script>";
+            echo "<script>alert('$employee is already encoded!'); </script>";
+            redirect(base_url().'index.php/masterfile/employee_list');
         }else {
             $data = array(
                 'employee_name'=>$employee,
@@ -202,14 +203,15 @@ class Masterfile extends CI_Controller {
                 $aaf_prefix1=$emp[0];
                 $aaf_prefix2=$emp[1];
                 $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
-                $series = $emp[2];
+                $series = $emp[1];
                 $emp_data= array(
-                    'aaf_prefix'=>$aaf_prefix,
+                    'aaf_prefix'=>$aaf_prefix1,
                     'series'=>$series
                 );
                 $this->super_model->insert_into("employee_series", $emp_data);
-                echo "<script>alert('Successfully Added!'); 
-                    window.location ='".base_url()."index.php/masterfile/employee_list'; </script>";
+                echo "<script>alert('Successfully Added!');  </script>";
+                    //window.location ='".base_url()."index.php/masterfile/employee_list'; </script>";
+                 redirect(base_url().'index.php/masterfile/employee_list');   
             }
         }
     }
@@ -342,8 +344,9 @@ class Masterfile extends CI_Controller {
         $aaf_no = trim($this->input->post('aaf_no')," ");
         $row = $this->super_model->count_rows_where("employees","employee_name",$department);
         if($row!=0){
-            echo "<script>alert('$department is already encoded!'); window.location ='".base_url()."index.php/masterfile/emp_inclusion_list';</script>";
-        }else {
+            echo "<script>alert('$department is already encoded!');</script>";
+             redirect(base_url().'index.php/masterfile/emp_inclusion_list');        
+        } else {
             $data = array(
                 'employee_name'=>$department,
                 'location_id'=>$location,
@@ -355,14 +358,17 @@ class Masterfile extends CI_Controller {
                 $aaf_prefix1=$emp[0];
                 $aaf_prefix2=$emp[1];
                 $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
-                $series = $emp[2];
+                $series = $emp[1];
+
                 $emp_data= array(
-                    'aaf_prefix'=>$aaf_prefix,
+                    'aaf_prefix'=>$aaf_prefix1,
                     'series'=>$series
                 );
                 $this->super_model->insert_into("employee_series", $emp_data);
-                echo "<script>alert('Successfully Added!'); 
-                    window.location ='".base_url()."index.php/masterfile/emp_inclusion_list'; </script>";
+
+                redirect(base_url().'index.php/masterfile/emp_inclusion_list');
+               /* echo "<script>alert('Successfully Added!'); 
+                    window.location ='".base_url()."index.php/masterfile/emp_inclusion_list'; </script>";*/
             }
         }
     }

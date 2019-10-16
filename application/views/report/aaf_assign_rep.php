@@ -188,7 +188,8 @@
                                     <option value = "$emp->employee_id"><?php echo $emp->employee_name;?></option>
                                 <?php } ?>
                             </select> -->
-                            <input class="select" id = "receive_by" type="text" name="">
+                            <!-- <input class="select" id = "receive_by" type="text" name=""> -->
+                            <div id = "receive_by" style = "color:black;text-align: center;"></div>
                         </td>
                         <td></td>
                     </tr>
