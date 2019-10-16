@@ -703,62 +703,62 @@ class Masterfile extends CI_Controller {
         }
     }
 
-    public function rack_list(){  
+    public function company_list(){  
         $this->load->view('template/header');
         $this->load->view('template/sidebar');
-        $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
-        $this->load->view('masterfile/rack_list',$data);
+        $data['company'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
+        $this->load->view('masterfile/company_list',$data);
         $this->load->view('template/scripts');
     }
 
-    public function insert_rack(){
-        $rack = trim($this->input->post('rack')," ");
-        $row = $this->super_model->count_rows_where("rack","rack_name",$rack);
+    public function insert_company(){
+        $company = trim($this->input->post('company')," ");
+        $row = $this->super_model->count_rows_where("company","company_name",$company);
         if($row!=0){
-            echo "<script>alert('$rack is already encoded!'); 
-                    window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+            echo "<script>alert('$company is already encoded!'); 
+                    window.location ='".base_url()."index.php/masterfile/company_list'; </script>";
         }else {
             $data = array(
-                'rack_name'=>$rack
+                'company_name'=>$company
             );
-            if($this->super_model->insert_into("rack", $data)){
+            if($this->super_model->insert_into("company", $data)){
                echo "<script>alert('Successfully Added!'); 
-                    window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+                    window.location ='".base_url()."index.php/masterfile/company_list'; </script>";
             }
         }
     }
 
-    public function rack_update(){  
+    public function company_update(){  
         $this->load->view('template/header');
         $this->load->view('template/sidebar');
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
-        $data['rack'] = $this->super_model->select_row_where('rack', 'rack_id', $id);
-        $this->load->view('masterfile/rack_update',$data);
+        $data['company'] = $this->super_model->select_row_where('company', 'company_id', $id);
+        $this->load->view('masterfile/company_update',$data);
         $this->load->view('template/scripts');
     }
 
-    public function update_rack(){
+    public function update_company(){
         $data = array(
-            'rack_name'=>$this->input->post('rack')
+            'company_name'=>$this->input->post('company')
         );
-        $rack_id = $this->input->post('rack_id');
-            if($this->super_model->update_where('rack', $data, 'rack_id', $rack_id)){
+        $company_id = $this->input->post('company_id');
+            if($this->super_model->update_where('company', $data, 'company_id', $company_id)){
             echo "<script>alert('Successfully Updated!'); 
-                window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+                window.location ='".base_url()."index.php/masterfile/company_list'; </script>";
         }
     }
 
-    public function delete_rack(){
+    public function delete_company(){
         $id=$this->uri->segment(3);
-        $row = $this->super_model->count_rows_where("et_details","rack_id",$id);
+        $row = $this->super_model->count_rows_where("et_details","company_id",$id);
         if($row!=0){
             echo "<script>alert('You cannot delete this record!'); 
-                    window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+                    window.location ='".base_url()."index.php/masterfile/company_list'; </script>";
         }else{
-            if($this->super_model->delete_where('rack', 'rack_id', $id)){
+            if($this->super_model->delete_where('company', 'company_id', $id)){
                 echo "<script>alert('Succesfully Deleted'); 
-                    window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+                    window.location ='".base_url()."index.php/masterfile/company_list'; </script>";
             }
         }
     }

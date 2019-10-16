@@ -210,11 +210,7 @@
                                                         </div>
                                                     </div>                                                 
                                                     <div class="col-6">
-<<<<<<< HEAD
-                                                        <label for="" class="control-label mb-1">Acquired From:</label>
-=======
                                                         <label for="" class="control-label mb-1">Supplier:</label>
->>>>>>> 15bba1c3ef3c7673ad366344c7ce10f98201ca16
                                                         <?php if(!empty($d['acquired_by'])){ ?>
                                                         <input name="acquired_by[]" readonly="" value = "<?php echo $d['acquired_by'];?>" type="text" class="form-control bor-radius5 cc-exp">
                                                         <?php } else { ?>
@@ -490,7 +486,7 @@
                                 <center>     
                                     <!-- <i class="fa fa-dot-circle-o"></i> -->
                                     <input type="hidden" name="count" id = "count" value = "<?php echo $counter;?>">
-                                    <input type = "submit" class="btn btn-success btn-md bor-radius10 btn-block  " value="Submit">  
+                                    <input type = "submit" class="btn btn-success btn-md bor-radius10 btn-block" name ="saved" value="Submit">  
                                     <input type="hidden" name="user_id" value = "<?php echo $_SESSION['user_id'];?>">
                                     <input type="hidden" name="et_id" value = "<?php echo $id;?>">
                                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">                         

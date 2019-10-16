@@ -7,6 +7,7 @@
     <title>Print</title>
 </head>
 <style type="text/css">
+    body,p,h5{font-size: 12px!important}
     @media print{
         .hid{
             display: none;
@@ -32,6 +33,7 @@
     }
     p, .main-tab, h5, label.nomarg{
         color:#000;
+        font-family: Arial, Helvetica, sans-serif;
     }
     .select {
        text-align-last: center;
@@ -49,6 +51,13 @@
         #print, #printhide{
             display: none;
         }
+        body,p,h5{font-size: 12px!important;}
+    }
+    .cancel{
+        background-image: url('<?php echo base_url(); ?>assets/images/cancel.png')!important;
+        background-repeat:no-repeat!important;
+        background-size: contain!important;
+        background-position: center center!important;
     }
 </style>
 <body style="padding-top:20px">
@@ -65,175 +74,176 @@
                     <p id="head" style="margin: 0px">Tel. No. 476-7382</p>
                 </td>
                 <td style="padding:10px;border-bottom: 2px solid #000;border-left: 2px solid #000" width="50%" align="center">
-                    <h5><strong>ASSET ACCOUNTABILITY FORM</strong></h5>
+                    <h5><strong>ASSET ACCOUNTABILITY FORM <?php echo ($save_temp!=0) ? '<span style="color:red;">(DRAFT)</span>' : ''; ?></strong></h5>
                 </td>
             </tr>
         </table>
-        <form id='Assignform'>
+        <form id='Assignform' class="<?php echo ($save_temp!=0) ? 'cancel' : '';?>">
             <div class="col-lg-12" style="margin:10px 0px 10px">
-                <table width="100%">
-                    <tr>
-                        <td width="13%"><h5 class="nomarg">Employee</h5></td>
-                        <td width="40%" style="border-bottom: 1px solid #999">
-                            <!-- <input type="text" style="width: 100%"> -->
-                            <input type="text" id = "assign" name = "assigned" autocomplete="off" style="width: 100%" value = "<?php echo $name;?>">
-                        </td>
-                        <td width="4%"></td>
-                        <td width="13%"><h5 class="nomarg pull-right">Employee No.</h5></td>
-                        <td colspan="3" style="border-bottom: 1px solid #999">
-                            <input type="text" name = "aaf_no" id ="aaf_no" style="width: 100%" value = "<?php echo $employee_no;?>">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><h5 class="nomarg">Position</h5></td>
-                        <td style="border-bottom: 1px solid #999">
-                            <input type="text" name = "position" id = "position" style="width: 100%" value = "<?php echo $position;?>">
-                        </td>
-                    </tr>
-                    <!-- <tr>
-                        <td><h5 class="nomarg">Date Issued</h5></td>
-                        <td style="border-bottom: 1px solid #999">
-                            <input type="date" name = "date_issued" style="width: 100%" value = "<?php echo $date_issued;?>">
-                        </td>
-                    </tr> -->
-                    <tr>
-                        <td><h5 class="nomarg">Department</h5></td>
-                        <td style="border-bottom: 1px solid #999">
-                            <input type="text" name = "department" id = "department" style="width: 100%" value = "<?php echo $department;?>">
-                        </td>
-                    </tr>              
-                </table>
-            </div>
-            <!-- <div id="printhide">
-                <div class="card p-b-10 p-t-10 p-l-10 p-r-10">
-                    <div class="row">
-                        <div class="col-lg-2"><label for="" class="control-label pull-right">Item Name:</label></div>
-                        <div class="col-lg-7">                        
-                            <input id="item" name="item" type="text" class="form-control" placeholder="" autocomplete="off">
-                            <span id="suggestion-item"></span>
-                        </div>
-                        <div class="col-lg-3">
-                            <a onclick='add_item()' class="btn btn-success bor-radius text-white">Add Item</a>
-                        </div>
-                    </div>
-                </div>
-                
-                
-            </div>  -->
-            <div class="col-lg-12">
-                <table width="100%" class="table-bordered">
-                    <tr>                
-                        <td class="main-tab" width="20%" align="center"><strong>Asset #</strong></td>
-                        <td class="main-tab" width="10%" align="center"><strong>Acquisition Date</strong></td>
-                        <td class="main-tab" width="10%" align="center"><strong>Item</strong></td>                    
-                        <td class="main-tab" width="10%" align="center"><strong>Brand</strong></td>                    
-                        <td class="main-tab" width="10%" align="center"><strong>Type</strong></td>                    
-                        <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>                    
-                        <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                    
-                        <td class="main-tab" width="7%" align="center"><strong>Qty</strong></td>
-                        <td class="main-tab" width="7%" align="center"><strong>U/M</strong></td>
-                        <td class="main-tab" width="7%" align="center"><strong>Cost</strong></td>
-                        <td class="main-tab" width="8%" align="center"><strong>Total</strong></td>
-                    </tr>
-                    <tr>
-                        <?php 
-                            if(!empty($head)){ 
-                                foreach($head as $head){
-                                    foreach($details AS $det){ 
-                                        switch($det){
-                                            case($head['et_id'] == $det['et_id']):
-                        ?>
+                    <table width="100%">
                         <tr>
-                            <td class="main-tab" align="center"><?php echo $det['acn_no'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['date'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['item'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['brand'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['type'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['model'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['serial'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
-                            <td class="main-tab" align="center"><?php echo $det['price']." <small>".$det['currency']."</small>";?></td>
-                            <td class="main-tab" align="center"><?php echo number_format($det['price'],2)." <small>".$det['currency']."</small>";?></td>
-                        </tr>
-                        <?php   
-                            break;
-                            default: 
-                            } } } 
-                            } else { 
-                        ?>
-                        <tr>
-                            <td class="main-tab" align="center" colspan='11'><center>No Data Available.</center></td>
-                        </tr>
-                        <?php } ?>
-                    </tr>
-                    <tr>
-                        <td class="main-tab" colspan="11"><center>***nothing follows***</center></td>
-                    </tr>  
-                </table>
-                <br>
-                <table width = '100%'>
-                        <tr>
-                            <td width = '7%' style ="color:black;"><strong>Remarks:</strong></td>
-                            <td style = "border-bottom: 1px solid #aeaeae">
-                                <?php 
-                                    foreach($remarks_it AS $rem){ 
-                                ?>
-                                <?php if($rem['remarks'] == ''){ ?>   
-                                <?php } else { ?>
-                                    <b><?php echo $rem['remarks']; ?> ,</b>
-                                <?php } ?>
-                                <?php } ?> 
+                            <td width="13%"><h5 class="nomarg">Employee</h5></td>
+                            <td width="40%" style="border-bottom: 1px solid #999">
+                                <!-- <input type="text" style="width: 100%"> -->
+                                <input type="text" id = "assign" name = "assigned" autocomplete="off" style="width: 100%" value = "<?php echo $name;?>">
+                            </td>
+                            <td width="4%"></td>
+                            <td width="13%"><h5 class="nomarg pull-right">Employee No.</h5></td>
+                            <td colspan="3" style="border-bottom: 1px solid #999">
+                                <input type="text" name = "aaf_no" id ="aaf_no" style="width: 100%" value = "<?php echo $employee_no;?>">
                             </td>
                         </tr>
-                </table>
-                <br>
-                <table width="100%">
-                    <tr>
-                        <td class="main-tab" style="text-indent:20%">I hereby acknowledge receipt of the company owned property/ies listed above for which I am accountable. I agree to maintain the property/ies in good condition and to return it when I cease working for the company, or earlier on request.  I promise to report any loss or damage immediately and further agree to use the said property for work related purposes.</td>
-                    </tr>
-                </table>
-                <br>
-                 <table width="100%">
-                    <tr>
-                        <td width="10%"></td>
-                        <td width="26%" class="main-tab">Prepared by:</td>
-                        <td width="10%"></td>
-                        <td width="26%" class="main-tab">Received by:</td>
-                        <td width="10%"></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td style="border-bottom:1px solid #000">
-                            <input class="select" type="text" name="" value="<?php echo $user_id;?>">
-                        </td> 
-                        <td></td>
-                        <td style="border-bottom:1px solid #000">
-                            <?php if($type == 2){ ?>
-                                <?php foreach($child as $c){ echo  $c['emp'].", <br>"; }?>
-                            <?php } else { ?>
-                                <textarea class="select" type="" name="" value="" ><?php echo  $name;?></textarea>
+                        <tr>
+                            <td><h5 class="nomarg">Position</h5></td>
+                            <td style="border-bottom: 1px solid #999">
+                                <input type="text" name = "position" id = "position" style="width: 100%" value = "<?php echo $position;?>">
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td><h5 class="nomarg">Date Issued</h5></td>
+                            <td style="border-bottom: 1px solid #999">
+                                <input type="date" name = "date_issued" style="width: 100%" value = "<?php echo $date_issued;?>">
+                            </td>
+                        </tr> -->
+                        <tr>
+                            <td><h5 class="nomarg">Department</h5></td>
+                            <td style="border-bottom: 1px solid #999">
+                                <input type="text" name = "department" id = "department" style="width: 100%" value = "<?php echo $department;?>">
+                            </td>
+                        </tr>              
+                    </table>
+                </div>
+                <!-- <div id="printhide">
+                    <div class="card p-b-10 p-t-10 p-l-10 p-r-10">
+                        <div class="row">
+                            <div class="col-lg-2"><label for="" class="control-label pull-right">Item Name:</label></div>
+                            <div class="col-lg-7">                        
+                                <input id="item" name="item" type="text" class="form-control" placeholder="" autocomplete="off">
+                                <span id="suggestion-item"></span>
+                            </div>
+                            <div class="col-lg-3">
+                                <a onclick='add_item()' class="btn btn-success bor-radius text-white">Add Item</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>  -->
+                <div class="col-lg-12">
+                    <table width="100%" class="table-bordered">
+                        <tr>                
+                            <td class="main-tab" width="7%" align="center"><strong>Asset #</strong></td>
+                            <td class="main-tab" width="6%" align="center"><strong>Acq Date</strong></td>
+                            <td class="main-tab" width="20%" align="center"><strong>Item</strong></td>                    
+                            <td class="main-tab" width="10%" align="center"><strong>Brand</strong></td>                    
+                            <!-- <td class="main-tab" width="2%" align="center"><strong>Type</strong></td>       -->              
+                            <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>                    
+                            <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                    
+                            <td class="main-tab" width="3%" align="center"><strong>Qty</strong></td>
+                            <td class="main-tab" width="4%" align="center"><strong>U/M</strong></td>
+                            <td class="main-tab" width="8%" align="center"><strong>Cost</strong></td>
+                            <td class="main-tab" width="8%" align="center"><strong>Total</strong></td>
+                        </tr>
+                        <tr>
+                            <?php 
+                                if(!empty($head)){ 
+                                    foreach($head as $head){
+                                        foreach($details AS $det){ 
+                                            switch($det){
+                                                case($head['et_id'] == $det['et_id']):
+                            ?>
+                            <tr>
+                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['acn_no'];?></td>
+                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['date'];?></td>
+                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['item'];?></td>
+                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['brand'];?></td>
+                                <!-- <td class="main-tab" align="center"><?php echo $det['type'];?></td> -->
+                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['model'];?></td>
+                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['serial'];?></td>
+                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['qty'];?></td>
+                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['unit'];?></td>
+                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['price']." <small>".$det['currency']."</small>";?></td>
+                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo number_format($det['price'],2)." <small>".$det['currency']."</small>";?></td>
+                            </tr>
+                            <?php   
+                                break;
+                                default: 
+                                } } } 
+                                } else { 
+                            ?>
+                            <tr>
+                                <td class="main-tab" align="center" colspan='11'><center>No Data Available.</center></td>
+                            </tr>
                             <?php } ?>
-                            <!-- <select class="select">
-                                <option></option>
-                                <?php foreach($employee AS $emp){ ?>
-                                    <option value = "$emp->employee_id"><?php echo $emp->employee_name;?></option>
+                        </tr>
+                        <tr>
+                            <td class="main-tab" colspan="11"><center>***nothing follows***</center></td>
+                        </tr>  
+                    </table>
+                    <br>
+                    <table width = '100%'>
+                            <tr>
+                                <td width = '7%' style ="color:black;"><strong>Remarks:</strong></td>
+                                <td style = "border-bottom: 1px solid #aeaeae">
+                                    <?php 
+                                        foreach($remarks_it AS $rem){ 
+                                    ?>
+                                    <?php if($rem['remarks'] == ''){ ?>   
+                                    <?php } else { ?>
+                                        <b><?php echo $rem['remarks']; ?> ,</b>
+                                    <?php } ?>
+                                    <?php } ?> 
+                                </td>
+                            </tr>
+                    </table>
+                    <br>
+                    <table width="100%">
+                        <tr>
+                            <td class="main-tab" style="text-indent:20%">I hereby acknowledge receipt of the company owned property/ies listed above for which I am accountable. I agree to maintain the property/ies in good condition and to return it when I cease working for the company, or earlier on request.  I promise to report any loss or damage immediately and further agree to use the said property for work related purposes.</td>
+                        </tr>
+                    </table>
+                    <br>
+                     <table width="100%">
+                        <tr>
+                            <td width="10%"></td>
+                            <td width="26%" class="main-tab">Prepared by:</td>
+                            <td width="10%"></td>
+                            <td width="26%" class="main-tab">Received by:</td>
+                            <td width="10%"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td style="border-bottom:1px solid #000">
+                                <input class="select" type="text" name="" value="<?php echo $user_id;?>">
+                            </td> 
+                            <td></td>
+                            <td style="border-bottom:1px solid #000">
+                                <?php if($type == 2){ ?>
+                                    <?php foreach($child as $c){ echo  $c['emp'].", <br>"; }?>
+                                <?php } else { ?>
+                                    <textarea class="select" type="" name="" value="" ><?php echo  $name;?></textarea>
                                 <?php } ?>
-                            </select> -->
-                            <!-- <input class="select" id = "receive_by" type="text" name="" value = "<?php echo $name;?>"> -->
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input class="select" type="" name="" value="Asset Management Assistant" >
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table> 
+                                <!-- <select class="select">
+                                    <option></option>
+                                    <?php foreach($employee AS $emp){ ?>
+                                        <option value = "$emp->employee_id"><?php echo $emp->employee_name;?></option>
+                                    <?php } ?>
+                                </select> -->
+                                <!-- <input class="select" id = "receive_by" type="text" name="" value = "<?php echo $name;?>"> -->
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input class="select" type="" name="" value="Asset Management Assistant" >
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table> 
+                </div>
                 <br>
                 <center>
                     <!-- id="print" -->

@@ -39,7 +39,7 @@
                                                 <td><?php echo $i['item'];?></td>
                                                 <td><?php echo $i['accountability'];?></td>
                                                 <td><?php echo $status;?></td>
-                                                <td><?php echo $i['qty'];?></td>
+                                                <td><?php echo '1';?></td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>                           

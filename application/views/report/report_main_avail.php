@@ -18,6 +18,7 @@
                                     <a href="<?php echo base_url(); ?>index.php/report/aaf_assign_rep" class="btn btn-success">
                                         Assign
                                     </a>
+                                    <a href = "<?php echo base_url(); ?>index.php/report/report_print_avail" class="btn btn-info"><span class="fa fa-print"></span> Print</a>
                                 </div>
                                 
                             </h2>
@@ -43,7 +44,9 @@
                                                 <a class="btn btn-primary text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update" href="<?php echo base_url(); ?>index.php/report/edit_encode/<?php echo $a['et_id'];?>">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
-                                                
+                                                <a href = "<?php echo base_url(); ?>index.php/report/encode_report/<?php echo $a['et_id'];?>" class="btn btn-warning text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
                                                 <a class="btn btn-danger item btn-sm text-white" onClick="tagAsDamage(<?php echo $a['empid'];?>,<?php echo $a['et_id'];?>)" data-toggle="tooltip" data-placement="top" title="Tag as Damage">
                                                     <i class="fa fa-times"></i>
                                                 </a>

@@ -122,11 +122,11 @@
                                                         </select>
                                                     </div>                                                
                                                     <div class="col-6">
-                                                        <label for="" class="control-label mb-1">Rack:</label>
-                                                        <select name="rack[]" class="form-control bor-radius5 cc-cvc">
-                                                            <option value = "">--Select Rack--</option>
-                                                            <?php foreach($rack AS $r){ ?>
-                                                            <option value = "<?php echo $r->rack_id; ?>"><?php echo $r->rack_name;?></option>
+                                                        <label for="" class="control-label mb-1">Company:</label>
+                                                        <select name="company[]" class="form-control bor-radius5 cc-cvc">
+                                                            <option value = "">--Select Company--</option>
+                                                            <?php foreach($company AS $r){ ?>
+                                                            <option value = "<?php echo $r->company_id; ?>"><?php echo $r->company_name;?></option>
                                                             <?php } ?>
                                                         </select>
                                                     </div>
@@ -134,15 +134,16 @@
                                                 <div class="row"> 
                                                     <div class="col-6">
                                                         <label for="" class="control-label mb-1">Physical Condition:</label>
-                                                        <select name="condition[]" class="form-control bor-radius5 cc-cvc">
+                                                        <input type="text" name="condition[]" class="form-control bor-radius5 cc-cvc">
+                                                        <!-- <select name="condition[]" class="form-control bor-radius5 cc-cvc">
                                                             <option value = "">--Select Physical Condition--</option>
                                                             <?php foreach($condition AS $co){ ?>
                                                             <option value = "<?php echo $co->physical_id; ?>"><?php echo $co->condition_name;?></option>
                                                             <?php } ?>
-                                                        </select>
+                                                        </select> -->
                                                     </div>                                                
                                                     <div class="col-6">
-                                                        <label for="" class="control-label mb-1">Acquired By:</label>
+                                                        <label for="" class="control-label mb-1">Supplier:</label>
                                                         <input name="acquired_by[]" type="text" class="form-control bor-radius5 cc-exp">
                                                     </div>
                                                 </div>
@@ -230,7 +231,8 @@
                                 <center>     
                                     <!-- <i class="fa fa-dot-circle-o"></i> -->
                                     <input type="hidden" name="count" id = "count" value = "<?php echo $counter;?>">
-                                    <input type = "submit" class="btn btn-success btn-md bor-radius10 btn-block  " value="Submit"> 
+                                    <input type = "submit" class="btn btn-primary btn-md bor-radius10 btn-block" name ="draft" value="Submit Draft"> 
+                                    <input type = "submit" class="btn btn-success btn-md bor-radius10 btn-block" name ="saved" value="Submit"> 
                                     <input type="hidden" name="user_id" value = "<?php echo $_SESSION['user_id'];?>">
                                     <input type="hidden" name="et_id" value = "<?php echo $id;?>">
                                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">                         

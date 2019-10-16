@@ -36,7 +36,7 @@
                                 <tr>
                                     <td>Accountability:</td>
                                     <td><?php echo $v['accountability'];?></td>
-                                    <td>Deptartment:</td>
+                                    <td>Department:</td>
                                     <td><?php echo $v['department'];?></td>
                                 </tr>
                             <?php } ?>
