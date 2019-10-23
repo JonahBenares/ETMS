@@ -47,7 +47,7 @@
                                         </tr>   
                                          <?php } else if($ids==0 && $changeloc=='1'){ ?>
                                         <tr>
-                                            <td colspan="7"><button class="btn btn-info btn-block btn-lg animated headShake text-white">Changed Location</button></td>
+                                            <td colspan="7"><button class="btn btn-info btn-block btn-lg animated headShake text-white">Moved to <?php echo $location; ?></button></td>
                                         </tr> 
                                         <?php }else { echo ''; } ?>
                                     </table>

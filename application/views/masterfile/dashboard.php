@@ -31,6 +31,7 @@
                                 <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/employee_list">Employee</a></center>
                                 <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/loc_list">Location</a></center>
                                 <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/placement_list">Placement</a></center>
+                                <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/rack_list">Rack</a></center>
                                 <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/company_list">Company</a></center>
                                 <center><a class="names" href="<?php echo base_url(); ?>index.php/masterfile/currency_list">Currency</a></center>
                                 <center><a class="names borbot" href="<?php echo base_url(); ?>index.php/masterfile/uom_list">UOM</a></center>

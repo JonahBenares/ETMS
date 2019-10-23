@@ -98,10 +98,10 @@
                     <td class="thead">Qty</td>
                     <td class="thead">UOM</td>
                     <td class="thead">Date Issue</td>
-                    <!-- <td class="thead">Accountability</td> -->
                     <td class="thead">Status</td>
                     <td class="thead">Department</td>
                     <td class="thead">Placement</td>
+                    <td class="thead">Rack</td>
                     <td class="thead">Company</td>
                     <td class="thead" align="center">Physical Condition</td>
                     <td class="thead" align="center">Total Cost</td>
@@ -109,8 +109,8 @@
                 </tr>
                 <tbody>
                     <?php 
-                        foreach($report AS $r){ 
-                            if($r['accountability_id']!=0 && $r['borrowed']==0){
+                            foreach($report AS $r){ 
+                            /*if($r['accountability_id']!=0 && $r['borrowed']==0){
                                 $status = 'Assigned';
                             }else if($r['accountability_id']==0 && $r['damaged']==0){
                                 $status = 'Available';
@@ -118,7 +118,19 @@
                                 $status = 'Borrowed';
                             }else if($r['damaged']==1){
                                 $status = 'Damaged';
+                            }*/
+                            if($r['accountability_id']!=0 && $r['borrowed']==0){
+                                $status = 'Assigned';
+                            }else if($r['accountability_id']==0 && $r['damaged']==0 && $r['change_location']==0){
+                                $status = '<span style = "color:green;">Available</span>';
+                            }else if($r['accountability_id']==0 && $r['change_location']==1){
+                                $status = "Moved to ".$r['location'];
+                            }else if($r['borrowed']==1){
+                                $status = '<span style = "color:blue;">Borrowed</span>';
+                            }else if($r['damaged']==1){
+                                $status = '<span style = "color:red;">Damaged</span>';
                             }
+                    
                     ?>
                     <tr>
                         <td><?php echo $r['category'];?></td>
@@ -131,20 +143,20 @@
                         <td><?php echo $r['qty'];?></td>
                         <td><?php echo $r['unit'];?></td>
                         <td><?php echo $r['date_issued'];?></td>
-                        <!-- <td><?php echo $r['accountability'];?></td> -->
                         <td><?php echo $status;?></td>
                         <td><?php echo $r['department'];?></td>
                         <td><?php echo $r['placement'];?></td>
+                        <td><?php echo $r['rack'];?></td>
                         <td><?php echo $r['company'];?></td>
                         <td align="center"><?php echo $r['condition'];?></td>
                         <td align="center"><?php echo $r['total'];?></td>
                         <td><?php echo $r['remarks'];?></td>
                     </tr>
-                    <?php } ?>
+                    <?php  } ?>
                 </tbody>
             </table>
             <hr>
-            <small>printed by: <?php echo $user_id;?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
+            <small>printed by: <?php echo $_SESSION['fullname']; ?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
         </div>
     </div>
 </div>

@@ -186,40 +186,44 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <label for="" class="control-label mb-1">Physical Condition:</label>
-                                                        <div class="input-group">
-                                                            <?php if($d['physical']!=''){ ?>
-                                                            <input type="text" name="condition[]" style = "pointer-events: none" class="form-control bor-radius5 cc-cvc" value = "<?php echo $d['physical'];?>">
-                                                            <!-- <select name="condition[]" style = "pointer-events: none" class="form-control bor-radius5 cc-cvc">
-                                                                <option value = "">--Select Physical Condition--</option>
-                                                                <?php foreach($condition AS $c){ ?>
-                                                                <option value = "<?php echo $c->physical_id; ?>" <?php echo (($d['physical'] == $c->physical_id) ? ' selected' : '');?>><?php echo $c->condition_name;?></option>
-                                                                <?php } ?>
-                                                            </select> -->
-                                                            <?php } else { ?>
-                                                            <input type="text" name="condition[]" class="form-control bor-radius5 cc-cvc">
-                                                            <!-- <select name="condition[]" class="form-control bor-radius5 cc-cvc">
-                                                                <option value = "">--Select Physical Condition--</option>
-                                                                <?php foreach($condition AS $c){ ?>
-                                                                <option value = "<?php echo $c->physical_id; ?>"><?php echo $c->condition_name;?></option>
-                                                                <?php } ?>
-                                                            </select> -->
+                                                <div class="row">    
+                                                    <div class = "col-6">
+                                                        <label for="" class="control-label mb-1">Rack:</label>
+                                                        <?php if($d['rack_id']!=''){ ?>
+                                                        <select name="rack[]" style = "pointer-events: none" class="form-control bor-radius5 cc-cvc">
+                                                            <option value = "">--Select Rack--</option>
+                                                            <?php foreach($rack AS $c){ ?>
+                                                            <option value = "<?php echo $c->rack_id; ?>" <?php echo (($d['rack_id'] == $c->rack_id) ? ' selected' : '');?>><?php echo $c->rack_name;?></option>
                                                             <?php } ?>
-                                                        </div>
-                                                    </div>                                                 
+                                                        </select>
+                                                        <?php } else { ?>
+                                                        <select name="rack[]" class="form-control bor-radius5 cc-cvc">
+                                                            <option value = "">--Select Rack--</option>
+                                                            <?php foreach($rack AS $c){ ?>
+                                                            <option value = "<?php echo $c->rack_id; ?>"><?php echo $c->rack_name;?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                        <?php } ?>
+                                                    </div>                                             
                                                     <div class="col-6">
-<<<<<<< HEAD
-                                                        <label for="" class="control-label mb-1">Acquired From:</label>
-=======
                                                         <label for="" class="control-label mb-1">Supplier:</label>
->>>>>>> 15bba1c3ef3c7673ad366344c7ce10f98201ca16
                                                         <?php if(!empty($d['acquired_by'])){ ?>
                                                         <input name="acquired_by[]" readonly="" value = "<?php echo $d['acquired_by'];?>" type="text" class="form-control bor-radius5 cc-exp">
                                                         <?php } else { ?>
                                                         <input name="acquired_by[]" type="text" class="form-control bor-radius5 cc-exp">
                                                         <?php } ?>
+                                                    </div>
+                                                </div>
+                                                <div class = "row">
+                                                    <div class="col-12">
+                                                        <label for="" class="control-label mb-1">Physical Condition:</label>
+                                                        <div class="input-group">
+                                                            <?php if($d['physical']!=''){ ?>
+                                                            <input type="text" name="condition[]" style = "pointer-events: none" class="form-control bor-radius5 cc-cvc" value = "<?php echo $d['physical'];?>">
+                                                            <?php } else { ?>
+                                                            <input type="text" name="condition[]" class="form-control bor-radius5 cc-cvc">
+                                                            <?php } ?>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -387,22 +391,27 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <label for="" class="control-label mb-1">Physical Condition:</label>
-                                                        <div class="input-group">
-                                                            <input type="text" name="condition[]" class="form-control bor-radius5 cc-cvc">
-                                                            <!-- <select name="condition[]" class="form-control bor-radius5 cc-cvc">
-                                                                <option value = "">--Select Physical Condition--</option>
-                                                                <?php foreach($condition AS $c){ ?>
-                                                                <option value = "<?php echo $c->physical_id; ?>"><?php echo $c->condition_name;?></option>
-                                                                <?php } ?>
-                                                            </select> -->
-                                                        </div>
-                                                    </div>                                                 
+                                                <div class="row">   
+                                                    <div class = "col-6">
+                                                        <label for="" class="control-label mb-1">Rack:</label>
+                                                        <select name="rack[]" class="form-control bor-radius5 cc-cvc">
+                                                            <option value = "">--Select Rack--</option>
+                                                            <?php foreach($rack AS $c){ ?>
+                                                            <option value = "<?php echo $c->rack_id; ?>"><?php echo $c->rack_name;?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>                                               
                                                     <div class="col-6">
                                                         <label for="" class="control-label mb-1">Supplier:</label>
                                                         <input name="acquired_by[]" type="text" class="form-control bor-radius5 cc-exp">
+                                                    </div>
+                                                </div>
+                                                <div class = "row">
+                                                    <div class="col-12">
+                                                        <label for="" class="control-label mb-1">Physical Condition:</label>
+                                                        <div class="input-group">
+                                                            <input type="text" name="condition[]" class="form-control bor-radius5 cc-cvc">
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <!-- <div class="row">                                                 

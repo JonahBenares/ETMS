@@ -149,7 +149,7 @@
                 </tr>
             </table>  -->
             <hr>
-            <small>printed by: <?php echo $user_id;?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
+            <small>printed by: <?php echo $_SESSION['fullname'];?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
         <!-- </div> -->
     </div>
     <center><a href="" id="printBtn" onclick="iprint()" class="btn btn-block btn-success m-t-50 m-b-50 animated headShake">Print</a></center>

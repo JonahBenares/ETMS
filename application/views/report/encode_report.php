@@ -75,7 +75,7 @@
                     <p id="head" style="margin: 0px">Tel. No. 476-7382</p>
                 </td>
                 <td style="padding:10px;border-bottom: 2px solid #000;border-left: 2px solid #000" width="50%" align="center">
-                    <h5><strong>ASSET ACCOUNTABILITY FORM</strong></h5>
+                    <h5><strong>ASSET ACCOUNTABILITY FORM <?php echo ($save_temp!=0) ? '<span style="color:red;">(DRAFT)</span>' : ''; ?></strong></h5>
                 </td>
             </tr>
         </table>

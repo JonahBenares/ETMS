@@ -703,6 +703,66 @@ class Masterfile extends CI_Controller {
         }
     }
 
+    public function rack_list(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $data['rack'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
+        $this->load->view('masterfile/rack_list',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function insert_rack(){
+        $rack = trim($this->input->post('rack')," ");
+        $row = $this->super_model->count_rows_where("rack","rack_name",$rack);
+        if($row!=0){
+            echo "<script>alert('$rack is already encoded!'); 
+                    window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+        }else {
+            $data = array(
+                'rack_name'=>$rack
+            );
+            if($this->super_model->insert_into("rack", $data)){
+               echo "<script>alert('Successfully Added!'); 
+                    window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+            }
+        }
+    }
+
+    public function rack_update(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        $data['rack'] = $this->super_model->select_row_where('rack', 'rack_id', $id);
+        $this->load->view('masterfile/rack_update',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function update_rack(){
+        $data = array(
+            'rack_name'=>$this->input->post('rack')
+        );
+        $rack_id = $this->input->post('rack_id');
+            if($this->super_model->update_where('rack', $data, 'rack_id', $rack_id)){
+            echo "<script>alert('Successfully Updated!'); 
+                window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+        }
+    }
+
+    public function delete_rack(){
+        $id=$this->uri->segment(3);
+        $row = $this->super_model->count_rows_where("et_details","rack_id",$id);
+        if($row!=0){
+            echo "<script>alert('You cannot delete this record!'); 
+                    window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+        }else{
+            if($this->super_model->delete_where('rack', 'rack_id', $id)){
+                echo "<script>alert('Succesfully Deleted'); 
+                    window.location ='".base_url()."index.php/masterfile/rack_list'; </script>";
+            }
+        }
+    }
+
     public function company_list(){  
         $this->load->view('template/header');
         $this->load->view('template/sidebar');

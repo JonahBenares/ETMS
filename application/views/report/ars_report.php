@@ -181,7 +181,7 @@
                 </tr>
             </table> 
             <hr>
-            <small>printed by: <?php echo $user_id;?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
+            <small>printed by: <?php echo $_SESSION['fullname'];?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
         </div>
     </div>
     <br>
