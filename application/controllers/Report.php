@@ -783,11 +783,16 @@ class Report extends CI_Controller {
             foreach($this->super_model->select_row_where("et_head","subcat_id",$subcat) AS $t){
                 $employee = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $t->accountability_id);                     
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $t->et_id);                     
-                $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $t->et_id);                     
+                $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $t->et_id); 
+                $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $t->et_id); 
+                $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $t->et_id); 
+                $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);                     
                 $data['item'][]=array(
                     'item'=>$t->et_desc,
                     'damaged'=>$damaged,
                     'borrowed'=>$borrowed,
+                    'location'=>$location,
+                    'change_location'=>$change_location,
                     'accountability'=>$employee,
                     'accountability_id'=>$t->accountability_id,
                     'qty'=>$t->qty,
@@ -831,11 +836,14 @@ class Report extends CI_Controller {
                     $qty = $a->qty;   
                 }                  
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $t->et_id);                     
-                $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $t->et_id);                     
+                $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $t->et_id);   
+                $location = $this->super_model->select_column_where("location","location_name","location_id",$t->location_id);                  
                 $data['itema'][]=array(
                     'item'=>$item,
                     'damaged'=>$damaged,
                     'borrowed'=>$borrowed,
+                    'location'=>$location,
+                    'change_location'=>$t->change_location,
                     'accountability'=>$employee,
                     'accountability_id'=>$accountability_id,
                     'qty'=>$qty,
