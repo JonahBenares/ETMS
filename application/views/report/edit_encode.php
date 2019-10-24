@@ -176,7 +176,7 @@
                                                                 <?php } ?>
                                                             </select>
                                                             <?php } else { ?>
-                                                            <select name="company[]" style = "pointer-events: none" class="form-control bor-radius5 cc-cvc">
+                                                            <select name="company[]" class="form-control bor-radius5 cc-cvc">
                                                                 <option value = "">--Select Company--</option>
                                                                 <?php foreach($company AS $c){ ?>
                                                                 <option value = "<?php echo $c->company_id; ?>"><?php echo $c->company_name;?></option>
@@ -189,7 +189,7 @@
                                                 <div class="row">    
                                                     <div class = "col-6">
                                                         <label for="" class="control-label mb-1">Rack:</label>
-                                                        <?php if($d['rack_id']!=''){ ?>
+                                                        <?php if($d['rack_id']!=0){ ?>
                                                         <select name="rack[]" style = "pointer-events: none" class="form-control bor-radius5 cc-cvc">
                                                             <option value = "">--Select Rack--</option>
                                                             <?php foreach($rack AS $c){ ?>
