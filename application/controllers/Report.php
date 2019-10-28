@@ -151,7 +151,7 @@ class Report extends CI_Controller {
                     $data['details'][]= array(
                         'et_id'=>$ss->et_id,
                         'item'=>$item_desc,
-                        'qty'=>$ss->qty,
+                        'qty'=>1,
                         'department'=>$ss->department,
                         'accountability_id'=>$ss->accountability_id,
                         'employee'=>$employee,
@@ -359,7 +359,7 @@ class Report extends CI_Controller {
             $data['details'][]= array(
                 'et_id'=>$et->et_id,
                 'item'=>$item_desc,
-                'qty'=>$et->qty,
+                'qty'=>1,
                 'department'=>$et->department,
                 'accountability_id'=>$et->accountability_id,
                 'employee'=>$employee,
@@ -522,7 +522,7 @@ class Report extends CI_Controller {
                     $status = 'Damaged';
                 }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $item_desc);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $et->qty);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, '1');
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $unit_price);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $category);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $subcat);
@@ -564,7 +564,7 @@ class Report extends CI_Controller {
                     }
 
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $item_desc);
-                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $ss->qty);
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, '1');
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $unit_price);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $category);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $subcat);
@@ -698,7 +698,7 @@ class Report extends CI_Controller {
                 $data['details'][]= array(
                     'et_id'=>$et->et_id,
                     'item'=>$item_desc,
-                    'qty'=>$et->qty,
+                    'qty'=>1,
                     'department'=>$et->department,
                     'accountability_id'=>$et->accountability_id,
                     'employee'=>$employee,
@@ -723,7 +723,7 @@ class Report extends CI_Controller {
                     $data['details'][]= array(
                         'et_id'=>$ss->et_id,
                         'item'=>$item_desc,
-                        'qty'=>$ss->qty,
+                        'qty'=>1,
                         'department'=>$ss->department,
                         'accountability_id'=>$ss->accountability_id,
                         'employee'=>$employee,
