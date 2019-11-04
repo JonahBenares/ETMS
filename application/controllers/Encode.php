@@ -160,8 +160,10 @@ class Encode extends CI_Controller {
             $data['employee_no'] = $this->super_model->select_column_where("employees", "aaf_no", "employee_id", $et->accountability_id);
             $data['save_temp']=$et->save_temp;
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$et->accountability_id) AS $em){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "employee_id = '$em->child_id'");
                 $data['child'][] = array( 
-                    'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id = '$em->child_id'"), 
+                    'status'=>$status
                 );
             }
             $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -366,7 +368,7 @@ class Encode extends CI_Controller {
         $rows=$this->super_model->count_custom_where("employees","employee_name LIKE '%$accountability%'");
         if($rows!=0){
             echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$accountability%'") AS $acct){     
+            foreach($this->super_model->select_custom_where("employees", "status = '0' AND employee_name LIKE '%$accountability%'") AS $acct){     
             ?>
                    <li onClick="selectEmp('<?php echo $acct->employee_id; ?>','<?php echo $acct->employee_name; ?>','<?php echo $acct->department; ?>')"><?php echo $acct->employee_name; ?></li>
                 <?php 

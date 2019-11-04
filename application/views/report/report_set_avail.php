@@ -17,9 +17,11 @@
                                     <!-- <a href="<?php echo base_url(); ?>index.php/report/create_set_avail" class="btn btn-warning text-white bor-radius20 pull-right">Create Set</a> -->
                                     <a href="<?php echo base_url(); ?>index.php/report/set_print_avail" class="btn btn-primary bor-radius100" title="Set Print">
                                     <span class="fa fa-print"></span></a>
+                                    <?php if($_SESSION['usertype'] == 1){ ?> 
                                     <a href="<?php echo base_url(); ?>index.php/report/aaf_assign_rep" class="btn btn-success">
                                         Assign
                                     </a>
+                                    <?php } ?>
                                 </div>
                                 
                             </h2>
@@ -42,13 +44,15 @@
                                     <tr <?php if($a['damaged'] == 1){ echo "class='tr-damage'"; } else { echo ''; }?>>
                                         <td >  
                                             <div class="table-data-feature">
-                                            <?php if($a['damaged']!=1){ ?>                                          
+                                            <?php if($a['damaged']!=1){ ?>         
+                                                <?php if($_SESSION['usertype'] == 1){ ?>                                 
                                                 <a class="btn btn-primary text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update" href="<?php echo base_url(); ?>index.php/report/edit_encode/<?php echo $a['et_id'];?>">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
                                                 <a class="btn btn-danger item btn-sm text-white" onClick="tagAsDamage(<?php echo $a['empid'];?>,<?php echo $a['et_id'];?>)" data-toggle="tooltip" data-placement="top" title="Tag as Damage">
                                                     <i class="fa fa-times"></i>
                                                 </a>
+                                                <?php } ?>
 
                                             <?php } ?> 
                                             </div>

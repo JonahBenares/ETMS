@@ -33,6 +33,12 @@
                                 <?php }else { ?>
                                     <select id="aaf" name="aaf_no" class="form-control bor-radius5" readonly style = "pointer-events:none;-webkit-appearance: none;" ><option value = "<?php echo $emp->aaf_no; ?>"><?php echo $emp->aaf_no; ?></option></select>
                                 <?php } ?>
+                                <label for="" class="control-label mb-1">Status:</label>
+                                <select name="status" class="form-control">
+                                    <option value = "">--Select Status--</option>
+                                    <option value = "0" <?php echo (($emp->status == '0') ? ' selected' : '');?>>Active</option>
+                                    <option value = "1" <?php echo (($emp->status == '1') ? ' selected' : '');?>>Inactive</option>
+                                </select>
                             </div>
                             <div class="card-footer">
                                 <center>

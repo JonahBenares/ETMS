@@ -216,13 +216,17 @@
                                         <td><?php echo $m['department']; ?></td>
                                         <td>                                            
                                             <div class="table-data-feature">
+                                                <?php if($_SESSION['usertype'] == 1){ ?>
                                                 <a class="btn btn-primary text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Update" href="<?php echo base_url(); ?>index.php/report/edit_encode_draft/<?php echo $m['et_id'];?>">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
+                                                <?php } ?>
                                                 <a href = "<?php echo base_url(); ?>index.php/report/encode_report/<?php echo $m['et_id'];?>" class="btn btn-warning text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Print">
                                                     <i class="fa fa-print"></i>
                                                 </a>
+                                                <?php if($_SESSION['usertype'] == 1){ ?>
                                                 <a href="javascript:void(0)" data-toggle="modal" data-id = '<?php echo $m['et_id']; ?>' id ="updateReminder_button" data-target="#mediumModal" class="btn btn-danger text-white item btn-sm" title="Cancel Draft"><span class="fa fa-times"></span></a>
+                                                <?php } ?>
                                                 <!-- <a class="btn btn-success text-white item btn-sm" data-toggle="tooltip" data-placement="top" title="Return" onClick="viewReturn(<?php echo $m['empid'];?>,<?php echo $m['et_id'];?>)">
                                                     <i class="fa fa-refresh"></i>
                                                 </a>

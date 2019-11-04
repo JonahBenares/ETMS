@@ -211,18 +211,29 @@
                     <td></td>
                     <td style="border-bottom:1px solid #000">
                         <?php if($type == 2){ ?>
-                             <input class="select" type="" name="" value="<?php foreach($child as $c){ echo  $c['emp'].', '; }?>" >
+                            <?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].', <br>' : ''; }?>
+                            <!--  <input class="select" type="" name="" value="<?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].', <br>' : ''; }?>" > -->
                         <?php } else { ?>
                             <input class="select" type="" name="" value="<?php echo $submitted_by;?>" style = "pointer-events:none;">
                         <?php } ?>
                     </td> 
                     <td></td>
                     <td style="border-bottom:1px solid #000">
-                        <input class="select" type="" name="" value="<?php echo $checked_by;?>" style = "pointer-events:none;">
+                        <?php if($type == 2){ ?>
+                            <?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].', <br>' : ''; }?>
+                             <!-- <input class="select" type="" name="" value="<?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].', <br>' : ''; }?>" > -->
+                        <?php } else { ?>
+                            <input class="select" type="" name="" value="<?php echo $checked_by;?>" style = "pointer-events:none;">
+                        <?php } ?>
                     </td>
                     <td></td>
                     <td style="border-bottom:1px solid #000">
-                        <input class="select" type="" name="" value="<?php echo $noted_by;?>" style = "pointer-events:none;">
+                        <?php if($type == 2){ ?>
+                            <?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].', <br>' : ''; }?>
+                             <!-- <input class="select" type="" name="" value="<?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].', <br>' : ''; }?>" > -->
+                        <?php } else { ?>
+                            <input class="select" type="" name="" value="<?php echo $noted_by;?>" style = "pointer-events:none;">
+                        <?php } ?>
                     </td>
                     <td></td>
                 </tr>

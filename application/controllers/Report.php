@@ -3224,10 +3224,10 @@ class Report extends CI_Controller {
         $checked=$this->input->post('checked');
         $id=$this->input->post('id');
         
-        $rows=$this->super_model->count_custom_where("employees","employee_name LIKE '%$checked%'");
+        $rows=$this->super_model->count_custom_where("employees","status = '0' AND employee_name LIKE '%$checked%'");
         if($rows!=0){
              echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$checked%'") AS $acct){ 
+            foreach($this->super_model->select_custom_where("employees", "status = '0' AND employee_name LIKE '%$checked%'") AS $acct){ 
                     ?>
                    <li onClick="selectChk('<?php echo $acct->employee_id; ?>','<?php echo $acct->employee_name; ?>','<?php echo $id; ?>')"><?php echo $acct->employee_name; ?></li>
                 <?php 
@@ -3240,10 +3240,10 @@ class Report extends CI_Controller {
         $submitted=$this->input->post('submitted');
         $id=$this->input->post('id');
         
-        $rows=$this->super_model->count_custom_where("employees","employee_name LIKE '%$submitted%'");
+        $rows=$this->super_model->count_custom_where("employees","status = '0' AND employee_name LIKE '%$submitted%'");
         if($rows!=0){
              echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$submitted%'") AS $acct){ 
+            foreach($this->super_model->select_custom_where("employees", "status = '0' AND employee_name LIKE '%$submitted%'") AS $acct){ 
                     ?>
                    <li onClick="selectSbmt('<?php echo $acct->employee_id; ?>','<?php echo $acct->employee_name; ?>','<?php echo $id; ?>')"><?php echo $acct->employee_name; ?></li>
                 <?php 
@@ -3256,10 +3256,10 @@ class Report extends CI_Controller {
         $noted=$this->input->post('noted');
         $id=$this->input->post('id');
         
-        $rows=$this->super_model->count_custom_where("employees","employee_name LIKE '%$noted%'");
+        $rows=$this->super_model->count_custom_where("employees","status = '0' AND employee_name LIKE '%$noted%'");
         if($rows!=0){
              echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$noted%'") AS $acct){ 
+            foreach($this->super_model->select_custom_where("employees", "status = '0' AND employee_name LIKE '%$noted%'") AS $acct){ 
                     ?>
                    <li onClick="selectNtd('<?php echo $acct->employee_id; ?>','<?php echo $acct->employee_name; ?>','<?php echo $id; ?>')"><?php echo $acct->employee_name; ?></li>
                 <?php 
@@ -3270,10 +3270,10 @@ class Report extends CI_Controller {
 
     public function rec_list(){
         $rec=$this->input->post('rec');
-        $rows=$this->super_model->count_custom_where("employees","employee_name LIKE '%$rec%'");
+        $rows=$this->super_model->count_custom_where("employees","status = '0' AND employee_name LIKE '%$rec%'");
         if($rows!=0){
              echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$rec%'") AS $acct){ 
+            foreach($this->super_model->select_custom_where("employees", "status = '0' AND employee_name LIKE '%$rec%'") AS $acct){ 
                    
                     ?>
                    <li onClick="selectRec('<?php echo $acct->employee_id; ?>','<?php echo $acct->employee_name; ?>')"><?php echo $acct->employee_name; ?></li>
@@ -3715,10 +3715,12 @@ class Report extends CI_Controller {
             foreach($this->super_model->select_row_where('et_head', 'et_id', $dam->et_id) AS $head){ 
                 $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $head->et_id);
             }
-            $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $dam->submitted_by); 
+            $data['type'] = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->submitted_by'"); 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->submitted_by) AS $em){
+                $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$em->child_id'");
                 $data['child'][] = array( 
-                    'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
+                    'emp'=> $this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$em->child_id'"), 
+                    'status'=> $status, 
                 );
             }
             $data['user_id'] =$_SESSION['fullname'];
@@ -3772,10 +3774,10 @@ class Report extends CI_Controller {
 
     public function assignlist(){
         $assign=$this->input->post('assign');
-        $rows=$this->super_model->count_custom_where("employees","employee_name LIKE '%$assign%'");
+        $rows=$this->super_model->count_custom_where("employees","status = '0' AND employee_name LIKE '%$assign%'");
         if($rows!=0){
              echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$assign%'") AS $emp){ 
+            foreach($this->super_model->select_custom_where("employees", "status = '0' AND employee_name LIKE '%$assign%'") AS $emp){ 
                 if($emp->type == '1'){
             ?>
                 <li onClick="selectAssign('<?php echo $emp->employee_id; ?>','<?php echo $emp->employee_name; ?>','<?php echo $emp->department; ?>','<?php echo $emp->position; ?>','<?php echo $emp->aaf_no; ?>', '0', '1')"><?php echo $emp->employee_name; ?></li>
@@ -3783,7 +3785,7 @@ class Report extends CI_Controller {
                 } else { 
                     $ch = '';
                      foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$emp->employee_id) AS $child){
-                        $ch.=$this->super_model->select_column_where("employees", "employee_name", "employee_id", $child->child_id). ", ";
+                        $ch.=$this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id='$child->child_id'"). ", ";
                      }
                      $chi = substr($ch, 0, -2);
 

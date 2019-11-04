@@ -48,6 +48,13 @@
                                                     <label for="" class="control-label mb-1">Employee No.:</label>
                                                     <!-- <input id="aaf" name="aaf_no" type="text" class="form-control bor-radius5" placeholder=""> -->
                                                     <select id="aaf" name="aaf_no" class="form-control bor-radius5" readonly style = "pointer-events:none;-webkit-appearance: none;" ></select>
+
+                                                    <label for="" class="control-label mb-1">Status:</label>
+                                                    <select name="status" class="form-control bor-radius5">
+                                                        <option>-- Select Status --</option>
+                                                        <option value="0">Active</option>
+                                                        <option value="1">Inactive</option>
+                                                    </select>
                                                 </div>
                                                 <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -70,6 +77,7 @@
                                         <th>Employee</th>
                                         <th>Department</th>
                                         <th>Postition</th>
+                                        <th>Status</th>
                                         <th>Location</th>
                                     </tr>
                                 </thead>
@@ -93,6 +101,7 @@
                                         </td>
                                         <td><?php echo $emp['department'];?></td>
                                         <td><?php echo $emp['position'];?></td>
+                                        <td><?php echo ($emp['status']==0) ? 'Active' : '<span style = "color:red;">Inactive</span>';?></td>
                                         <td><?php echo $emp['location'];?></td>
                                     </tr>
                                     <?php } } ?>

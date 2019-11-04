@@ -92,14 +92,17 @@
                                                         <center><small>Employees:</small></center>
                                                         <hr style="margin:0px">
                                                         <table width="100%">
+                                                            
                                                         <?php 
                                                             foreach($ems AS $e){ 
                                                                 switch($e){
                                                                     case($emp['id'] == $e['id']):
                                                         ?>
-                                                            <tr>
+                                                            <?php if($e['status']==0){ ?>
+                                                            <tr> 
                                                                 <td><?php echo $e['employee'];?></td>
                                                             </tr>
+                                                            <?php } ?>
                                                         <?php   
                                                             break;
                                                             default: 

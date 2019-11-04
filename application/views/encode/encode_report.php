@@ -219,9 +219,9 @@
                             <td></td>
                             <td style="border-bottom:1px solid #000">
                                 <?php if($type == 2){ ?>
-                                    <?php foreach($child as $c){ echo  $c['emp'].", <br>"; }?>
+                                    <?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].", <br>" : ''; }?>
                                 <?php } else { ?>
-                                    <textarea class="select" type="" name="" value="" ><?php echo  $name;?></textarea>
+                                    <textarea class="select" type="" name="" value="" ><?php echo $name;?></textarea>
                                 <?php } ?>
                                 <!-- <select class="select">
                                     <option></option>

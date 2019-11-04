@@ -48,11 +48,13 @@ class Masterfile extends CI_Controller {
                 $userid = $d->user_id;
                 $username = $d->username;
                 $fullname = $d->fullname;
+                $usertype = $d->usertype;
             }
             $newdata = array(
                'user_id'=> $userid,
                'username'=> $username,
                'fullname'=> $fullname,
+               'usertype'=> $usertype,
                'logged_in'=> TRUE
             );
             $this->session->set_userdata($newdata);
@@ -104,7 +106,8 @@ class Masterfile extends CI_Controller {
                     'location'=>$location,
                     'position'=>$emp->position,
                     'aaf_no'=>$emp->aaf_no,
-                    'type'=>$emp->type
+                    'type'=>$emp->type,
+                    'status'=>$emp->status,
                 );
                /* $rows=$this->super_model->count_rows("employee_inclusion");
                 if($rows!=0){
@@ -132,7 +135,7 @@ class Masterfile extends CI_Controller {
         $rows=$this->super_model->count_custom_where("employees","employee_name LIKE '%$employee%'");
         if($rows!=0){
              echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$employee%'") AS $acct){ 
+            foreach($this->super_model->select_custom_where("employees", "status='0' AND employee_name LIKE '%$employee%'") AS $acct){ 
                     ?>
                    <li onClick="selectEmp('<?php echo $acct->employee_id; ?>','<?php echo $acct->employee_name; ?>')"><?php echo $acct->employee_name; ?></li>
                 <?php 
@@ -146,15 +149,19 @@ class Masterfile extends CI_Controller {
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $row=$this->super_model->count_rows_where("employee_inclusion","parent_id",$id);
+        $data['employee'] = $this->super_model->select_all_order_by('employees', 'employee_name', 'ASC');
         if($row!=0){
             foreach($this->super_model->select_row_where("employee_inclusion","parent_id",$id) AS $multi){
-                $employee_name =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $multi->child_id);
-                $data['parent']=
+                $employee_name =$this->super_model->select_column_custom_where("employees", "employee_name", "status = '0' AND employee_id = '$multi->child_id'");
+                $status = $this->super_model->select_column_where("employees","status","employee_id",$multi->child_id);
+                //$data['parent']=
                 $data['multi_emp'][] = array(
                     'id'=>$multi->child_id,
                     'emp_name'=>$employee_name,
                     'eid'=>$multi->ei_id,
-                    'parent'=>$multi->parent_id
+                    'parent'=>$multi->parent_id,
+                    'child_id'=>$multi->child_id,
+                    'status'=>$status,
                 );
             }
         }else{
@@ -179,12 +186,26 @@ class Masterfile extends CI_Controller {
         }
     }
 
+    public function transfer_dept(){
+        $office = $this->input->post('office');
+        $eid = $this->input->post('eid');
+        $emp_name = $this->input->post('emp_name');
+        $data = array(
+            'parent_id'=>$office,
+            'child_id'=>$emp_name
+        );
+        $this->super_model->delete_where('employee_inclusion', 'ei_id', $eid);
+        $this->super_model->insert_into("employee_inclusion", $data);
+        echo "<script>alert('Succesfully Transfered'); window.close();window.opener.location.reload();</script>";
+    }
+
     public function insert_employee(){
         $employee = trim($this->input->post('employee')," ");
         $position = trim($this->input->post('position')," ");
         $department = trim($this->input->post('department')," ");
         $location = trim($this->input->post('location')," ");
         $aaf_no = trim($this->input->post('aaf_no')," ");
+        $status = trim($this->input->post('status')," ");
         $row = $this->super_model->count_rows_where("employees","employee_name",$employee);
         if($row!=0){
             echo "<script>alert('$employee is already encoded!'); </script>";
@@ -196,7 +217,8 @@ class Masterfile extends CI_Controller {
                 'aaf_no'=>$aaf_no,
                 'position'=>$position,
                 'department'=>$department,
-                'type'=>1
+                'type'=>1,
+                'status'=>$status,
             );
             if($this->super_model->insert_into("employees", $data)){
                 $emp=explode("-", $this->input->post('aaf_no'));
@@ -237,6 +259,7 @@ class Masterfile extends CI_Controller {
                     'position'=>$this->input->post('position'),
                     'department'=>$this->input->post('department'),
                     'location_id'=>$this->input->post('location'),
+                    'status'=>$this->input->post('status'),
                     'aaf_no'=>$aaf_no
                 );
                 if($this->super_model->update_where('employees', $data, 'employee_id', $empid)){
@@ -258,7 +281,9 @@ class Masterfile extends CI_Controller {
                 $data = array(
                     'employee_name'=>$this->input->post('employee'),
                     'position'=>$this->input->post('position'),
+                    'department'=>$this->input->post('department'),
                     'location_id'=>$this->input->post('location'),
+                    'status'=>$this->input->post('status'),
                     'aaf_no'=>$aaf_no,
                 );
                 if($this->super_model->update_where('employees', $data, 'employee_id', $empid)){
@@ -319,11 +344,13 @@ class Masterfile extends CI_Controller {
                 $rows=$this->super_model->count_rows("employee_inclusion");
                 if($rows!=0){
                     foreach($this->super_model->select_row_where("employee_inclusion", "parent_id", $emp->employee_id) AS $em){
-                        $emp = $this->super_model->select_column_where('employees', 'employee_name', 'employee_id', $em->child_id);
+                        $emp = $this->super_model->select_column_custom_where('employees', 'employee_name', "employee_id = '$em->child_id'");
+                        $status = $this->super_model->select_column_custom_where('employees', 'status', "employee_id = '$em->child_id'");
                         $data['ems'][] = array(
                             'eid'=>$em->ei_id,
                             'id'=>$em->parent_id,
                             'employee' => $emp,
+                            'status' => $status,
                         ); 
                     }
                 }else {

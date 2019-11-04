@@ -77,10 +77,11 @@
                                         <td><?php echo $emp['count'];?></td>
                                         <td>
                                             <div class="table-data-feature">
-                                                
+                                                <?php if($_SESSION['usertype'] == 1){ ?>
                                                 <a href="<?php echo base_url(); ?>index.php/report/multi_return/<?php echo $emp['employee_id']?>" class="btn btn-success item btn-sm" data-toggle="tooltip" data-placement="top" title="Multiple Return">
                                                     <i class="fa fa-dedent"></i>
                                                 </a>
+                                                <?php } ?>
                                                 <!-- <a href="<?php echo base_url(); ?>index.php/report/multi_transfer/<?php echo $emp['employee_id']?>" class="btn text-white btn-warning item btn-sm" data-toggle="tooltip" data-placement="top" title="Multiple Transfer">
                                                     <i class="fa fa-indent"></i>
                                                 </a> -->

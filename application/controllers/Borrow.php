@@ -51,10 +51,10 @@ class Borrow extends CI_Controller {
 
     public function borrowlist(){
         $borrow=$this->input->post('borrow');
-        $rows=$this->super_model->count_custom_where("employees","employee_name LIKE '%$borrow%'");
+        $rows=$this->super_model->count_custom_where("employees","status = '0' AND employee_name LIKE '%$borrow%'");
         if($rows!=0){
              echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("employees", "employee_name LIKE '%$borrow%'") AS $brw){ 
+            foreach($this->super_model->select_custom_where("employees", "status = '0' AND employee_name LIKE '%$borrow%'") AS $brw){ 
                    
                     ?>
                    <li onClick="selectBorrow('<?php echo $brw->employee_id; ?>','<?php echo $brw->employee_name; ?>')"><?php echo $brw->employee_name; ?></li>

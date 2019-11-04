@@ -1,6 +1,24 @@
 <script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/encode.js"></script>
  <!-- MAIN CONTENT-->
+ <script type="text/javascript">
+     function isNumberKey(txt, evt){
+       var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode == 46) {
+            //Check if the text already contains the . character
+            if (txt.value.indexOf('.') === -1) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (charCode > 31
+                 && (charCode < 48 || charCode > 57))
+                return false;
+        }
+        return true;
+    }
+ </script>
 <div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
@@ -59,7 +77,7 @@
                                         <div class="col-6">
                                             <label for="x_card_code" class="control-label mb-1">Quantity:</label>
                                             <div class="input-group">
-                                                <input id="" name="qty" class="form-control bor-radius5 cc-cvc" type="number" required>
+                                                <input id="" name="qty" class="form-control bor-radius5 cc-cvc" type="text" onkeypress="return isNumberKey(this, event)" required>
 
                                             </div>
                                         </div>

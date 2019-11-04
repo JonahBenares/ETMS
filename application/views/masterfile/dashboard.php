@@ -8,7 +8,7 @@
             </div>
             <div class="row m-t-25 m-l-150 m-r-150">
                 <div class="col-sm-3 col-lg-3">
-                    <div class="overview-item overview-item--c4" style="height: 85%;" id="main_btn" onmouseover="nameIn(this)" onmouseout="listIn(this)">
+                    <div class="overview-item overview-item--c4" style="height: 85%;<?php echo ($_SESSION['usertype']==1) ? '' : 'pointer-events: none'?>" id="main_btn" onmouseover="nameIn(this)" onmouseout="listIn(this)">
                         <div class="overview__inner" id="mas_name" >
                             <div class="overview-box clearfix">
                                 <center>
@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="col-sm-3 col-lg-3">
-                    <a href="<?php echo base_url(); ?>index.php/encode/encode_et" style="width:100%;">
+                    <a href="<?php echo base_url(); ?>index.php/encode/encode_et" style="width:100%;<?php echo ($_SESSION['usertype']==1) ? '' : 'pointer-events: none'?>">
                         <div class="overview-item overview-item--c2" style="height: 100%;">
                             <div class="overview__inner">
                                 <div class="overview-box clearfix">
@@ -110,7 +110,7 @@
                     </div>
                 </div>
                 <div class="col-sm-3 col-lg-3">
-                    <a href="<?php echo base_url(); ?>index.php/borrow/borrow_list" style="width:100%;">
+                    <a href="<?php echo base_url(); ?>index.php/borrow/borrow_list" style="width:100%;<?php echo ($_SESSION['usertype']==1) ? '' : 'pointer-events: none'?>">
                         <div class="overview-item overview-item--c1" style="height: 100%;">
                             <div class="overview__inner">
                                 <div class="overview-box clearfix">

@@ -48,7 +48,9 @@
                                         <?php $x++; } }?>                                        
                                     </tbody>
                                 </table>
-                                 <input type = "submit" class="btn btn-primary btn-block  btn-md" value = "Repair">
+                                <?php if($_SESSION['usertype'] == 1){ ?> 
+                                <input type = "submit" class="btn btn-primary btn-block  btn-md" value = "Repair">
+                                <?php } ?>
                                     
                             </div>
                             <!-- <div class="row">
