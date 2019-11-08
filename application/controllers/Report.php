@@ -2794,7 +2794,11 @@ class Report extends CI_Controller {
         $this->load->view('template/sidebar');
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
+        $data['ed_id']=$this->uri->segment(4);
+        $ed_id=$this->uri->segment(4);
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
+        $sets = $this->super_model->select_column_where("et_details","set_id","ed_id",$ed_id);
+        $data['set']=$this->super_model->select_row_where("et_set","set_id",$sets);
         $row=$this->super_model->count_custom_where("et_head","accountability_id = '$id'");
         if($row!=0){
             foreach($this->super_model->select_custom_where('et_head', "accountability_id='$id' ORDER BY et_desc ASC") AS $sub){
@@ -2818,6 +2822,7 @@ class Report extends CI_Controller {
                         'department'=>$sub->department,
                         'et_desc'=>$sub->et_desc,
                         'qty'=>$sub->qty,
+                        'employee_id'=>$sub->accountability_id,
                         'accountability'=>$accountability
                     );
                 }
@@ -2833,6 +2838,8 @@ class Report extends CI_Controller {
         $id=$this->input->post('id');
         $count = $this->input->post('count');
         $edid = $this->input->post('edid');
+        $set_ed = $this->input->post('set_ed');
+        $sets = $this->input->post('set_id');
         $name = $this->input->post('name');
         $price = $this->input->post('price');
         $serial = $this->input->post('serial');
@@ -2845,13 +2852,23 @@ class Report extends CI_Controller {
             $set_id = $series+1;
         }
 
-        $set_data = array(
-            'set_id'=>$set_id,
-            'set_name'=>$name,
-            'set_price'=>$price,
-            'set_serial_no'=>$serial,
-        );
-        $this->super_model->insert_into("et_set", $set_data);
+        if(empty($set_ed)){
+            $set_data = array(
+                'set_id'=>$set_id,
+                'set_name'=>$name,
+                'set_price'=>$price,
+                'set_serial_no'=>$serial,
+            );
+            $this->super_model->insert_into("et_set", $set_data);
+        }else {
+            $set_data = array(
+                'set_name'=>$name,
+                'set_price'=>$price,
+                'set_serial_no'=>$serial,
+            );
+
+            $this->super_model->update_where("et_set", $set_data, "set_id", $sets);
+        }
 
         for($x=0;$x<$checked;$x++){
             $det_data = array(
@@ -2859,9 +2876,16 @@ class Report extends CI_Controller {
             ); 
             $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
         }
+
+        if(!empty($set_ed)){
         ?>
-        <script>alert("Successfully Set!"); window.location.href ='<?php echo base_url(); ?>index.php/report/report_sub/<?php echo $id; ?>'</script>
+        <script>alert('Successfully Updated!'); window.location.href ='<?php echo base_url(); ?>index.php/report/create_set/<?php echo $id; ?>/<?php echo $set_ed; ?>'</script>
         <?php
+        }else{
+        ?>
+        <script>alert('Successfully Set!'); window.location.href ='<?php echo base_url(); ?>index.php/report/create_set/<?php echo $id; ?>'</script>
+        <?php
+        }
     }
 
     public function rem_set(){
@@ -2872,13 +2896,17 @@ class Report extends CI_Controller {
         ); 
         $this->super_model->update_where("et_details", $det_data, "ed_id", $edid);
         ?>
-        <script>window.location.href ='<?php echo base_url(); ?>index.php/report/report_sub/<?php echo $id; ?>'</script>
+        <script>window.location.href ='<?php echo base_url(); ?>index.php/report/create_set/<?php echo $id; ?>'</script>
         <?php
     }
 
     public function create_set_avail(){  
         $this->load->view('template/header');
         $this->load->view('template/sidebar');
+        $data['ed_id']=$this->uri->segment(3);
+        $ed_id=$this->uri->segment(3);
+        $sets = $this->super_model->select_column_where("et_details","set_id","ed_id",$ed_id);
+        $data['set']=$this->super_model->select_row_where("et_set","set_id",$sets);
         $row=$this->super_model->count_custom_where("et_head","accountability_id = '0'");
         if($row!=0){
             foreach($this->super_model->select_row_where('et_head', 'accountability_id', '0') AS $sub){
@@ -2917,6 +2945,8 @@ class Report extends CI_Controller {
     public function insert_set_avail(){
         $count = $this->input->post('count');
         $edid = $this->input->post('edid');
+        $set_ed = $this->input->post('set_ed');
+        $sets = $this->input->post('set_id');
         $name = $this->input->post('name');
         $price = $this->input->post('price');
         $serial = $this->input->post('serial');
@@ -2929,13 +2959,22 @@ class Report extends CI_Controller {
             $set_id = $series+1;
         }
 
-        $set_data = array(
-            'set_id'=>$set_id,
-            'set_name'=>$name,
-            'set_price'=>$price,
-            'set_serial_no'=>$serial,
-        );
-        $this->super_model->insert_into("et_set", $set_data);
+        if(empty($set_ed)){
+            $set_data = array(
+                'set_id'=>$set_id,
+                'set_name'=>$name,
+                'set_price'=>$price,
+                'set_serial_no'=>$serial,
+            );
+            $this->super_model->insert_into("et_set", $set_data);
+        }else {
+            $set_data = array(
+                'set_name'=>$name,
+                'set_price'=>$price,
+                'set_serial_no'=>$serial,
+            );
+            $this->super_model->update_where("et_set", $set_data, "set_id", $sets);
+        }
 
         for($x=0;$x<$checked;$x++){
             $det_data = array(
@@ -2943,9 +2982,16 @@ class Report extends CI_Controller {
             ); 
             $this->super_model->update_where("et_details", $det_data, "ed_id", $edid[$x]);
         }
+        
+        if(!empty($set_ed)){
         ?>
-        <script>alert("Successfully Set!"); window.location.href ='<?php echo base_url(); ?>index.php/report/report_main_avail'</script>
+        <script>alert('Successfully Updated!'); window.location.href ='<?php echo base_url(); ?>index.php/report/create_set_avail/<?php echo $set_ed; ?>'</script>
         <?php
+        }else{
+        ?>
+        <script>alert('Successfully Set!'); window.location.href ='<?php echo base_url(); ?>index.php/report/create_set_avail'</script>
+        <?php
+        }
     }
 
     public function rem_set_avail(){

@@ -18,16 +18,17 @@
                                 <div class="row m-b-20">
                                     <div class = "col-lg-4">
                                         <label>Set Name:</label>
-                                        <input type = "text" class = "form-control bor-radius20" name = "name" required="">
+                                        <input type = "text" class = "form-control bor-radius20" name = "name" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_name; } }else{ echo ''; } ; ?>" required="">
                                     </div>
                                     <div class = "col-lg-4">
                                         <label>Set Price:</label>
-                                        <input type = "text" class = "form-control bor-radius20" name = "price">
+                                        <input type = "text" class = "form-control bor-radius20" name = "price" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_price; } }else{ echo ''; } ; ?>">
                                     </div>  
                                     <div class = "col-lg-4">
-                                        <label>Set Lot No.:</label>
-                                        <input type = "text" class = "form-control bor-radius20" name = "serial">
-                                    </div>
+                                        <label>Set Serial No.:</label>
+                                        <input type = "text" class = "form-control bor-radius20" name = "serial" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_serial_no; } }else{ echo ''; } ; ?>">
+                                    </div> 
+                                    <input type="hidden" name="set_id" value = "<?php if(isset($ed_id)){ foreach($set AS $s){ echo $s->set_id; } } ?>">
                                 </div>                      
                                 <table class="table table-bordersed dataTable table-striped table-earning" id = "myTable_avail_set">
                                     <thead>
@@ -51,9 +52,12 @@
                                         <tr>
                                             <?php if($s['set_id']!=0){ ?>
                                             <td align="center" hidden><input type="text" name="etid[]" value='<?php echo $s['et_id']; ?>' disabled></td>
-                                            <td align="center">
+                                            <td align="center" width = '10%'>
                                                 <a href = '<?php echo base_url(); ?>index.php/report/rem_set_avail/<?php echo $s['ed_id'];?>' class="btn btn-danger item btn-sm text-white" data-toggle="tooltip" onclick="confirmationDeleteSet(this);return false;" data-placement="top" title="Remove Set">
                                                     <i class="fa fa-times"></i>
+                                                </a>
+                                                <a href = '<?php echo base_url(); ?>index.php/report/create_set_avail/<?php echo $s['ed_id'];?>' class="btn btn-primary item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Update Set">
+                                                    <i class="fa fa-edit"></i>
                                                 </a>
                                             </td>
                                             <?php } else { ?>
@@ -75,10 +79,11 @@
                                         </tr>
                                         <?php $x++; } ?>
                                         <input type="hidden" name = "count" id = "count" value = "<?php echo $x?>">
+                                        <input type="hidden" name = "set_ed" id = "set_ed" value = "<?php echo $ed_id?>">
                                     </tbody>
                                 </table>
                                 <br>
-                                <input type="submit" class="btn btn-block btn-primary" name = "submit" id = "submit" value="Set">
+                                <input type="submit" class="btn btn-block btn-primary" name = "submit" id = "submit" value="<?php echo (isset($ed_id)) ? 'Update' : 'Set' ?>">
                                 <!-- <a href="" class="btn btn-block btn-primary"> Set</a> -->
                             </div>                            
                         </form>
