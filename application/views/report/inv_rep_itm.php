@@ -71,25 +71,6 @@
                                     </tbody>                           
                                 </table>
                                 <?php } ?>
-                                <!-- <?php if(!empty($setdata)){ ?>
-                                <table class="table table-borderless table-striped table-earning " id="myTable_peremp">
-                                    <thead>
-                                        <tr>
-                                            <th>Set Name</th>
-                                            <th align="center">Count</th>
-                                        </tr>
-                                    </thead> 
-                                    <tbody>
-                                        <?php foreach($setdata AS $s){ ?>
-                                        <tr>
-                                            <td><?php echo $s['set_name']; ?></td>
-                                            <td align="center"><?php echo $s['count']; ?></td>
-                                        </tr>
-                                        <?php }
-                                         ?>
-                                    </tbody>                           
-                                </table>
-                                <?php } ?> -->
                             </div>
                         </div>
                         

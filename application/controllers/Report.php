@@ -102,10 +102,12 @@ class Report extends CI_Controller {
         if($row!=0){
             foreach($this->super_model->select_all_order_by("et_head",'et_id','ASC') AS $ss){
                 $counts = $this->super_model->count_rows_where('et_details','et_id',$ss->et_id);
-                foreach($this->super_model->select_row_where("et_details","et_id",$ss->et_id) AS $r){
+                /*foreach($this->super_model->select_row_where("et_details","et_id",$ss->et_id) AS $r){
                     $setss = $this->super_model->select_column_where("et_set", "set_name", "set_id", $r->set_id);
                     $set_id = $r->set_id;
-                }
+                }*/
+                $set_id = $this->super_model->select_column_where("et_details","set_id","et_id",$ss->et_id);
+                $sets = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                 //$avcount = $this->super_model->count_custom_where('et_head',"accountability_id='0' AND et_id = '$ss->et_id'");
                 //$incount = $this->super_model->count_custom_where('et_head',"accountability_id!='0' AND et_id = '$ss->et_id'");
                 foreach($this->super_model->custom_query("SELECT COUNT(ed.et_id) AS av FROM et_head eh LEFT JOIN et_details ed ON eh.et_id = ed.et_id WHERE eh.accountability_id='0' AND ed.et_id = '$ss->et_id'") AS $av){
@@ -120,7 +122,7 @@ class Report extends CI_Controller {
                     'item_id'=>$ss->et_id,
                     'set_id'=>$set_id,
                     'item'=>$ss->et_desc,
-                    'set'=>$setss,
+                    'set'=>$sets,
                     'count'=>$counts,
                     'avcount'=>$avcount,
                     'incount'=>$incount,
