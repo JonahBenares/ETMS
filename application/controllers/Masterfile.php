@@ -225,9 +225,9 @@ class Masterfile extends CI_Controller {
                 $aaf_prefix1=$emp[0];
                 $aaf_prefix2=$emp[1];
                 $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
-                $series = $emp[1];
+                $series = $emp[2];
                 $emp_data= array(
-                    'aaf_prefix'=>$aaf_prefix1,
+                    'aaf_prefix'=>$aaf_prefix,
                     'series'=>$series
                 );
                 $this->super_model->insert_into("employee_series", $emp_data);
