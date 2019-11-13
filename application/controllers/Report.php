@@ -3118,11 +3118,12 @@ class Report extends CI_Controller {
         }
 
         foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
-            $location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
-            if($location == 'Bacolod'){
-                $location = 'BCD';
+            $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
+            $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
+            if($locations == $l->location_id){
+                $location = $location_prefix;
             }else {
-                $location = 'BS';
+                $location = '';
             }
         }
 
@@ -3335,11 +3336,18 @@ class Report extends CI_Controller {
         $date = $this->input->post('date');
         $id = $this->input->post('ids');
         foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
-            $location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
+            /*$location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
             if($location == 'Bacolod'){
                 $location = 'BCD';
             }else {
                 $location = 'BS';
+            }*/
+            $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
+            $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
+            if($locations == $l->location_id){
+                $location = $location_prefix;
+            }else {
+                $location = '';
             }
         }
 
@@ -3361,11 +3369,18 @@ class Report extends CI_Controller {
         $date = $this->input->post('date');
         $id = $this->input->post('id');
         foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
-            $location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
+            /*$location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
             if($location == 'Bacolod'){
                 $location = 'BCD';
             }else {
                 $location = 'BS';
+            }*/
+            $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
+            $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
+            if($locations == $l->location_id){
+                $location = $location_prefix;
+            }else {
+                $location = '';
             }
         }
         $date_format = date("Y-m",strtotime($date));
@@ -3609,11 +3624,18 @@ class Report extends CI_Controller {
             }
 
             foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
-                $location1 = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
+                /*$location1 = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
                 if($location1 == 'Bacolod'){
                     $location1 = 'BCD';
                 }else {
                     $location1 = 'BS';
+                }*/
+                $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
+                $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
+                if($locations == $l->location_id){
+                    $location1 = $location_prefix;
+                }else {
+                    $location1 = '';
                 }
             }
 
@@ -4520,11 +4542,18 @@ class Report extends CI_Controller {
         $received_by = $this->input->post('rec_id');
 
         foreach($this->super_model->select_row_where("employees","employee_id", $accountability_id) AS $l){
-            $location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
+            /*$location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
             if($location == 'Bacolod'){
                 $location = 'BCD';
             }else {
                 $location = 'BS';
+            }*/
+            $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
+            $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
+            if($locations == $l->location_id){
+                $location = $location_prefix;
+            }else {
+                $location = '';
             }
         }
         $atf_format = date("Y");

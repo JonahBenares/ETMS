@@ -226,6 +226,7 @@
                     <input type='submit' class="btn btn-primary" id='' value='Save & Print'>
                     <!--  <input type="hidden" name="id" value = "<?php echo $id;?>">  -->
                     <input type="hidden" id="" name="returned_by" value = "<?php echo $borrowed_by;?>"> 
+                    <input type="hidden" id="" name="emp" value = "<?php echo $employees;?>"> 
                     <input type="hidden" id="user_id" name="user_id" value = "<?php echo $_SESSION['user_id'];?>"> 
                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">
                 </center>

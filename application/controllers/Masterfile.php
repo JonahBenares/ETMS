@@ -532,6 +532,7 @@ class Masterfile extends CI_Controller {
         $data['id']=$this->input->post('id');
         $id=$this->input->post('id');
         $data['subcat'] = $this->super_model->select_row_where('subcategory', 'subcat_id', $id);
+        $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         $this->load->view('masterfile/edit_subcat_modal',$data);
     }
 
