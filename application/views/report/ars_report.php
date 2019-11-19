@@ -150,15 +150,16 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td style="border-bottom:1px solid #000">
+                    <td style="border-bottom:1px solid #000;vertical-align:bottom;color:black">
                         <input class="select" type="" name="" value="<?php echo $user_id;?>">
                     </td> 
                     <td></td>
-                    <td style="border-bottom:1px solid #000">
+                    <td style="border-bottom:1px solid #000;vertical-align:bottom;color:black">
                         <?php if($type == 2){ ?>
-                            <?php foreach($child as $c){ echo  $c['emp'].", <br>"; }?>
+                            <?php foreach($child as $c){ echo  "<div style='margin-top: 20px;'>".$c['emp'].", </div>"; }?>
                         <?php } else { ?>
-                            <textarea class="select" type="" name="" value="" ><?php echo  $name;?></textarea>
+                            <div style = "text-align:center;"><?php echo  $name;?></div>
+                            <!-- <textarea class="select" type="" name="" value="" ><?php echo  $name;?></textarea> -->
                         <?php } ?>
                     </td>
                     <td></td>

@@ -158,13 +158,13 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td style="border-bottom:1px solid #000" align = "center">
+                    <td style="border-bottom:1px solid #000;vertical-align:bottom;color:black" align = "center">
                         <?php echo $user_id;?>
                     </td> 
                     <td></td>
-                    <td style="border-bottom:1px solid #000" align = "center">
+                    <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom;<?php echo ($type != 2) ? 'text-align: center;' : '';?>">
                         <?php if($type == 2){ ?>
-                            <?php if(!empty($child)){  foreach($child as $c){ echo  $c['emp'].', <br>'; } } ?>
+                            <?php if(!empty($child)){  foreach($child as $c){ echo  "<div style='margin-top: 20px;'>".$c['emp'].', <div>'; } } ?>
                         <?php } else { ?>
                             <?php echo  $employee;?>
                         <?php } ?>

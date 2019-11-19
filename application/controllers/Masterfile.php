@@ -221,11 +221,25 @@ class Masterfile extends CI_Controller {
                 'status'=>$status,
             );
             if($this->super_model->insert_into("employees", $data)){
-                $emp=explode("-", $this->input->post('aaf_no'));
+                /*$emp=explode("-", $this->input->post('aaf_no'));
                 $aaf_prefix1=$emp[0];
                 $aaf_prefix2=$emp[1];
                 $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
-                $series = $emp[2];
+                $series = $emp[2];*/
+                $emp=explode("-", $this->input->post('aaf_no'));
+                $one=$emp[0];
+                $two=$emp[1];
+                $three = (!empty($emp[2])) ? $emp[2] : '';
+                if(!empty($one) && !empty($two) && !empty($three)){ 
+                    $aaf_prefix1=$emp[0];
+                    $aaf_prefix2=$emp[1];
+                    $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
+                    $series = $emp[2];
+                }else {
+                    $aaf_prefix=$emp[0];
+                    $series = $emp[1];
+                }
+
                 $emp_data= array(
                     'aaf_prefix'=>$aaf_prefix,
                     'series'=>$series
@@ -264,14 +278,24 @@ class Masterfile extends CI_Controller {
                 );
                 if($this->super_model->update_where('employees', $data, 'employee_id', $empid)){
                     $emp=explode("-", $this->input->post('aaf_no'));
-                    $aaf_prefix1=$emp[0];
-                    $aaf_prefix2=$emp[1];
-                    $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
-                    $series = $emp[2];
+                    $one=$emp[0];
+                    $two=$emp[1];
+                    $three = (!empty($emp[2])) ? $emp[2] : '';
+                    if(!empty($one) && !empty($two) && !empty($three)){ 
+                        $aaf_prefix1=$emp[0];
+                        $aaf_prefix2=$emp[1];
+                        $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
+                        $series = $emp[2];
+                    }else {
+                        $aaf_prefix=$emp[0];
+                        $series = $emp[1];
+                    }
+
                     $emp_data= array(
                         'aaf_prefix'=>$aaf_prefix,
                         'series'=>$series
                     );
+
                     $this->super_model->insert_into("employee_series", $emp_data);
                     echo "<script>alert('Successfully Updated!'); 
                         window.location ='".base_url()."index.php/masterfile/employee_list'; </script>";
@@ -287,7 +311,7 @@ class Masterfile extends CI_Controller {
                     'aaf_no'=>$aaf_no,
                 );
                 if($this->super_model->update_where('employees', $data, 'employee_id', $empid)){
-                    $emp=explode("-", $this->input->post('aaf_no'));
+                    /*$emp=explode("-", $this->input->post('aaf_no'));
                     $aaf_prefix1=$emp[0];
                     $aaf_prefix2=$emp[1];
                     $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
@@ -296,7 +320,21 @@ class Masterfile extends CI_Controller {
                         'aaf_prefix'=>$aaf_prefix,
                         'series'=>$series
                     );
-                    $this->super_model->insert_into("employee_series", $emp_data);
+                    $this->super_model->insert_into("employee_series", $emp_data);*/
+                    $emp=explode("-", $this->input->post('aaf_no'));
+                    $one=$emp[0];
+                    $two=$emp[1];
+                    $three = (!empty($emp[2])) ? $emp[2] : '';
+                    if(!empty($one) && !empty($two) && !empty($three)){ 
+                        $aaf_prefix1=$emp[0];
+                        $aaf_prefix2=$emp[1];
+                        $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
+                        $series = $emp[2];
+                    }else {
+                        $aaf_prefix=$emp[0];
+                        $series = $emp[1];
+                    }
+
                     echo "<script>alert('Successfully Updated!'); 
                         window.location ='".base_url()."index.php/masterfile/employee_list'; </script>";
                 }
@@ -381,14 +419,28 @@ class Masterfile extends CI_Controller {
                 'type'=>2
             );
             if($this->super_model->insert_into("employees", $data)){
-                $emp=explode("-", $this->input->post('aaf_no'));
+                /*$emp=explode("-", $this->input->post('aaf_no'));
                 $aaf_prefix1=$emp[0];
                 $aaf_prefix2=$emp[1];
                 $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
-                $series = $emp[1];
+                $series = $emp[2];*/
+
+                $emp=explode("-", $this->input->post('aaf_no'));
+                $one=$emp[0];
+                $two=$emp[1];
+                $three = (!empty($emp[2])) ? $emp[2] : '';
+                if(!empty($one) && !empty($two) && !empty($three)){ 
+                    $aaf_prefix1=$emp[0];
+                    $aaf_prefix2=$emp[1];
+                    $aaf_prefix=$aaf_prefix1."-".$aaf_prefix2;
+                    $series = $emp[2];
+                }else {
+                    $aaf_prefix=$emp[0];
+                    $series = $emp[1];
+                }
 
                 $emp_data= array(
-                    'aaf_prefix'=>$aaf_prefix1,
+                    'aaf_prefix'=>$aaf_prefix,
                     'series'=>$series
                 );
                 $this->super_model->insert_into("employee_series", $emp_data);
@@ -499,7 +551,7 @@ class Masterfile extends CI_Controller {
         $this->load->view('template/header');
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
-        $data['location'] = $this->super_model->select_all('location');
+        $data['location'] = $this->super_model->select_all_order_by('location',"location_name",'ASC');
         $data['cat'] = $this->super_model->select_row_where('category', 'category_id', $id);
         $this->load->view('masterfile/add_subcat',$data);
         $this->load->view('template/scripts');

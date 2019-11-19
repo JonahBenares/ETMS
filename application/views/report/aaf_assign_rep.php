@@ -177,7 +177,7 @@
                     </tr>
                     <tr>
                         <td></td>
-                        <td style="border-bottom:1px solid #000">
+                        <td style="border-bottom:1px solid #000;vertical-align:bottom;">
                             <input class="select" type="text" name="" value="<?php echo $user_id;?>">
                         </td> 
                         <td></td>
@@ -189,7 +189,7 @@
                                 <?php } ?>
                             </select> -->
                             <!-- <input class="select" id = "receive_by" type="text" name=""> -->
-                            <div id = "receive_by" style = "color:black;text-align: center;"></div>
+                            <div id = "receive_by" style = "color:black;"></div>
                         </td>
                         <td></td>
                     </tr>

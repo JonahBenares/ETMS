@@ -85,7 +85,7 @@ class Borrow extends CI_Controller {
             if($locations == $l->location_id){
                 $location = $location_prefix;
             }else {
-                $location = '';
+                $location = 'NA';
             }
         }
 
@@ -673,7 +673,7 @@ class Borrow extends CI_Controller {
                 if($locations == $l->location_id){
                     $location1 = $location_prefix;
                 }else {
-                    $location1 = '';
+                    $location1 = 'NA';
                 }
             }
             $date_format = date("Y-m",strtotime($date));
