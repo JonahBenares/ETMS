@@ -89,7 +89,7 @@
                             </td>
                             <td width="4%"></td>
                             <td width="13%"><h5 class="nomarg pull-right">Employee No.</h5></td>
-                            <td colspan="3" style="border-bottom: 1px solid #999">
+                            <td colspan="3" style="border-bottom: 1px solid #999; padding-left: 10px;">
                                 <input type="text" name = "aaf_no" id ="aaf_no" style="width: 100%" value = "<?php echo $employee_no;?>">
                             </td>
                         </tr>
@@ -97,6 +97,11 @@
                             <td><h5 class="nomarg">Position</h5></td>
                             <td style="border-bottom: 1px solid #999">
                                 <input type="text" name = "position" id = "position" style="width: 100%" value = "<?php echo $position;?>">
+                            </td>
+                            <td width="4%"></td>
+                            <td width="13%"><h5 class="nomarg pull-right">Date Issued</h5></td>
+                            <td colspan="3" style="border-bottom: 1px solid #999;padding-left: 10px;">
+                                <input type="date" name = "date_issued" id ="date_issued" style="width: 100%" value = "<?php echo $date_issued;?>">
                             </td>
                         </tr>
                         <!-- <tr>
@@ -213,15 +218,17 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td style="border-bottom:1px solid #000">
-                                <input class="select" type="text" name="" value="<?php echo $user_id;?>">
+                            <td style="border-bottom:1px solid #000;vertical-align:bottom;color:black" align = 'center'>
+                                <!-- <input class="select" type="text" name="" value="<?php echo $user_id;?>"> -->
+                                <?php echo $user_id;?>
                             </td> 
                             <td></td>
-                            <td style="border-bottom:1px solid #000">
+                            <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
                                 <?php if($type == 2){ ?>
-                                    <?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].", <br>" : ''; }?>
+                                    <?php foreach($child as $c){ echo ($c['status']==0) ? "<div style='margin-top: 20px;'>".$c['emp'].", </div>" : ''; }?>
                                 <?php } else { ?>
-                                    <textarea class="select" type="" name="" value="" ><?php echo $name;?></textarea>
+                                    <div style = "text-align:center;"><?php echo  $name;?></div>
+                                    <!-- <textarea class="select" type="" name="" value="" ><?php echo $name;?></textarea> -->
                                 <?php } ?>
                                 <!-- <select class="select">
                                     <option></option>

@@ -197,14 +197,15 @@ function selectAssign(emp_id,emp,dept,position,aaf_no, children,type) {
     if(type==1){
         //$("#receive_by").val(emp);
         var element = document.getElementById("receive_by");
-        element.innerHTML = emp;
+        em ="<p style = 'text-align:center;'>"+emp+"</p>";
+        element.innerHTML = em;
     } else {
         var child = children.split(",");
         var key='';
         var ch='';
         for(i = 0; i < child.length; i++){
             var element = document.getElementById("receive_by");
-            ch += "<p>"+child[i]+"</p>";
+            ch += "<p style = 'margin-top:20px;'>"+child[i]+"</p>";
             element.innerHTML = ch;
         }
         //var child = children.replace(',', '\n');

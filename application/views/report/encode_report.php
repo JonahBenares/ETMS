@@ -100,17 +100,25 @@
                             <input type="text" name = "position" id = "position" style="width: 100%" value = "<?php echo $position;?>">
                         </td>
                         <td></td>
-                        <td><h5 class="nomarg">Department</h5></td>
-                        <td style="border-bottom: 1px solid #999">
-                            <input type="text" name = "department" id = "department" style="width: 100%" value = "<?php echo $department;?>">
-                        </td>
-                    </tr>
-                    <!-- <tr>
                         <td><h5 class="nomarg">Date Issued</h5></td>
                         <td style="border-bottom: 1px solid #999">
                             <input type="date" name = "date_issued" style="width: 100%" value = "<?php echo $date_issued;?>">
                         </td>
-                    </tr> -->
+                        <!-- <td><h5 class="nomarg">Department</h5></td>
+                        <td style="border-bottom: 1px solid #999">
+                            <input type="text" name = "department" id = "department" style="width: 100%" value = "<?php echo $department;?>">
+                        </td> -->
+                    </tr>
+                    <tr>
+                        <td><h5 class="nomarg">Department</h5></td>
+                        <td style="border-bottom: 1px solid #999">
+                            <input type="text" name = "department" id = "department" style="width: 100%" value = "<?php echo $department;?>">
+                        </td>
+                        <!-- <td><h5 class="nomarg">Date Issued</h5></td>
+                        <td style="border-bottom: 1px solid #999">
+                            <input type="date" name = "date_issued" style="width: 100%" value = "<?php echo $date_issued;?>">
+                        </td> -->
+                    </tr>
                     <tr>
                         
                     </tr>              
@@ -222,7 +230,7 @@
                         <td></td>
                         <td style="border-bottom:1px solid #000;color:black">
                             <?php if($type == 2){ ?>
-                                <?php foreach($child as $c){ echo  $c['emp'].", <br>"; }?>
+                                <?php foreach($child as $c){ echo  "<div style='margin-top: 20px;'>".$c['emp'].", </div>"; }?>
                             <?php } else { ?>
                                 <div style = "text-align:center;"><?php echo  $name;?></div>
                             <?php } ?>

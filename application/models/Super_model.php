@@ -212,6 +212,13 @@ class super_model extends CI_Model
          return $query->result();
     }
 
+   public function custom_query_single($column,$q){
+        $query = $this->db->query($q);
+          foreach($query->result() as $result){
+            return $result->$column;
+        }
+    }
+
     public function update_where($table, $data, $column, $value)
     {
         $this->db->trans_begin();

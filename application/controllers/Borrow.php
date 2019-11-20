@@ -74,11 +74,18 @@ class Borrow extends CI_Controller {
         }
 
         foreach($this->super_model->select_row_where("employees","employee_id", $this->input->post('borrow_id')) AS $l){
-            $location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
+            /*$location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
             if($location == 'Bacolod'){
                 $location = 'BCD';
             }else {
                 $location = 'BS';
+            }*/
+            $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
+            $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
+            if($locations == $l->location_id){
+                $location = $location_prefix;
+            }else {
+                $location = 'NA';
             }
         }
 
@@ -655,11 +662,18 @@ class Borrow extends CI_Controller {
             $recommendation = $this->input->post('recommendation'.$x);
 
             foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
-                $location1 = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
+                /*$location1 = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
                 if($location1 == 'Bacolod'){
                     $location1 = 'BCD';
                 }else {
                     $location1 = 'BS';
+                }*/
+                $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
+                $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
+                if($locations == $l->location_id){
+                    $location1 = $location_prefix;
+                }else {
+                    $location1 = 'NA';
                 }
             }
             $date_format = date("Y-m",strtotime($date));

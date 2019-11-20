@@ -2370,15 +2370,17 @@ class Report extends CI_Controller {
         $this->load->view('report/report_set_avail',$data);
         $this->load->view('template/scripts');
     }
-
+/*
+    public function count_set($set_id){
+       $count_next_set= $this->super_model->count_rows_where("et_details","set_id",$set_id);
+       return $count_next_set;
+    }*/
     public function set_print_avail(){  
         $this->load->view('template/header');
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $row=$this->super_model->count_rows_where("et_head","accountability_id",'0');
         if($row!=0){
-             $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND set_id !='0'");
-             $data['count_set']=$count_set;
             foreach($this->super_model->select_row_where('et_head','accountability_id','0') AS $aaf){
                 $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $aaf->accountability_id); 
                 foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$aaf->accountability_id) AS $em){
@@ -2395,6 +2397,10 @@ class Report extends CI_Controller {
                 $qty = 1;
                 if(!isset($id)){
                     foreach($this->super_model->select_custom_where('et_details', "et_id = '$aaf->et_id' AND set_id != '0' ORDER BY set_id DESC") AS $det){
+                        $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND set_id ='$det->set_id'");
+                         $count_distinct_set = $this->super_model->custom_query_single("ct","SELECT COUNT(DISTINCT set_id) AS ct FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND  set_id != 0");
+                        
+                        //$data['count_set']=$count_set;
                         $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
                         $set_price = $this->super_model->select_column_where("et_set", "set_price", "set_id", $det->set_id);
                         $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $det->set_id);
@@ -2412,11 +2418,17 @@ class Report extends CI_Controller {
                             'set_name'=>$set_name,
                             'set_lot'=>$set_lot,
                             'currency'=>$currency,
-                            'total'=>$total
+                            'total'=>$total,
+                            'count_set'=>$count_set,
+                            'count_distinct'=>$count_distinct_set
                         );
+                         $data['set'][]=$count_set;
                     }
+                   
                 }else {
                     foreach($this->super_model->select_custom_where('et_details', "et_id = '$aaf->et_id' AND set_id = '$id' ORDER BY set_id DESC") AS $det){
+                        $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND set_id ='$id'");
+                        //$data['count_set']=$count_set;
                         $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
                         $set_price = $this->super_model->select_column_where("et_set", "set_price", "set_id", $det->set_id);
                         $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $det->set_id);
@@ -2434,9 +2446,13 @@ class Report extends CI_Controller {
                             'set_name'=>$set_name,
                             'set_lot'=>$set_lot,
                             'currency'=>$currency,
-                            'total'=>$total
+                            'total'=>$total,
+                            'count_set'=>$count_set,
                         );
+
+                         $data['set'][]=$count_set;
                     }
+
                 }
             }
         }else {
@@ -2493,6 +2509,7 @@ class Report extends CI_Controller {
 
         $query=substr($sql, 0, -3);
         $data['filt']=substr($filter, 0, -2);
+        $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         /*$data['available_qty']=$this->super_model->select_sum("et_head", "qty", "accountability_id", "0");*/
@@ -3118,11 +3135,12 @@ class Report extends CI_Controller {
         }
 
         foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
-            $location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
-            if($location == 'Bacolod'){
-                $location = 'BCD';
+            $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
+            $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
+            if($locations == $l->location_id){
+                $location = $location_prefix;
             }else {
-                $location = 'BS';
+                $location = 'NA';
             }
         }
 
@@ -3335,11 +3353,18 @@ class Report extends CI_Controller {
         $date = $this->input->post('date');
         $id = $this->input->post('ids');
         foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
-            $location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
+            /*$location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
             if($location == 'Bacolod'){
                 $location = 'BCD';
             }else {
                 $location = 'BS';
+            }*/
+            $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
+            $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
+            if($locations == $l->location_id){
+                $location = $location_prefix;
+            }else {
+                $location = 'NA';
             }
         }
 
@@ -3360,13 +3385,25 @@ class Report extends CI_Controller {
     public function getEtdr(){
         $date = $this->input->post('date');
         $id = $this->input->post('id');
-        foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
-            $location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
-            if($location == 'Bacolod'){
-                $location = 'BCD';
-            }else {
-                $location = 'BS';
+
+        if($id!=0){
+            foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
+                /*$location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
+                if($location == 'Bacolod'){
+                    $location = 'BCD';
+                }else {
+                    $location = 'BS';
+                }*/
+                $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
+                $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
+                if($locations == $l->location_id){
+                    $location = $location_prefix;
+                }else {
+                    $location = 'NA';
+                }
             }
+        }else {
+            $location = 'NA';
         }
         $date_format = date("Y-m",strtotime($date));
         $prefix= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
@@ -3608,13 +3645,18 @@ class Report extends CI_Controller {
                 $this->super_model->update_where("et_details", $det_data, "ed_id", $edid);
             }
 
-            foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
-                $location1 = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
-                if($location1 == 'Bacolod'){
-                    $location1 = 'BCD';
-                }else {
-                    $location1 = 'BS';
+            if($id!=0){ 
+                foreach($this->super_model->select_row_where("employees","employee_id", $id) AS $l){
+                    $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
+                    $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
+                    if($locations == $l->location_id){
+                        $location1 = $location_prefix;
+                    }else {
+                        $location1 = 'NA';
+                    }
                 }
+            }else {
+                $location1 = 'NA';
             }
 
             $rows=$this->super_model->count_custom_where("damage_info","etdr_no = '$prefix'");
@@ -3957,7 +3999,8 @@ class Report extends CI_Controller {
                     }
                 }else if($c == $ret->qty){
                     $data = array(
-                        'accountability_id'=>$assign
+                        'accountability_id'=>$assign,
+                        'department'=>$this->input->post('department'),
                     );
                     if($this->super_model->update_where('et_head', $data, 'et_id', $et_id[$x])){
                         foreach($this->super_model->select_row_where('et_details', 'ed_id', $ed_id[$x]) AS $det){
@@ -4518,13 +4561,19 @@ class Report extends CI_Controller {
         $remarks = $this->input->post('remarks');
         $ars_no = $this->input->post('ars_no');
         $received_by = $this->input->post('rec_id');
-
         foreach($this->super_model->select_row_where("employees","employee_id", $accountability_id) AS $l){
-            $location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
+            /*$location = $this->super_model->select_column_where("location","location_name",'location_id',$l->location_id);
             if($location == 'Bacolod'){
                 $location = 'BCD';
             }else {
                 $location = 'BS';
+            }*/
+            $locations = $this->super_model->select_column_where("location","location_id",'location_id',$l->location_id);
+            $location_prefix = $this->super_model->select_column_where("location","location_prefix",'location_id',$l->location_id);
+            if($locations == $l->location_id){
+                $location = $location_prefix;
+            }else {
+                $location = 'NA';
             }
         }
         $atf_format = date("Y");
