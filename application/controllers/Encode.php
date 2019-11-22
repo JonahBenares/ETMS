@@ -153,6 +153,7 @@ class Encode extends CI_Controller {
 
     public function encode_report(){  
         $this->load->view('template/header');
+        $this->load->view('template/print_head');
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('et_head','et_id',$id) AS $et){
