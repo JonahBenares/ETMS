@@ -144,8 +144,18 @@
             var et_id = $(this).attr("data-id");
             $("#et_id").val(et_id);
         });
+
+        $(document).on("click", "#lost_button", function () {
+            var emp_id = $(this).attr("data-id");
+            var accountable = $(this).attr("data-name");
+            var ed_id = $(this).attr("data-ab");
+            var et_id = $(this).attr("data-ac");
+            $("#emp_id").val(emp_id);
+            $("#accountable").val(accountable);
+            $("#ed_id").val(ed_id);
+            $("#et_id").val(et_id);
+        });
     </script>
-    
 </body>
 
 </html>

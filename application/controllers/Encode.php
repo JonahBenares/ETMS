@@ -348,6 +348,18 @@ class Encode extends CI_Controller {
                 );
             
                 if($this->super_model->insert_into("et_details", $data)){
+                    $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
+                    $subcat_prefix1=$assetdetails[0];
+                    $subcat_prefix2=$assetdetails[1];
+                    $location=$assetdetails[2];
+                    $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
+                    $series = $assetdetails[3];
+                    $asset_data= array(
+                        'subcat_prefix'=>$subcat_prefix,
+                        'location'=>$location,
+                        'series'=>$series
+                    );
+                    $this->super_model->insert_into("asset_series", $asset_data);
                     $data_up = array(
                         'save_temp'=>1,
                     );

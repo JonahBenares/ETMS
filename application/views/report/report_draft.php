@@ -62,7 +62,7 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <form method='POST' action="<?php echo base_url(); ?>index.php/report/search_report/">
+                                        <form method='POST' action="<?php echo base_url(); ?>index.php/report/search_report_draft/">
                                             <div class="modal-body">
                                                 <div class="row">
                                                     <div class="col-lg-6">

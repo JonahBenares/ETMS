@@ -162,6 +162,7 @@ class Report extends CI_Controller {
                         'borrowed'=>$r->borrowed,
                         'damaged'=>$r->damage,
                         'change_location'=>$r->change_location,
+                        'lost'=>$r->lost,
                         'location'=>$location,
                         'unit_price'=>$r->unit_price,
                     );
@@ -509,19 +510,22 @@ class Report extends CI_Controller {
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
                 $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
                 $item_desc = $et->et_desc.", ".$brand.", ".$model.", ".$serial_no;
-                if($et->accountability_id!=0 && $borrowed==0){
+                if($et->accountability_id!=0 && $borrowed==0 && $lost==0){
                     $status = $employee;
                 }else if($et->accountability_id==0 && $damaged==0 && $change_location==0){
                     $status = 'Available';
-                }else if($et->accountability_id==0 && $i['change_location']==1){
+                }else if($et->accountability_id==0 && $change_location==1){
                     $status = "Moved to ".$location;
                 }else if($borrowed==1){
                     $status = 'Borrowed';
                 }else if($damaged==1){
                     $status = 'Damaged';
+                }else if($lost==1){
+                    $status = 'Lost Item / '.$employee;
                 }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $item_desc);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, '1');
@@ -550,10 +554,11 @@ class Report extends CI_Controller {
                     $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $ss->accountability_id);
                     $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $r->et_id);
                     $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $r->et_id);
+                    $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $r->et_id);
                     $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $r->et_id);
                     $location = $this->super_model->select_column_where("location", "location_name", "location_id", $r->location_id);
                     $item_desc = $ss->et_desc.", ".$brand.", ".$model.", ".$serial_no;
-                    if($ss->accountability_id!=0 && $borrowed==0){
+                    if($ss->accountability_id!=0 && $borrowed==0 && $lost==0){
                         $status = $employee;
                     }else if($ss->accountability_id==0 && $damaged==0 && $change_location==0){
                         $status = 'Available';
@@ -563,8 +568,9 @@ class Report extends CI_Controller {
                         $status = 'Borrowed';
                     }else if($damaged==1){
                         $status = 'Damaged';
+                    }else if($lost==1){
+                        $status = 'Lost Item / '.$employee;
                     }
-
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $item_desc);
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, '1');
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $unit_price);
@@ -708,6 +714,7 @@ class Report extends CI_Controller {
                     'subcategory'=>$subcategory,
                     'borrowed'=>$et->borrowed,
                     'damaged'=>$et->damage,
+                    'lost'=>$et->lost,
                     'change_location'=>$et->change_location,
                     'location'=>$location,
                     'unit_price'=>$et->unit_price,
@@ -733,6 +740,7 @@ class Report extends CI_Controller {
                         'subcategory'=>$subcategory,
                         'borrowed'=>$r->borrowed,
                         'damaged'=>$r->damage,
+                        'lost'=>$r->lost,
                         'change_location'=>$r->change_location,
                         'location'=>$location,
                         'unit_price'=>$r->unit_price,
@@ -839,10 +847,12 @@ class Report extends CI_Controller {
                 }                  
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $t->et_id);                     
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $t->et_id);   
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $t->et_id);   
                 $location = $this->super_model->select_column_where("location","location_name","location_id",$t->location_id);                  
                 $data['itema'][]=array(
                     'item'=>$item,
                     'damaged'=>$damaged,
+                    'lost'=>$lost,
                     'borrowed'=>$borrowed,
                     'location'=>$location,
                     'change_location'=>$t->change_location,
@@ -963,7 +973,7 @@ class Report extends CI_Controller {
         $data['company1'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['rack1'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
         if($row!=0){
-            foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0 AND save_temp=0') AS $et){
+            foreach($this->super_model->select_join_where('et_head','et_details', 'accountability_id!=0 AND save_temp=0 AND lost=0','et_id') AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
@@ -997,6 +1007,34 @@ class Report extends CI_Controller {
         }
         $this->load->view('report/report_main',$data);
         $this->load->view('template/scripts');
+    }
+
+    public function insert_lost(){
+        $lost_date = trim($this->input->post('lost_date')," ");
+        $remarks = trim($this->input->post('remarks')," ");
+        $emp_id = trim($this->input->post('emp_id')," ");
+        $ed_id = trim($this->input->post('ed_id')," ");
+        $et_id = trim($this->input->post('et_id')," ");
+
+        $data_lost = array(
+            'lost'=>1,
+        );
+
+        if($this->super_model->update_where('et_details', $data_lost, 'ed_id', $ed_id)){
+            $data = array(
+                'ed_id'=>$this->input->post('ed_id'),
+                'lost_date'=>$lost_date,
+                'remarks'=>$remarks,
+                'employee_id'=> $emp_id,
+            );
+            if($this->super_model->insert_into("lost_items", $data)){
+                /*$data_et = array(
+                    'accountability_id'=>0,
+                );
+                $this->super_model->update_where('et_head', $data_et, 'et_id', $et_id);*/
+                echo "<script>alert('Successfully Tagged as Lost!'); location.replace(document.referrer); </script>";
+            }
+        }
     }
 
     public function report_draft(){  
@@ -1293,6 +1331,7 @@ class Report extends CI_Controller {
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
                 $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
@@ -1322,12 +1361,14 @@ class Report extends CI_Controller {
                     'employee'=>$employee,
                     'borrowed'=>$borrowed,
                     'damaged'=>$damaged,
+                    'lost'=>$lost,
                     'change_location'=>$change_location,
                     'location'=>$location,
                 );
             }
         }else {
-            foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0') AS $et){
+            foreach($this->super_model->select_join_where('et_head','et_details', 'accountability_id!=0 AND save_temp=0 AND lost=0','et_id') AS $et){
+            //foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0') AS $et){
                 $data['user_id'] =$_SESSION['fullname'];
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -1356,6 +1397,7 @@ class Report extends CI_Controller {
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
                 $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
@@ -1385,6 +1427,7 @@ class Report extends CI_Controller {
                     'employee'=>$employee,
                     'borrowed'=>$borrowed,
                     'damaged'=>$damaged,
+                    'lost'=>$lost,
                     'change_location'=>$change_location,
                     'location'=>$location,
                 );
@@ -1524,6 +1567,7 @@ class Report extends CI_Controller {
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
                 $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
@@ -1553,12 +1597,14 @@ class Report extends CI_Controller {
                     'employee'=>$employee,
                     'borrowed'=>$borrowed,
                     'damaged'=>$damaged,
+                    'lost'=>$lost,
                     'change_location'=>$change_location,
                     'location'=>$location,
                 );
             }
         }else {
-            foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0 AND save_temp=1 AND cancelled=0') AS $et){
+            foreach($this->super_model->select_join_where('et_head','et_details', 'accountability_id!=0 AND save_temp=1 AND lost=0 AND cancelled=0','et_id') AS $et){
+            //foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0 AND save_temp=1 AND cancelled=0') AS $et){
                 $data['user_id'] =$_SESSION['fullname'];
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -1587,6 +1633,7 @@ class Report extends CI_Controller {
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
                 $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id);
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
@@ -1616,6 +1663,7 @@ class Report extends CI_Controller {
                     'employee'=>$employee,
                     'borrowed'=>$borrowed,
                     'damaged'=>$damaged,
+                    'lost'=>$lost,
                     'change_location'=>$change_location,
                     'location'=>$location,
                 );
@@ -2040,6 +2088,7 @@ class Report extends CI_Controller {
             $data['damage'] =$this->super_model->select_column_where("et_details", "damage", "ed_id", $cur->ed_id);
             $data['borrowed'] =$this->super_model->select_column_where("et_details", "borrowed", "ed_id", $cur->ed_id);
             $data['changeloc'] =$this->super_model->select_column_where("et_details", "change_location", "ed_id", $cur->ed_id);
+            $data['lost'] =$this->super_model->select_column_where("et_details", "lost", "ed_id", $cur->ed_id);
             $location_id=$this->super_model->select_column_where("et_details", "location_id", "ed_id", $cur->ed_id);
             $data['location'] =$this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
             $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "ed_id", $cur->ed_id);
@@ -2148,22 +2197,28 @@ class Report extends CI_Controller {
             $data['repair']=array();
         }
 
-        /*$row_turnover=$this->super_model->count_rows_where("transfer_details", "ed_id",$id);
-        if($row_turnover!=0){
-            foreach($this->super_model->custom_query("SELECT th.accountability_id, th.transfer_date, th.transfer_to, td.et_id FROM transfer_head th INNER JOIN transfer_details td ON th.transfer_id = td.transfer_id WHERE td.ed_id = '$id' GROUP BY td.transfer_id") AS $to){
-                $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $to->accountability_id);
-                $turnover_to =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $to->transfer_to);
-                $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $to->et_id);
-                $data['turnover'][] = array(
-                    "employee"=>$employee,
-                    "turnover_to"=>$turnover_to,
-                    "turnover_date"=>$to->transfer_date,
-                    "qty"=>$qty
+        $row_lost=$this->super_model->count_rows_where("lost_items", "ed_id",$id);
+        foreach($this->super_model->select_row_where('lost_items', 'ed_id', $id) AS $l){
+            $accountable =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $l->employee_id);
+            $rep_id =$this->super_model->select_column_where("lost_items", "replacement", "ed_id", $l->ed_id);
+            $etid =$this->super_model->select_column_where("et_details", "et_id", "ed_id", $l->ed_id);
+            $et_id =$this->super_model->select_column_where("et_head", "et_id", "et_id", $etid);
+            $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et_id);
+            $ed = $this->super_model->select_column_where("et_details", "et_id", "ed_id", $rep_id);
+            $replacement =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $ed);
+
+            if($row_lost!=0){
+                $data['losts'][] = array(
+                    "employee"=>$accountable,
+                    "item"=>$item,
+                    "replacement"=>$replacement,
+                    "remarks"=>$l->remarks,
+                    "lost_date"=>$l->lost_date,
                 );
+            } else {
+                $data['losts']=array();
             }
-        } else {
-            $data['turnover']=array();
-        }*/
+        }
 
         $this->load->view('report/history_view',$data);
         $this->load->view('template/scripts');
@@ -2171,7 +2226,7 @@ class Report extends CI_Controller {
 
     public function row_avail(){
 
-         $row_avail=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0' and change_location = '0'",'et_id');
+         $row_avail=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0' and change_location = '0' AND lost ='0'",'et_id');
          return $row_avail;
     }
 
@@ -2191,7 +2246,7 @@ class Report extends CI_Controller {
         if($row_avail!=0){
             //foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
             //foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' and change_location = '0'","et_id") as $et){
-            foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' AND change_location = '0'","et_id") as $et){
+            foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' AND change_location = '0' AND lost='0'","et_id") as $et){
                 /*foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$et->et_id'") AS $det){*/
                 $damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
                 $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et->et_id);
@@ -2218,6 +2273,7 @@ class Report extends CI_Controller {
                         'category'=>$category,
                         'subcat'=>$subcat,
                         'qty'=>$qty,
+                        'accountability'=>'',
                         /*'serial_no'=>$serial,
                         'asset_control'=>$acn,
                         'acquisition_date'=>$acquisition_date,
@@ -2323,7 +2379,7 @@ class Report extends CI_Controller {
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         if($row_set_avail!=0){
             //foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
-            foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' and change_location = '0' AND set_id!='0'","et_id") as $et){
+            foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' and change_location = '0' AND set_id!='0' AND lost='0'","et_id") as $et){
                 /*foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$et->et_id'") AS $det){*/
                 $damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
                 $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et->et_id);
@@ -2727,7 +2783,7 @@ class Report extends CI_Controller {
         $data['company1'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
         $data['placement1'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
         $data['rack1'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
-        foreach ($this->super_model->select_join_where("et_head", "et_details", $query, "et_id") AS $et){
+        foreach ($this->super_model->select_join_where("et_head", "et_details", "save_temp='0' AND $query", "et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
@@ -2762,11 +2818,253 @@ class Report extends CI_Controller {
                 'count'=>$count
             );
         }
-        if($url=='report_main'){
+
+        $this->load->view('report/report_main',$data);
+        /*if($url=='report_main'){
             $this->load->view('report/report_main',$data);
         }else{
             $this->load->view('report/report_draft',$data);
+        }*/
+        $this->load->view('template/scripts');
+    }
+
+    public function search_report_draft(){
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $url=$this->uri->segment(2);
+        if(!empty($this->input->post('from'))){
+            $data['from'] = $this->input->post('from');
+        } else {
+            $data['from']= "null";
         }
+
+        if(!empty($this->input->post('to'))){
+            $data['to'] = $this->input->post('to');
+        } else {
+            $data['to']= "null";
+        }
+
+        if(!empty($this->input->post('category'))){
+            $data['category'] = $this->input->post('category');
+        } else {
+            $data['category'] = "null";
+        }
+
+        if(!empty($this->input->post('subcat'))){
+            $data['subcat'] = $this->input->post('subcat');
+        } else {
+            $data['subcat'] = "null";
+        }
+
+        if(!empty($this->input->post('department'))){
+            $data['department'] = $this->input->post('department');
+        } else {
+            $data['department'] = "null";
+        }
+
+        if(!empty($this->input->post('item'))){
+            $data['item'] = $this->input->post('item');
+        } else {
+            $data['item'] = "null";
+        } 
+
+        if(!empty($this->input->post('brand'))){
+            $data['brand'] = $this->input->post('brand');
+        } else {
+            $data['brand'] = "null";
+        } 
+
+        if(!empty($this->input->post('item_type'))){
+            $data['item_type'] = $this->input->post('item_type');
+        } else {
+            $data['item_type'] = "null";
+        } 
+
+        if(!empty($this->input->post('model'))){
+            $data['model'] = $this->input->post('model');
+        } else {
+            $data['model'] = "null";
+        } 
+
+        if(!empty($this->input->post('serial_no'))){
+            $data['serial_no'] = $this->input->post('serial_no');
+        } else {
+            $data['serial_no'] = "null";
+        } 
+
+        if(!empty($this->input->post('damage'))){
+            $data['damage'] = $this->input->post('damage');
+        } else {
+            $data['damage'] = "null";
+        } 
+
+        if(!empty($this->input->post('condition'))){
+            $data['condition'] = $this->input->post('condition');
+        } else {
+            $data['condition'] = "null";
+        }
+
+        if(!empty($this->input->post('placement'))){
+            $data['placement'] = $this->input->post('placement');
+        } else {
+            $data['placement'] = "null";
+        }
+
+        if(!empty($this->input->post('company'))){
+            $data['company'] = $this->input->post('company');
+        } else {
+            $data['company'] = "null";
+        }
+
+        if(!empty($this->input->post('rack'))){
+            $data['rack'] = $this->input->post('rack');
+        } else {
+            $data['rack'] = "null";
+        }
+
+        $sql="";
+        $filter = "";
+        if(!empty($this->input->post('from')) && !empty($this->input->post('to'))){
+            $from = $this->input->post('from');
+            $to = $this->input->post('to');
+            $sql.= " et_details.acquisition_date BETWEEN '$from' AND '$to' AND";
+            $filter .= "Acquisition Date - ".$from.' <strong>To</strong> '.$to.", ";
+        }
+
+        if(!empty($this->input->post('category'))){
+            $category = $this->input->post('category');
+            $sql.=" et_head.category_id = '$category' AND";
+            $cat = $this->super_model->select_column_where("category", "category_name", "category_id", $category);
+            $filter .= "Category - ".$cat.", ";
+        }
+
+        if(!empty($this->input->post('subcat'))){
+            $subcat = $this->input->post('subcat');
+            $sql.=" et_head.subcat_id = '$subcat' AND";
+            $subcat1 = $this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $subcat);
+            $filter .= "Sub Category - ".$subcat1.", ";
+        }
+
+        if(!empty($this->input->post('department'))){
+            $department = $this->input->post('department');
+            $sql.=" et_head.department LIKE '%$department%' AND";
+            $filter .= "Department - ".$department.", ";
+        }
+
+        if(!empty($this->input->post('item'))){
+            $item = $this->input->post('item');
+            $sql.=" et_head.et_desc LIKE '%$item%' AND";
+            $filter .= "Item Description - ".$item.", ";
+        }
+
+        if(!empty($this->input->post('brand'))){
+            $brand = $this->input->post('brand');
+            $sql.=" et_details.brand LIKE '%$brand%' AND";
+            $filter .= "Brand - ".$brand.", ";
+        }
+
+        if(!empty($this->input->post('model'))){
+            $model = $this->input->post('model');
+            $sql.=" et_details.model LIKE '%$model%' AND";
+            $filter .= "Model - ".$model.", ";
+        }
+
+        if(!empty($this->input->post('item_type'))){
+            $item_type = $this->input->post('item_type');
+            $sql.=" et_details.type LIKE '%$item_type%' AND";
+            $filter .= "Type - ".$item_type.", ";
+        }
+
+        if(!empty($this->input->post('serial_no'))){
+            $serial_no = $this->input->post('serial_no');
+            $sql.=" et_details.serial_no LIKE '%$serial_no%' AND";
+            $filter .= "Serial No. - ".$serial_no.", ";
+        }
+
+        if(!empty($this->input->post('damage'))){
+            $damage = $this->input->post('damage');
+            $sql.=" et_details.damage = '$damage' AND";
+            $filter .= "Damage Items, ";
+        }
+
+        if(!empty($this->input->post('condition'))){
+            $condition = $this->input->post('condition');
+            $sql.=" et_details.physical_condition LIKE '%$condition%' AND";
+            $filter .= "Physical Condition - ".$condition.", ";
+        }
+
+        if(!empty($this->input->post('placement'))){
+            $placement = $this->input->post('placement');
+            $sql.=" et_details.placement_id = '$placement' AND";
+            $place = $this->super_model->select_column_where("placement", "placement_name", "placement_id", $placement);
+            $filter .= "Placement - ".$place.", ";
+        }
+
+        if(!empty($this->input->post('company'))){
+            $company = $this->input->post('company');
+            $sql.=" et_details.company_id = '$company' AND";
+            $rr = $this->super_model->select_column_where("company", "company_name", "company_id", $company);
+            $filter .= "company - ".$rr.", ";
+        }
+
+        if(!empty($this->input->post('rack'))){
+            $rack = $this->input->post('rack');
+            $sql.=" et_details.rack_id = '$rack' AND";
+            $rak = $this->super_model->select_column_where("rack", "rack_name", "rack_id", $rack);
+            $filter .= "Rack - ".$rak.", ";
+        }
+
+        $query=substr($sql, 0, -3);
+        $data['filt']=substr($filter, 0, -2);
+        $data['available_set_qty']= $this->row_set_avail();
+        $data['available_qty']=$this->super_model->select_count_join_inner('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');
+        $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
+        $data['cat'] = $this->super_model->select_all_order_by('category', 'category_name', 'ASC');
+        $data['company1'] = $this->super_model->select_all_order_by('company', 'company_name', 'ASC');
+        $data['placement1'] = $this->super_model->select_all_order_by('placement', 'placement_name', 'ASC');
+        $data['rack1'] = $this->super_model->select_all_order_by('rack', 'rack_name', 'ASC');
+        foreach ($this->super_model->select_join_where("et_head", "et_details", "save_temp=1 AND $query", "et_id") AS $et){
+                $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
+                $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
+                $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
+                $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
+                $asset_control_no =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
+                $acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);
+                $damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
+                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
+                $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
+                $date_issued =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $et->et_id);
+                $data['main'][] = array(
+                    'et_id'=>$et->et_id,
+                    'cat'=>$category,
+                    'subcat'=>$subcat,
+                    'department'=>$et->department,
+                    'unit'=>$unit,
+                    'damaged'=>$damage,
+                    'asset_control'=>$asset_control_no,
+                    'acquisition_date'=>$acquisition_date,
+                    'date_issued'=>$date_issued,
+                    'et_desc'=>$et->et_desc,
+                    'qty'=>$et->qty,
+                    'accountability'=>$accountability,
+                    'empid'=>$et->accountability_id,
+                );
+        }
+        foreach($this->super_model->select_all_order_by("employees", "employee_name", "ASC") AS $emp){
+            $count = $this->super_model->count_custom_where('et_head',"accountability_id = '$emp->employee_id'");
+            $data['employees'][] = array(
+                'employee_id'=>$emp->employee_id,
+                'employee'=>$emp->employee_name,
+                'count'=>$count
+            );
+        }
+
+        $this->load->view('report/report_draft',$data);
+        /*if($url=='report_main'){
+            $this->load->view('report/report_main',$data);
+        }else{
+            $this->load->view('report/report_draft',$data);
+        }*/
         $this->load->view('template/scripts');
     }
 
@@ -2779,7 +3077,7 @@ class Report extends CI_Controller {
         $row=$this->super_model->count_custom_where("et_head","accountability_id = '$id'");
 
         if($row!=0){
-            foreach($this->super_model->select_row_where('et_head', 'accountability_id', $id) AS $sub){
+            foreach($this->super_model->select_join_where('et_head','et_details', "accountability_id='$id' AND lost='0'","et_id") AS $sub){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
@@ -2798,7 +3096,8 @@ class Report extends CI_Controller {
                     'department'=>$sub->department,
                     'et_desc'=>$sub->et_desc,
                     'qty'=>$sub->qty,
-                    'accountability'=>$accountability
+                    'accountability'=>$accountability,
+                    'empid'=>$sub->accountability_id,
                 );
             }
         }else {
@@ -3893,7 +4192,7 @@ class Report extends CI_Controller {
         if($rows!=0){
              echo "<ul id='name-item'>";
             foreach($this->super_model->select_custom_where("et_head", "accountability_id='0' AND et_desc LIKE '%$item%'") AS $itm){
-                foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$itm->et_id' AND change_location = '0'") AS $det){  
+                foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$itm->et_id' AND change_location = '0' AND lost='0'") AS $det){  
                     $qty = 1;
                     $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $itm->unit_id);
                     $total = $det->unit_price*$qty;
@@ -4872,7 +5171,7 @@ class Report extends CI_Controller {
         $query=substr($sql, 0, -3);
         $filter=substr($filter, 0, -2);
         if($filter!=''){
-            foreach ($this->super_model->select_join_where("et_head", "et_details", $query, "et_id") AS $et){
+            foreach ($this->super_model->select_join_where("et_head", "et_details", "save_temp=0 AND $query", "et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
@@ -4901,14 +5200,21 @@ class Report extends CI_Controller {
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
-                if($et->accountability_id!=0 && $borrowed==0){
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
+                $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
+                $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
+                if($et->accountability_id!=0 && $borrowed==0 && $lost==0){
                     $status = 'Assigned';
-                }else if($et->accountability_id==0 && $damaged==0){
+                }else if($et->accountability_id==0 && $change_location==1){
+                    $status = "Moved to ".$location;
+                }else if($et->accountability_id==0 && $damaged==0 && $change_location==0){
                     $status = 'Available';
                 }else if($borrowed==1){
                     $status = 'Borrowed';
                 }else if($damaged==1){
                     $status = 'Damaged';
+                }else if($lost==1){
+                    $status = 'Lost Item / '.$accountability;
                 }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $category);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $asset_control_no);
@@ -4939,7 +5245,7 @@ class Report extends CI_Controller {
                 $num++;
             }
         }else {
-            foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0') AS $et){
+            foreach($this->super_model->select_custom_where('et_head', 'accountability_id!=0 AND save_temp=0') AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
@@ -4968,14 +5274,22 @@ class Report extends CI_Controller {
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
-                if($et->accountability_id!=0 && $borrowed==0){
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
+                $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
+                $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id);
+                $location = $this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
+                if($et->accountability_id!=0 && $borrowed==0 && $lost==0){
                     $status = 'Assigned';
-                }else if($et->accountability_id==0){
+                }else if($et->accountability_id==0 && $change_location==1){
+                    $status = "Moved to ".$location;
+                }else if($et->accountability_id==0 && $damaged==0 && $change_location==0){
                     $status = 'Available';
                 }else if($borrowed==1){
                     $status = 'Borrowed';
                 }else if($damaged==1){
                     $status = 'Damaged';
+                }else if($lost==1){
+                    $status = 'Lost Item / '.$accountability;
                 }
 
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $category);
@@ -5163,7 +5477,7 @@ class Report extends CI_Controller {
         $query=substr($sql, 0, -3);
         $filter=substr($filter, 0, -2);
         if($filter!=''){
-            foreach ($this->super_model->select_join_where("et_head", "et_details", $query, "et_id") AS $et){
+            foreach ($this->super_model->select_join_where("et_head", "et_details", "save_temp=1 AND cancelled=0 AND $query", "et_id") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
@@ -5192,14 +5506,22 @@ class Report extends CI_Controller {
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
+                $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
+                $location = $this->super_model->select_column_where("location", "location_name", "location_id", $et->location_id);
+        
                 if($et->accountability_id!=0 && $borrowed==0){
                     $status = 'Assigned';
-                }else if($et->accountability_id==0 && $damaged==0){
+                }else if($et->accountability_id==0 && $change_location==1){
+                    $status = "Moved to ".$location;
+                }else if($et->accountability_id==0 && $damaged==0 && $change_location==0){
                     $status = 'Available';
                 }else if($borrowed==1){
                     $status = 'Borrowed';
                 }else if($damaged==1){
                     $status = 'Damaged';
+                }else if($lost==1){
+                    $status = 'Lost Item / '.$accountability;
                 }
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $category);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $asset_control_no);
@@ -5259,16 +5581,25 @@ class Report extends CI_Controller {
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
-                if($et->accountability_id!=0 && $borrowed==0){
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $et->et_id);
+                $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $et->et_id);
+                $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $et->et_id);
+                $location = $this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
+
+
+                if($et->accountability_id!=0 && $borrowed==0 && $lost==0){
                     $status = 'Assigned';
-                }else if($et->accountability_id==0){
+                }else if($et->accountability_id==0 && $change_location==1){
+                    $status = "Moved to ".$location;
+                }else if($et->accountability_id==0 && $damaged==0 && $change_location==0){
                     $status = 'Available';
                 }else if($borrowed==1){
                     $status = 'Borrowed';
                 }else if($damaged==1){
                     $status = 'Damaged';
+                }else if($lost==1){
+                    $status = 'Lost Item / '.$accountability;
                 }
-
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $category);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $asset_control_no);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $acquisition_date);
@@ -5318,5 +5649,131 @@ class Report extends CI_Controller {
         $this->load->view('template/header'); 
         $this->load->view('report/damage_report_blank');
         $this->load->view('template/scripts');
+    }
+
+    public function lost_list(){  
+        $this->load->view('template/header');
+        $this->load->view('template/sidebar');
+        $row_avail = $this->row_avail();
+        $data['available_set_qty']= $this->row_set_avail();
+        $data['available_qty']= $this->row_avail();
+        $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
+        if($row_avail!=0){
+            foreach($this->super_model->select_custom_where("et_details", "lost='1'") AS $det){
+                $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $det->et_id);
+                //$empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $det->et_id);
+                $lost_date =$this->super_model->select_column_where("lost_items", "lost_date", "ed_id", $det->ed_id);
+                $accountable =$this->super_model->select_column_where("lost_items", "employee_id", "ed_id", $det->ed_id);
+                $accountability = $this->super_model->select_column_where("employees","employee_name","employee_id",$accountable);
+                $remarks =$this->super_model->select_column_where("lost_items", "remarks", "ed_id", $det->ed_id);
+                $rep_id =$this->super_model->select_column_where("lost_items", "replacement", "ed_id", $det->ed_id);
+                $et_id =$this->super_model->select_column_where("et_head", "et_id", "et_id", $det->et_id);
+                $ed = $this->super_model->select_column_where("et_details", "et_id", "ed_id", $rep_id);
+                $replacement =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $ed);
+                $lost_id =$this->super_model->select_column_where("lost_items", "lost_id", "ed_id", $det->ed_id);
+                $data['lost'][] = array(
+                    'et_id'=>$det->et_id,
+                    'ed_id'=>$det->ed_id,
+                    'lost_id'=>$lost_id,
+                    'empid'=>$accountable,
+                    'item'=>$item,
+                    'replacement'=>$replacement,
+                    'lost_date'=>$lost_date,
+                    'accountable'=>$accountability,
+                    'remarks'=>$remarks
+                );
+            }
+        }else {
+            $data['lost'] = array();
+        }
+        $this->load->view('report/lost_list',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function replace_item(){  
+        $this->load->view('template/header'); 
+        $empid = $this->uri->segment(3);
+        $lost_id = $this->uri->segment(4);
+        $data['empid'] = $this->uri->segment(3);
+        $data['lost_id'] = $this->uri->segment(4);
+        $data['employee_name'] = $this->super_model->select_column_where("employees","employee_name","employee_id",$empid);
+        $data['position'] = $this->super_model->select_column_where("employees","position","employee_id",$empid);
+        $data['department'] = $this->super_model->select_column_where("employees","department","employee_id",$empid);
+        $data['aaf_no'] = $this->super_model->select_column_where("employees","aaf_no","employee_id",$empid);
+        $data['employee'] = $this->super_model->select_all_order_by("employees","employee_name","ASC"); 
+        $data['user_id'] = $_SESSION['fullname'];
+        $this->load->view('report/replace_item',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function insert_replace(){
+        $count = $this->input->post('counter');
+        $assign = $this->input->post('assign_id');
+        $date = $this->input->post('date_issued');
+        $lost_id = $this->input->post('lost_id');
+        $ed = $this->input->post('ed_id');
+        for($x=0;$x<$count;$x++){ 
+            $et_id = $this->input->post('itemid');
+            $ed_id = $this->input->post('edid');
+            foreach($this->super_model->select_row_where('et_head', 'et_id', $et_id[$x]) AS $ret){
+                $c = count($et_id[$x]);
+                $q = $this->super_model->select_sum("et_head", "qty", "et_id",$ret->et_id);
+                if($c < $ret->qty){
+                    $rows_et=$this->super_model->count_rows("et_head");
+                    if($rows_et==0){
+                        $new_etid= 1;
+                    } else {
+                        $series = $this->super_model->get_max("et_head", "et_id");
+                        $new_etid = $series+1;
+                    }
+
+                    $et_data = array(
+                        'et_id'=>$new_etid,
+                        'user_id'=>$this->input->post('user_id'),
+                        'et_desc'=>$ret->et_desc,
+                        'unit_id'=>$ret->unit_id,   
+                        'qty'=>$c,
+                        'accountability_id'=>$assign,
+                        'department'=>$ret->department,
+                        'category_id'=>$ret->category_id,
+                        'subcat_id'=>$ret->subcat_id,
+                        'create_date'=>date("Y-m-d H:i:s"),
+                    );
+                    if($this->super_model->insert_into("et_head", $et_data)){
+                        foreach($this->super_model->select_row_where('et_details', 'ed_id', $ed_id[$x]) AS $det){
+                            $det_data = array(
+                                'et_id'=>$new_etid,
+                                'date_issued'=>$date
+                            ); 
+                            $this->super_model->update_where("et_details", $det_data, "ed_id", $ed_id[$x]);
+                        }
+                        $new_qty = $ret->qty-$c;
+                        $qty_data = array(
+                            'qty'=>$new_qty
+                        );
+                        $this->super_model->update_where('et_head', $qty_data, 'et_id', $et_id[$x]);
+                    }
+                }else if($c == $ret->qty){
+                    $data = array(
+                        'accountability_id'=>$assign,
+                        'department'=>$this->input->post('department'),
+                    );
+                    if($this->super_model->update_where('et_head', $data, 'et_id', $et_id[$x])){
+                        foreach($this->super_model->select_row_where('et_details', 'ed_id', $ed_id[$x]) AS $det){
+                            $det_data = array(
+                                'date_issued'=>$date
+                            ); 
+                            $this->super_model->update_where("et_details", $det_data, "ed_id", $ed_id[$x]);
+                        }
+                    }
+                }
+            }
+        }
+
+        $rep_data = array(
+            'replacement'=>$ed,
+            'employee_id'=>$assign,
+        );
+        $this->super_model->update_where("lost_items", $rep_data, "lost_id", $lost_id);
     }
 }

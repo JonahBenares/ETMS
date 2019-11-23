@@ -120,7 +120,7 @@
                             }else if($r['damaged']==1){
                                 $status = 'Damaged';
                             }*/
-                            if($r['accountability_id']!=0 && $r['borrowed']==0){
+                            if($r['accountability_id']!=0 && $r['borrowed']==0 && $r['lost']==0){
                                 $status = 'Assigned';
                             }else if($r['accountability_id']==0 && $r['damaged']==0 && $r['change_location']==0){
                                 $status = '<span style = "color:green;">Available</span>';
@@ -130,6 +130,8 @@
                                 $status = '<span style = "color:blue;">Borrowed</span>';
                             }else if($r['damaged']==1){
                                 $status = '<span style = "color:red;">Damaged</span>';
+                            }else if($r['lost']==1){
+                                $status = '<span style = "color:orange;">Lost Item / '.$r['accountability']."</span>";
                             }
                     ?>
                     <tr>

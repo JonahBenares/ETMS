@@ -25,7 +25,7 @@
                                     <tbody>
                                         <?php 
                                             foreach($itema AS $i){ 
-                                                if($i['accountability_id']!=0 && $i['borrowed']==0){
+                                                if($i['accountability_id']!=0 && $i['borrowed']==0 && $i['lost']==0){
                                                     $status = '<span style = "color:orange;">Assigned</span>';
                                                 }else if($i['accountability_id']==0 && $i['damaged']==0 && $i['change_location']==0){
                                                     $status = '<span style = "color:green;">Available</span>';
@@ -35,6 +35,9 @@
                                                     $status = '<span style = "color:blue;">Borrowed</span>';
                                                 }else if($i['damaged']==1){
                                                     $status = '<span style = "color:red;">Damaged</span>';
+                                                }
+                                                else if($i['lost']==1){
+                                                    $status = '<span style = "color:grey;">Lost Item</span>';
                                                 }
                                                 /*if($i['accountability_id']!=0 && $i['borrowed']==0){
                                                     $status = '<span style = "color:orange;">Assigned</span>';

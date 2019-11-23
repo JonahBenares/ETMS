@@ -45,9 +45,13 @@
                                         <tr>
                                             <td colspan="7"><button class="btn btn-warning btn-block btn-lg animated headShake text-white">Borrowed</button></td>
                                         </tr>   
-                                         <?php } else if($ids==0 && $changeloc=='1'){ ?>
+                                        <?php } else if($ids==0 && $changeloc=='1'){ ?>
                                         <tr>
                                             <td colspan="7"><button class="btn btn-info btn-block btn-lg animated headShake text-white">Moved to <?php echo $location; ?></button></td>
+                                        </tr> 
+                                        <?php } else if($lost=='1'){ ?>
+                                        <tr>
+                                            <td colspan="7"><button class="btn btn-secondary btn-block btn-lg animated headShake text-white">Lost Item</button></td>
                                         </tr> 
                                         <?php }else { echo ''; } ?>
                                     </table>
@@ -178,6 +182,32 @@
                                                     <span class="badge bg-white text-dark badge-pill"><h5><?php echo $to['qty']; ?></h5></span>
                                                 </label>
                                             </td>
+                                        </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="card m-l-10 m-r-10 p-r-5 p-l-5 p-b-5 p-t-5" style = "background-color:#5a6268">
+                                <h4 class="text-dark m-r-10 m-l-10 m-t-10 m-b-10" style = "color:white!important">LOST ITEM</h4>
+                                <table class="table table-bordered table-striped table-earning">
+                                    <thead class="btn-dark">
+                                        <tr>
+                                            <td>Date Lost</td>
+                                            <td>Item</td>
+                                            <td>Replacement Item</td>
+                                            <td>Accountable Person</td>
+                                            <td>Remarks</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach($losts AS $l){ ?>
+                                        <tr>
+                                            <td><?php echo $l['lost_date']; ?></td>
+                                            <td><?php echo $l['item']; ?></td>
+                                            <td><?php echo $l['replacement']; ?></td>
+                                            <td><?php echo $l['employee']; ?></td>
+                                            <td align="right"><?php echo $l['remarks']; ?></td>
                                         </tr>
                                         <?php } ?>
                                     </tbody>
