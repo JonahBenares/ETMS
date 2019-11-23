@@ -1140,6 +1140,7 @@ class Report extends CI_Controller {
 
     public function encode_report(){  
         $this->load->view('template/header');
+        $this->load->view('template/print_head');
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('et_head','et_id',$id) AS $et){
@@ -2433,6 +2434,7 @@ class Report extends CI_Controller {
     }*/
     public function set_print_avail(){  
         $this->load->view('template/header');
+        $this->load->view('template/print_head');
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $row=$this->super_model->count_rows_where("et_head","accountability_id",'0');
@@ -4098,6 +4100,7 @@ class Report extends CI_Controller {
 
     public function damage_report(){  
         $this->load->view('template/header');
+        $this->load->view('template/print_head');
         $data['id']=$this->uri->segment(3);
         $damage_id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('damage_info', 'damage_id', $damage_id) AS $dam){
@@ -4155,6 +4158,7 @@ class Report extends CI_Controller {
 
     public function aaf_assign_rep(){  
         $this->load->view('template/header'); 
+        $this->load->view('template/print_head'); 
         $data['employee'] = $this->super_model->select_all_order_by("employees","employee_name","ASC"); 
         $data['user_id'] = $_SESSION['fullname'];
         $this->load->view('report/aaf_assign_rep',$data);
@@ -4553,6 +4557,7 @@ class Report extends CI_Controller {
 
     public function seaaf_report(){  
         $this->load->view('template/header');
+        $this->load->view('template/print_head');
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['employee'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
@@ -4613,6 +4618,7 @@ class Report extends CI_Controller {
 
     public function acf_report(){  
         $this->load->view('template/header');
+        $this->load->view('template/print_head');
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('return_head','return_id',$id) AS $ret){
@@ -5647,6 +5653,7 @@ class Report extends CI_Controller {
 
     public function damage_report_blank(){  
         $this->load->view('template/header'); 
+        $this->load->view('template/print_head'); 
         $this->load->view('report/damage_report_blank');
         $this->load->view('template/scripts');
     }

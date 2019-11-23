@@ -254,6 +254,7 @@ class Borrow extends CI_Controller {
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $this->load->view('template/header');
+        $this->load->view('template/print_head');
         foreach($this->super_model->select_row_where("borrow_head","bh_id",$id) AS $borrow){
             $data['name'] = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $borrow->borrowed_by);
             $employee_name = $this->super_model->select_column_where("employees", "employee_name", "employee_id", $borrow->borrowed_by);
@@ -272,6 +273,7 @@ class Borrow extends CI_Controller {
 
     public function borrow_view(){  
         $this->load->view('template/header');
+        $this->load->view('template/print_head');
         $user = $_SESSION['user_id'];
         $data['user_id'] = $this->super_model->select_column_where("users", "username", "user_id", $user); 
         /*$data['bh_id']=$this->uri->segment(3);*/
