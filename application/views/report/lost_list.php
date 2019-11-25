@@ -13,7 +13,7 @@
                                 <thead>
                                     <tr>
                                         <th>Date Lost</th>
-                                        <th>Item</th>
+                                        <th>Lost Item</th>
                                         <th>Replacement Item</th>
                                         <th>Accountable Person</th>
                                         <th>Remarks</th>
