@@ -371,6 +371,7 @@ class Report extends CI_Controller {
                 'borrowed'=>$et->borrowed,
                 'damaged'=>$et->damage,
                 'change_location'=>$et->change_location,
+                'lost'=>$et->lost,
                 'location'=>$location,
                 'unit_price'=>$et->unit_price,
             );
