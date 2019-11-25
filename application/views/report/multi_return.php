@@ -54,6 +54,7 @@
                                     <?php
                                         foreach($multi AS $m){ 
                                              $x=0;
+                                             if(!empty($details)){
                                             foreach($details AS $det){ 
                                                 switch($det){
                                                     case($m['id'] == $det['id']):
@@ -68,7 +69,7 @@
                                     <?php 
                                         break;
                                         default: 
-                                       } $x++; } } 
+                                       } $x++; } } }
                                     ?>
                                     </tbody>
                                 </table>

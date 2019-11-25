@@ -3079,15 +3079,16 @@ class Report extends CI_Controller {
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         $data['name'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $id);
-        $row=$this->super_model->count_custom_where("et_head","accountability_id = '$id'");
-
+        //$row=$this->super_model->count_custom_where("et_head","accountability_id = '$id'");
+        $row=$this->super_model->count_join_where('et_head','et_details', "accountability_id='$id'","et_id");
         if($row!=0){
-            foreach($this->super_model->select_join_where('et_head','et_details', "accountability_id='$id' AND lost='0'","et_id") AS $sub){
+            foreach($this->super_model->select_join_where('et_head','et_details', "accountability_id='$id'","et_id") AS $sub){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
                 $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                 $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
                 $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $sub->et_id);
+                $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $sub->et_id);
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
                 $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
                 $data['sub'][] = array(
@@ -3103,6 +3104,7 @@ class Report extends CI_Controller {
                     'qty'=>$sub->qty,
                     'accountability'=>$accountability,
                     'empid'=>$sub->accountability_id,
+                    'lost'=>$lost,
                 );
             }
         }else {
@@ -4326,7 +4328,7 @@ class Report extends CI_Controller {
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('return_head','return_id',$id) AS $ret){
-            $data['test'] = $this->super_model->select_column_where("et_head", "accountability_id", "accountability_id", $ret->accountability_id);;
+            $data['test'] = $this->super_model->select_column_where("et_head", "accountability_id", "accountability_id", $ret->accountability_id);
             $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $ret->accountability_id); 
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$ret->accountability_id) AS $em){
                 $data['child'][] = array( 
@@ -4350,11 +4352,13 @@ class Report extends CI_Controller {
                 $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
                 $qty = '1';
                 $total = $qty * $price;
+                $data['lost'] = '0';
                 foreach($this->super_model->select_row_where('et_head','et_id',$det->et_id) AS $u){
                     $unit = $this->super_model->select_column_where('unit', 'unit_name', 'unit_id', $u->unit_id);
                     $data['user_id'] =$_SESSION['fullname'];
                     $data['department'] =$u->department;
                 }
+
                 $data['details'][] = array(
                     'return_id'=>$det->return_id,
                     'set_id'=>$set_id,
@@ -4366,6 +4370,7 @@ class Report extends CI_Controller {
                     'model'=>$model,
                     'price'=>$price,
                     'total'=>$total,
+                    'lost'=>0,
                     'currency'=>$currency,
                     'unit'=>$unit
                 );
@@ -4373,7 +4378,43 @@ class Report extends CI_Controller {
             $data['return'][] = array(
                 'return_id'=>$ret->return_id,
             ); 
-              
+
+            foreach($this->super_model->select_custom_where("lost_items", "employee_id = '$ret->accountability_id' AND replacement = '0'") AS $l){
+                $etid = $this->super_model->select_column_where("et_details","et_id","ed_id",$l->ed_id);
+                $item_lost = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $etid);
+                $price = $this->super_model->select_column_where("et_details", "unit_price", "ed_id", $l->ed_id);
+                $brand = $this->super_model->select_column_where("et_details", "brand", "ed_id", $l->ed_id);
+                $type = $this->super_model->select_column_where("et_details", "type", "ed_id", $l->ed_id);
+                $model = $this->super_model->select_column_where("et_details", "model", "ed_id", $l->ed_id);
+                $serial = $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $l->ed_id);
+                $set_id = $this->super_model->select_column_where("et_details", "set_id", "ed_id", $l->ed_id);
+                $currency_id = $this->super_model->select_column_where("et_details", "currency_id", "ed_id", $l->ed_id);
+                $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
+                $qty = '1';
+                $total = $qty * $price;
+                foreach($this->super_model->select_row_where('et_head','et_id',$etid) AS $u){
+                    $unit = $this->super_model->select_column_where('unit', 'unit_name', 'unit_id', $u->unit_id);
+                    $data['user_id'] =$_SESSION['fullname'];
+                    $data['department'] =$u->department;
+                }
+                $lost = $this->super_model->select_column_custom_where("et_details", "lost", "ed_id = $l->ed_id");
+                $data['lost'] = $this->super_model->select_column_custom_where("et_details", "lost", "ed_id = $l->ed_id");
+                $data['details'][] = array(
+                    'return_id'=>$det->return_id,
+                    'set_id'=>$set_id,
+                    'qty'=>$qty,
+                    'item'=>$item_lost,
+                    'brand'=>$brand,
+                    'type'=>$type,
+                    'serial'=>$serial,
+                    'model'=>$model,
+                    'price'=>$price,
+                    'total'=>$total,
+                    'lost'=>$lost,
+                    'currency'=>$currency,
+                    'unit'=>$unit
+                );
+            }
         }
         $this->load->view('report/ars_report',$data);
         $this->load->view('template/scripts');
@@ -4659,12 +4700,52 @@ class Report extends CI_Controller {
                     'model'=>$model,
                     'price'=>$price,
                     'total'=>$total,
+                    'lost'=>0,
                     'unit'=>$unit
                 );
             }
             $data['return'][] = array(
                 'return_id'=>$ret->return_id,
-            );   
+            ); 
+
+            foreach($this->super_model->select_custom_where("lost_items", "employee_id = '$ret->accountability_id' AND replacement = '0'") AS $l){
+                $date_issued = $this->super_model->select_column_where("return_details", "date_issued", "ed_id", $l->ed_id);
+                $asset_control_no = $this->super_model->select_column_where("et_details", "asset_control_no", "ed_id", $l->ed_id);
+                $etid = $this->super_model->select_column_where("et_details","et_id","ed_id",$l->ed_id);
+                $item_lost = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $etid);
+                $price = $this->super_model->select_column_where("et_details", "unit_price", "ed_id", $l->ed_id);
+                $brand = $this->super_model->select_column_where("et_details", "brand", "ed_id", $l->ed_id);
+                $type = $this->super_model->select_column_where("et_details", "type", "ed_id", $l->ed_id);
+                $model = $this->super_model->select_column_where("et_details", "model", "ed_id", $l->ed_id);
+                $serial = $this->super_model->select_column_where("et_details", "serial_no", "ed_id", $l->ed_id);
+                $set_id = $this->super_model->select_column_where("et_details", "set_id", "ed_id", $l->ed_id);
+                $currency_id = $this->super_model->select_column_where("et_details", "currency_id", "ed_id", $l->ed_id);
+                $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $currency_id);
+                $qty = '1';
+                $total = $qty * $price;
+                foreach($this->super_model->select_row_where('et_head','et_id',$etid) AS $u){
+                    $unit = $this->super_model->select_column_where('unit', 'unit_name', 'unit_id', $u->unit_id);
+                    $data['user_id'] =$_SESSION['fullname'];
+                    $data['department'] =$u->department;
+                }
+                $lost = $this->super_model->select_column_custom_where("et_details", "lost", "ed_id = $l->ed_id");
+                $data['lost'] = $this->super_model->select_column_custom_where("et_details", "lost", "ed_id = $l->ed_id");
+                $data['details'][] = array(
+                    'return_id'=>$det->return_id,
+                    'qty'=>$qty,
+                    'date_issued'=>$date_issued,
+                    'asset_control_no'=>$asset_control_no,
+                    'item'=>$item_lost,
+                    'brand'=>$brand,
+                    'type'=>$type,
+                    'serial'=>$serial,
+                    'model'=>$model,
+                    'price'=>$price,
+                    'total'=>$total,
+                    'lost'=>$lost,
+                    'unit'=>$unit
+                );
+            }  
         }
         $this->load->view('report/acf_report',$data);
         $this->load->view('template/scripts');
@@ -4849,6 +4930,7 @@ class Report extends CI_Controller {
                         'acn'=>$det->asset_control_no,
                         'serial'=>$det->serial_no,
                         'price'=>$det->unit_price,
+                        'lost'=>$det->lost,
                         'currency'=>$currency
                     );
                 }

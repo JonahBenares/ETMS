@@ -103,12 +103,12 @@
                                        <!-- <tr>
                                             <td colspan="8"><?php //echo $s['set_name'];?> <!-- </td>
                                         </tr> -->
-                                        <tr>
+                                        <tr style = "<?php echo ($s['lost']!=0) ? "background-color:#ec7070 !important" : ''; ?>">
                                             <td><?php echo $s['cat']; ?></td>
                                             <td><?php echo $s['subcat']; ?></td>
                                             <td>
                                                 <a href="<?php echo base_url(); ?>index.php/report/view_more/<?php echo $s['et_id'];?>" class="btn btn-ilink" data-toggle="tooltip" data-placement="top" title="View More" style="white-space: normal!important;text-align: left">
-                                                     <?php echo $s['et_desc']; ?>
+                                                     <?php echo ($s['lost']!=0) ? $s['et_desc']." - <b>Lost Item</b>" : $s['et_desc']; ?>
                                                 </a>                                           
                                             </td>
                                             <td><?php echo $s['unit']; ?></td>
@@ -117,20 +117,22 @@
                                             <td><?php echo $s['set_name'];?></td>
                                             <td>                                            
                                                 <div class="table-data-feature">
-                                                    
+                                                    <?php if($s['lost']==0){ ?>
                                                     <a class="btn btn-success item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Return" onClick="viewReturn(<?php echo $id;?>,<?php echo $s['et_id'];?>)">
                                                         <i class="fa fa-refresh"></i>
                                                     </a>    
-
+                                                    
                                                     <a class="btn btn-secondary text-white item btn-sm" data-toggle="modal" id = "lost_button" data-id = "<?php echo $s['empid'];?>" data-name = "<?php echo $s['accountability'];?>" data-ab = "<?php echo $s['ed_id'];?>" data-ac = '<?php echo $s['et_id']; ?>' data-target="#lostTag" title="Lost">
                                                         <i class="fa fa-minus-circle"></i>
-                                                    </a>                                            
+                                                    </a>  
+                                                                                             
                                                     <!-- <a class="btn btn-warning item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Transfer" onClick="transferPop(<?php echo $id;?>,<?php echo $s['et_id'];?>)">
                                                         <i class="fa fa-reply"></i>
                                                     </a> -->
                                                     <a class="btn btn-danger item btn-sm text-white" data-toggle="tooltip" data-placement="top" title="Tag as Damage" onClick="tagAsDamage(<?php echo $id;?>,<?php echo $s['et_id'];?>)">
                                                         <i class="fa fa-times"></i>
                                                     </a>
+                                                    <?php } ?> 
                                                 </div>
                                             </td>
                                         </tr>

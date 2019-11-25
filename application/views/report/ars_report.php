@@ -106,10 +106,10 @@
                                 switch($det){
                                     case($ret['return_id'] == $det['return_id']): 
                 ?>
-                    <tr>
+                    <tr style = "<?php echo ($det['lost']!=0) ? "background-color:#ec7070!important" : ''; ?>">
                         <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
-                        <td class="main-tab" align="center"><?php echo $det['item'];?></td>
+                        <td class="main-tab" align="center"><?php echo ($det['lost']!=0) ? $det['item']." - <b>Lost Item</b>" : $det['item'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['brand'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['type'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['model'];?></td>
@@ -176,7 +176,7 @@
                 <tr>
                     <td colspan="5" align="center">
                         <a href="" id="printBtn" onclick="iprint()" class="btn btn-success m-t-50 animated headShake">Print</a>
-                        <?php if($test==0){ ?>
+                        <?php if($test==0 || $lost==1){ ?>
                         <a id="printBtn" href="<?php echo base_url(); ?>index.php/report/acf_report/<?php echo $id;?>" target="_blank" class="btn btn-info m-t-50 animated headShake">Print Clearance</a></td>
                         <?php } ?>
                 </tr>

@@ -100,17 +100,17 @@
                                 switch($det){
                                     case($r['return_id'] == $det['return_id']): 
                 ?>
-                    <tr>
+                    <tr style = "<?php echo ($det['lost']!=0) ? "background-color:#ec7070!important" : ''; ?>">
                         <td class="main-tab" align="center"><?php echo $det['asset_control_no'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['date_issued'];?></td>
-                        <td class="main-tab" align="center"><?php echo $det['item'];?></td>
+                        <td class="main-tab" align="center"><?php echo ($det['lost']!=0) ? $det['item']." - <b>Lost Item</b>" : $det['item'];;?></td>
                         <td class="main-tab" align="center"><?php echo $det['brand'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['type'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['model'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['serial'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
-                        <td class="main-tab" align="center"><?php echo $return_date;?></td>
+                        <td class="main-tab" align="center"><?php echo ($det['lost']==0) ? $return_date : '';?></td>
                         <td class="main-tab" align="center"></td>
                     </tr>
                     <?php  
