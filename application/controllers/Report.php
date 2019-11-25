@@ -4840,7 +4840,7 @@ class Report extends CI_Controller {
                     'id'=>$mul->et_id,
                     'item'=>$mul->et_desc
                 );
-                foreach($this->super_model->select_row_where("et_details", "et_id", $mul->et_id) AS $det){
+                foreach($this->super_model->select_custom_where("et_details", "et_id = '$mul->et_id' AND lost ='0'") AS $det){
                     $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
                     $data['details'][] = array(
                         'set_id'=>$det->set_id,
