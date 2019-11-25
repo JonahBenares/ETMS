@@ -337,10 +337,10 @@ function saveReplace(){
     var assign = document.getElementById('assign').value;
     var loc= document.getElementById("baseurl").value;
     var redirect = loc+'index.php/report/insert_replace';
-    if(assign==""){
+    /*if(assign==""){
         alert('Please fill out Employee.');
     }
-    else if(itemid==""){
+    else */if(itemid==""){
         alert('Please fill out Item.');
     }else {
          $.ajax({
