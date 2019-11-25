@@ -796,6 +796,7 @@ class Report extends CI_Controller {
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $t->et_id);                     
                 $damaged = $this->super_model->select_column_where("et_details", "damage", "et_id", $t->et_id); 
                 $change_location = $this->super_model->select_column_where("et_details", "change_location", "et_id", $t->et_id); 
+                $lost = $this->super_model->select_column_where("et_details", "lost", "et_id", $t->et_id); 
                 $location_id = $this->super_model->select_column_where("et_details", "location_id", "et_id", $t->et_id); 
                 $location = $this->super_model->select_column_where("location","location_name","location_id",$location_id);                     
                 $data['item'][]=array(
@@ -804,6 +805,7 @@ class Report extends CI_Controller {
                     'borrowed'=>$borrowed,
                     'location'=>$location,
                     'change_location'=>$change_location,
+                    'lost'=>$lost,
                     'accountability'=>$employee,
                     'accountability_id'=>$t->accountability_id,
                     'qty'=>$t->qty,
