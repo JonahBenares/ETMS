@@ -133,7 +133,7 @@ class Borrow extends CI_Controller {
         if($rows!=0){
              echo "<ul id='name-item'>";
             foreach($this->super_model->select_custom_where("et_head", "accountability_id='0' AND et_desc LIKE '%$item%'") AS $itm){
-                foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$itm->et_id'") AS $det){  
+                foreach($this->super_model->select_custom_where("et_details", "damage='0' AND lost = '0' AND et_id ='$itm->et_id'") AS $det){  
                     $qty = 1;
                     $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $itm->unit_id);
                     $total = $det->unit_price*$qty;
