@@ -156,7 +156,20 @@
             $("#et_id").val(et_id);
         });
     </script>
-</body>
 
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#qty').blur( function(){
+                var qty = document.getElementById("qty").value;
+                if(qty==0 || qty==''){
+                    alert('Cannot Proceed Quantity is Zero/Empty!');
+                    $('#save').hide();
+                }else{
+                    $('#save').show();
+                }
+            });
+        });
+    </script>
+</body>
 </html>
 <!-- end document-->

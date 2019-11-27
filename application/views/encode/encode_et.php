@@ -77,7 +77,7 @@
                                         <div class="col-6">
                                             <label for="x_card_code" class="control-label mb-1">Quantity:</label>
                                             <div class="input-group">
-                                                <input id="" name="qty" class="form-control bor-radius5 cc-cvc" type="text" onkeypress="return isNumberKey(this, event)" required>
+                                                <input id="qty" name="qty" class="form-control bor-radius5 cc-cvc" type="text" onkeypress="return isNumberKey(this, event)" required>
 
                                             </div>
                                         </div>
@@ -169,7 +169,7 @@
                                    <!--  <a href="<?php echo base_url(); ?>index.php/encode/encode_next" class="btn btn-success btn-sm bor-radius10 btn-block"> Next Page 
                                     </a>  -->    
                                     <!-- <i class="fa fa-dot-circle-o"></i> -->
-                                    <input type = "submit" class="btn btn-success btn-md bor-radius10 btn-block" value="Next"> 
+                                    <input type = "submit" id = "save" class="btn btn-success btn-md bor-radius10 btn-block" value="Next"> 
                                     <input type="hidden" name="user_id" value = "<?php echo $_SESSION['user_id'];?>">
                                     <input type="hidden" name="baseurl" id="baseurl" value="<?php echo base_url(); ?>">                         
                                 </center>

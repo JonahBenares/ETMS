@@ -201,7 +201,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach($losts AS $l){ ?>
+                                        <?php if(!empty($losts)){ foreach($losts AS $l){ ?>
                                         <tr>
                                             <td><?php echo $l['lost_date']; ?></td>
                                             <td><?php echo $l['item']; ?></td>
@@ -209,7 +209,7 @@
                                             <td><?php echo $l['employee']; ?></td>
                                             <td align="right"><?php echo $l['remarks']; ?></td>
                                         </tr>
-                                        <?php } ?>
+                                        <?php } } ?>
                                     </tbody>
                                 </table>
                             </div>
