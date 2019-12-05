@@ -185,11 +185,7 @@
                 </tr>
             </table>
             <br>
-            <?php   
-                break;
-                default: 
-                } } }
-            ?>
+            
             <center>
                 <p> Note: Tag damaged equipment. Place tag as close as possible to the damage area.</p>
                 <p> Store damaged equipment directly to the repair room to ensure no one else uses it.</p>
@@ -210,7 +206,7 @@
                 <tr>
                     <td></td>
                     <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
-                        <?php if($type == 2){ ?>
+                        <?php if($dam['types'] == 2){ ?>
                             <?php foreach($child as $c){ echo ($c['status']==0) ? "<div style='margin-top: 20px;'>".$c['emp'].', </div>' : ''; }?>
                             <!--  <input class="select" type="" name="" value="<?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].', <br>' : ''; }?>" > -->
                         <?php } else { ?>
@@ -219,7 +215,7 @@
                     </td> 
                     <td></td>
                     <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
-                        <?php if($type == 2){ ?>
+                        <?php if($dam['typec'] == 2){ ?>
                             <?php foreach($child as $c){ echo ($c['status']==0) ? "<div style='margin-top: 20px;'>".$c['emp'].', </div>' : ''; }?>
                              <!-- <input class="select" type="" name="" value="<?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].', <br>' : ''; }?>" > -->
                         <?php } else { ?>
@@ -228,7 +224,7 @@
                     </td>
                     <td></td>
                     <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom">
-                        <?php if($type == 2){ ?>
+                        <?php if($dam['typen'] == 2){ ?>
                             <?php foreach($child as $c){ echo ($c['status']==0) ? "<div style='margin-top: 20px;'>".$c['emp'].', </div>' : ''; }?>
                              <!-- <input class="select" type="" name="" value="<?php foreach($child as $c){ echo ($c['status']==0) ? $c['emp'].', <br>' : ''; }?>" > -->
                         <?php } else { ?>
@@ -237,6 +233,11 @@
                     </td>
                     <td></td>
                 </tr>
+                <?php   
+                    break;
+                    default: 
+                    } } }
+                ?>
                  <tr>
                     <td></td>
                     <td>

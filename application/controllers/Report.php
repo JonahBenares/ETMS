@@ -4113,6 +4113,9 @@ class Report extends CI_Controller {
                 $item = $this->super_model->select_column_where("et_head", "et_desc", "et_id", $head->et_id);
             }
             $data['type'] = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->submitted_by'"); 
+            $types = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->submitted_by'");
+            $typec = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->checked_by'");
+            $typen = $this->super_model->select_column_custom_where("employees", "type", "status = '0' AND employee_id ='$dam->noted_by'");
             foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$dam->submitted_by) AS $em){
                 $status = $this->super_model->select_column_custom_where("employees", "status", "status = '0' AND employee_id='$em->child_id'");
                 $data['child'][] = array( 
@@ -4138,6 +4141,9 @@ class Report extends CI_Controller {
                 'et_id'=>$dam->et_id,
                 'etdr_no'=> $dam->etdr_no,
                 'item'=> $item,
+                'types'=> $types,
+                'typec'=> $typec,
+                'typen'=> $typen,
                 'date_incident'=>$dam->incident_date,
                 'activity'=>$dam->activity,
                 'location'=>$dam->damage_location,
