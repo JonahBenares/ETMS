@@ -207,6 +207,18 @@ class super_model extends CI_Model
         }
     }
 
+    public function select_sum_where($table, $column, $where)
+    {
+        $this->db->select('SUM('.$column.') as total');
+        $this->db->from($table);
+        $this->db->where($where);
+        $query = $this->db->get();
+        foreach($query->result() as $result)
+        {
+            return $result->total;
+        }
+    }
+
     public function custom_query($q){
         $query = $this->db->query($q);
          return $query->result();

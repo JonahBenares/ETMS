@@ -1330,7 +1330,10 @@ class Report extends CI_Controller {
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
-                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
+                $serial_no='';
+                foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
+                    $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
+                }
                 $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
@@ -1396,7 +1399,10 @@ class Report extends CI_Controller {
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
-                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
+                $serial_no='';
+                foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
+                    $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
+                }
                 $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
@@ -1566,7 +1572,11 @@ class Report extends CI_Controller {
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
-                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
+                $serial_no='';
+                foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
+                    $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
+                }
+                //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
                 $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
@@ -1632,7 +1642,11 @@ class Report extends CI_Controller {
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
-                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
+                $serial_no='';
+                foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
+                    $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
+                }
+                //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
                 $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
@@ -2321,7 +2335,11 @@ class Report extends CI_Controller {
             $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
             $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
             $total = $et->qty*$unit_price;
-            $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
+            $serial_no='';
+            foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
+                $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
+            }
+            //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
             $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
             $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
             $borrowed = $this->super_model->select_column_where("et_details", "borrowed", "et_id", $et->et_id);
@@ -2540,7 +2558,8 @@ class Report extends CI_Controller {
         $data['location'] = $this->super_model->select_all_order_by('location', 'location_name', 'ASC');
         foreach($this->super_model->select_all_order_by("employees", "employee_name", "ASC") AS $emp){
             /*$count = $this->super_model->count_custom_where('et_head',"accountability_id = '$emp->employee_id'");*/
-            $count = $this->super_model->select_sum("et_head", "qty", "accountability_id",$emp->employee_id);
+            //$count = $this->super_model->select_sum("et_head", "qty", "accountability_id",$emp->employee_id);
+            $count = $this->super_model->select_sum_where("et_head", "qty", "accountability_id='$emp->employee_id' AND cancelled='0'");
             if($count!=0){
                 $count = $count;
             }else {
@@ -5292,7 +5311,11 @@ class Report extends CI_Controller {
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
-                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
+                $serial_no='';
+                foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
+                    $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
+                }
+                //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
                 $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
                 $type =$this->super_model->select_column_where("et_details", "type", "et_id", $et->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
@@ -5369,7 +5392,11 @@ class Report extends CI_Controller {
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
-                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
+                $serial_no='';
+                foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
+                    $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
+                }
+                //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
                 $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
                 $type =$this->super_model->select_column_where("et_details", "type", "et_id", $et->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
@@ -5603,7 +5630,11 @@ class Report extends CI_Controller {
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
-                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
+                $serial_no='';
+                foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
+                    $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
+                }
+                //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
                 $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
@@ -5680,7 +5711,11 @@ class Report extends CI_Controller {
                 $brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
-                $serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
+                $serial_no='';
+                foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
+                    $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
+                }
+                //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
                 $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $employee =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
