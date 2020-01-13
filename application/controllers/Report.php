@@ -2612,33 +2612,6 @@ class Report extends CI_Controller {
                     'date_returned'=>'',
                     'remarks'=>'',
                 );
-
-                $dam_etid = $this->super_model->select_column_where("damage_info","et_id","et_id",$sub->et_id);
-                if($sub->et_id == $dam_etid){
-                    foreach($this->super_model->select_row_where("damage_info","et_id",$dam_etid) AS $dam){
-                        $remarks="Damaged - ".$dam->incident_date;
-                        $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $dam->et_id);
-                        $data['sub'][] = array(
-                            'et_id'=>$sub->et_id,
-                            'ed_id'=>$edid,
-                            'set_id'=>$set_id,
-                            'set_name'=>$set_name,
-                            'cat'=>$category,
-                            'subcat'=>$subcat,
-                            'unit'=>$unit,
-                            'department'=>$sub->department,
-                            'et_desc'=>$et_desc,
-                            'qty'=>$sub->qty,
-                            'accountability'=>$accountability,
-                            'empid'=>$sub->accountability_id,
-                            'unit_price'=>$unit_price,
-                            'lost'=>$lost,
-                            'date_issued'=>'',
-                            'date_returned'=>'',
-                            'remarks'=>$remarks
-                        );
-                    }
-                }
             }
         }else if($ret_id==$id){
             foreach($this->super_model->select_join_where('et_head','et_details', "accountability_id='$id' AND cancelled = '0'","et_id") AS $sub){
@@ -2670,33 +2643,6 @@ class Report extends CI_Controller {
                     'date_returned'=>'',
                     'remarks'=>'',
                 );
-
-                $dam_etid = $this->super_model->select_column_where("damage_info","et_id","et_id",$sub->et_id);
-                if($sub->et_id == $dam_etid){
-                    foreach($this->super_model->select_row_where("damage_info","et_id",$dam_etid) AS $dam){
-                        $remarks="Damaged - ".$dam->incident_date;
-                        $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $dam->et_id);
-                        $data['sub'][] = array(
-                            'et_id'=>$sub->et_id,
-                            'ed_id'=>$edid,
-                            'set_id'=>$set_id,
-                            'set_name'=>$set_name,
-                            'cat'=>$category,
-                            'subcat'=>$subcat,
-                            'unit'=>$unit,
-                            'department'=>$sub->department,
-                            'et_desc'=>$et_desc,
-                            'qty'=>$sub->qty,
-                            'accountability'=>$accountability,
-                            'empid'=>$sub->accountability_id,
-                            'unit_price'=>$unit_price,
-                            'lost'=>$lost,
-                            'date_issued'=>'',
-                            'date_returned'=>'',
-                            'remarks'=>$remarks
-                        );
-                    }
-                }
             }
 
             foreach($this->super_model->select_join_where('return_head','return_details', "accountability_id='$id'","return_id") AS $ret){
@@ -2719,25 +2665,83 @@ class Report extends CI_Controller {
                 $date_issued =$this->super_model->select_column_where("return_details", "date_issued", "return_id", $ret->return_id);
                 $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et_id);
                 $remarks = $ret->return_date." - ".$ret->return_remarks;
-                $data['sub'][] = array(
-                    'et_id'=>$et_id,
-                    'ed_id'=>$edid,
-                    'set_id'=>$set_id,
-                    'set_name'=>$set_name,
-                    'cat'=>$category,
-                    'subcat'=>$subcat,
-                    'unit'=>$unit,
-                    'department'=>$department,
-                    'et_desc'=>$et_desc,
-                    'qty'=>$qty,
-                    'accountability'=>$accountability,
-                    'empid'=>$ret->accountability_id,
-                    'unit_price'=>$unit_price,
-                    'lost'=>$lost,
-                    'date_issued'=>$date_issued,
-                    'date_returned'=>$date_returned,
-                    'remarks'=>$remarks,
-                );
+                $damaged = $this->super_model->select_column_where("et_details","damage","et_id",$et_id);
+                $rep_edid = $this->super_model->select_column_where("repair_details","ed_id","ed_id",$edid);
+                if($damaged==0 && $rep_edid==0){
+                    $data['sub'][] = array(
+                        'et_id'=>$et_id,
+                        'ed_id'=>$edid,
+                        'set_id'=>$set_id,
+                        'set_name'=>$set_name,
+                        'cat'=>$category,
+                        'subcat'=>$subcat,
+                        'unit'=>$unit,
+                        'department'=>$department,
+                        'et_desc'=>$et_desc,
+                        'qty'=>$qty,
+                        'accountability'=>$accountability,
+                        'empid'=>$ret->accountability_id,
+                        'unit_price'=>$unit_price,
+                        'lost'=>$lost,
+                        'date_issued'=>$date_issued,
+                        'date_returned'=>$date_returned,
+                        'remarks'=>$remarks,
+                    );
+                }
+
+                $dam_etid = $this->super_model->select_column_where("damage_info","et_id","et_id",$et_id);
+                if($et_id == $dam_etid && $damaged==1){
+                    foreach($this->super_model->select_row_where("damage_info","et_id",$dam_etid) AS $dam){
+                        $remarks="Damaged - ".$dam->incident_date;
+                        $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $dam->et_id);
+                        $data['sub'][] = array(
+                            'et_id'=>$sub->et_id,
+                            'ed_id'=>$edid,
+                            'set_id'=>$set_id,
+                            'set_name'=>$set_name,
+                            'cat'=>$category,
+                            'subcat'=>$subcat,
+                            'unit'=>$unit,
+                            'department'=>$sub->department,
+                            'et_desc'=>$et_desc,
+                            'qty'=>$sub->qty,
+                            'accountability'=>$accountability,
+                            'empid'=>$sub->accountability_id,
+                            'unit_price'=>$unit_price,
+                            'lost'=>$lost,
+                            'date_issued'=>'',
+                            'date_returned'=>'',
+                            'remarks'=>$remarks,
+                        );
+                    }
+                }
+
+                if($edid == $rep_edid && $damaged==0){
+                    foreach($this->super_model->select_row_where("repair_details","ed_id",$rep_edid) AS $rep){
+                        $remarks="Repaired - ".$rep->repair_date." - ".$rep->remarks;
+                        $et_id = $this->super_model->select_column_where("et_details", "et_id", "ed_id", $rep->ed_id);
+                        $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et_id);
+                        $data['sub'][] = array(
+                            'et_id'=>$sub->et_id,
+                            'ed_id'=>$edid,
+                            'set_id'=>$set_id,
+                            'set_name'=>$set_name,
+                            'cat'=>$category,
+                            'subcat'=>$subcat,
+                            'unit'=>$unit,
+                            'department'=>$sub->department,
+                            'et_desc'=>$et_desc,
+                            'qty'=>$sub->qty,
+                            'accountability'=>$accountability,
+                            'empid'=>$sub->accountability_id,
+                            'unit_price'=>$unit_price,
+                            'lost'=>$lost,
+                            'date_issued'=>'',
+                            'date_returned'=>'',
+                            'remarks'=>$remarks,
+                        );
+                    }
+                }
             } 
         }
         $this->load->view('report/report_history',$data);
@@ -2783,33 +2787,6 @@ class Report extends CI_Controller {
                     'date_returned'=>'',
                     'remarks'=>'',
                 );
-
-                $dam_etid = $this->super_model->select_column_where("damage_info","et_id","et_id",$sub->et_id);
-                if($sub->et_id == $dam_etid){
-                    foreach($this->super_model->select_row_where("damage_info","et_id",$dam_etid) AS $dam){
-                        $remarks="Damaged - ".$dam->incident_date;
-                        $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $dam->et_id);
-                        $data['sub'][] = array(
-                            'et_id'=>$sub->et_id,
-                            'ed_id'=>$edid,
-                            'set_id'=>$set_id,
-                            'set_name'=>$set_name,
-                            'cat'=>$category,
-                            'subcat'=>$subcat,
-                            'unit'=>$unit,
-                            'department'=>$sub->department,
-                            'et_desc'=>$et_desc,
-                            'qty'=>$sub->qty,
-                            'accountability'=>$accountability,
-                            'empid'=>$sub->accountability_id,
-                            'unit_price'=>$unit_price,
-                            'lost'=>$lost,
-                            'date_issued'=>'',
-                            'date_returned'=>'',
-                            'remarks'=>$remarks
-                        );
-                    }
-                }
             }
         }else if($ret_id==$id){
             foreach($this->super_model->select_join_where('et_head','et_details', "accountability_id='$id' AND cancelled = '0'","et_id") AS $sub){
@@ -2842,33 +2819,6 @@ class Report extends CI_Controller {
                     'date_returned'=>'',
                     'remarks'=>''
                 );
-
-                $dam_etid = $this->super_model->select_column_where("damage_info","et_id","et_id",$sub->et_id);
-                if($sub->et_id == $dam_etid){
-                    foreach($this->super_model->select_row_where("damage_info","et_id",$dam_etid) AS $dam){
-                        $remarks="Damaged - ".$dam->incident_date;
-                        $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $dam->et_id);
-                        $data['sub'][] = array(
-                            'et_id'=>$sub->et_id,
-                            'ed_id'=>$edid,
-                            'set_id'=>$set_id,
-                            'set_name'=>$set_name,
-                            'cat'=>$category,
-                            'subcat'=>$subcat,
-                            'unit'=>$unit,
-                            'department'=>$sub->department,
-                            'et_desc'=>$et_desc,
-                            'qty'=>$sub->qty,
-                            'accountability'=>$accountability,
-                            'empid'=>$sub->accountability_id,
-                            'unit_price'=>$unit_price,
-                            'lost'=>$lost,
-                            'date_issued'=>'',
-                            'date_returned'=>'',
-                            'remarks'=>$remarks
-                        );
-                    }
-                }
             }
 
             foreach($this->super_model->select_join_where('return_head','return_details', "accountability_id='$id'","return_id") AS $ret){
@@ -2892,25 +2842,83 @@ class Report extends CI_Controller {
                 $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et_id);
                 $data['atf_no'] =$this->super_model->select_column_where("return_head", "atf_no", "return_id", $ret->return_id);
                 $remarks = $ret->return_date." - ".$ret->return_remarks;
-                $data['sub'][] = array(
-                    'et_id'=>$et_id,
-                    'ed_id'=>$edid,
-                    'set_id'=>$set_id,
-                    'set_name'=>$set_name,
-                    'cat'=>$category,
-                    'subcat'=>$subcat,
-                    'unit'=>$unit,
-                    'department'=>$department,
-                    'et_desc'=>$et_desc,
-                    'qty'=>$qty,
-                    'accountability'=>$accountability,
-                    'empid'=>$ret->accountability_id,
-                    'unit_price'=>$unit_price,
-                    'lost'=>$lost,
-                    'date_issued'=>$date_issued,
-                    'date_returned'=>$date_returned,
-                    'remarks'=>$remarks
-                );
+                $damaged = $this->super_model->select_column_where("et_details","damage","et_id",$et_id);
+                $rep_edid = $this->super_model->select_column_where("repair_details","ed_id","ed_id",$edid);
+                if($damaged==0 && $rep_edid==0){
+                    $data['sub'][] = array(
+                        'et_id'=>$et_id,
+                        'ed_id'=>$edid,
+                        'set_id'=>$set_id,
+                        'set_name'=>$set_name,
+                        'cat'=>$category,
+                        'subcat'=>$subcat,
+                        'unit'=>$unit,
+                        'department'=>$department,
+                        'et_desc'=>$et_desc,
+                        'qty'=>$qty,
+                        'accountability'=>$accountability,
+                        'empid'=>$ret->accountability_id,
+                        'unit_price'=>$unit_price,
+                        'lost'=>$lost,
+                        'date_issued'=>$date_issued,
+                        'date_returned'=>$date_returned,
+                        'remarks'=>$remarks
+                    );
+                }
+
+                $dam_etid = $this->super_model->select_column_where("damage_info","et_id","et_id",$et_id);
+                if($et_id == $dam_etid && $damaged==1){
+                    foreach($this->super_model->select_row_where("damage_info","et_id",$dam_etid) AS $dam){
+                        $remarks="Damaged - ".$dam->incident_date;
+                        $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $dam->et_id);
+                        $data['sub'][] = array(
+                            'et_id'=>$sub->et_id,
+                            'ed_id'=>$edid,
+                            'set_id'=>$set_id,
+                            'set_name'=>$set_name,
+                            'cat'=>$category,
+                            'subcat'=>$subcat,
+                            'unit'=>$unit,
+                            'department'=>$sub->department,
+                            'et_desc'=>$et_desc,
+                            'qty'=>$sub->qty,
+                            'accountability'=>$accountability,
+                            'empid'=>$sub->accountability_id,
+                            'unit_price'=>$unit_price,
+                            'lost'=>$lost,
+                            'date_issued'=>'',
+                            'date_returned'=>'',
+                            'remarks'=>$remarks,
+                        );
+                    }
+                }
+
+                if($edid == $rep_edid && $damaged==0){
+                    foreach($this->super_model->select_row_where("repair_details","ed_id",$rep_edid) AS $rep){
+                        $remarks="Repaired - ".$rep->repair_date." - ".$rep->remarks;
+                        $et_id = $this->super_model->select_column_where("et_details", "et_id", "ed_id", $rep->ed_id);
+                        $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et_id);
+                        $data['sub'][] = array(
+                            'et_id'=>$sub->et_id,
+                            'ed_id'=>$edid,
+                            'set_id'=>$set_id,
+                            'set_name'=>$set_name,
+                            'cat'=>$category,
+                            'subcat'=>$subcat,
+                            'unit'=>$unit,
+                            'department'=>$sub->department,
+                            'et_desc'=>$et_desc,
+                            'qty'=>$sub->qty,
+                            'accountability'=>$accountability,
+                            'empid'=>$sub->accountability_id,
+                            'unit_price'=>$unit_price,
+                            'lost'=>$lost,
+                            'date_issued'=>'',
+                            'date_returned'=>'',
+                            'remarks'=>$remarks,
+                        );
+                    }
+                }
             } 
         }
         $this->load->view('report/print_history',$data);
