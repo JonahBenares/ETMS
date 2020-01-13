@@ -70,13 +70,18 @@
                                 ?>
                                     <tr>
                                         <td>
-                                            <a href="<?php echo base_url(); ?>index.php/report/report_sub/<?php echo $emp['employee_id']?>" class="btn btn-link" data-toggle="tooltip" data-placement="right" title="View">
-                                                    <?php echo $emp['employee'];?>
-                                                </a>                                            
+                                            <?php echo $emp['employee'];?>
+                                            <!-- <a href="<?php echo base_url(); ?>index.php/report/report_sub/<?php echo $emp['employee_id']?>" class="btn btn-link" data-toggle="tooltip" data-placement="right" title="View">
+                                                <?php echo $emp['employee'];?>
+                                            </a> -->                                            
                                         </td>
                                         <td><?php echo $emp['count'];?></td>
                                         <td>
                                             <div class="table-data-feature">
+                                                <a href="<?php echo base_url(); ?>index.php/report/report_sub/<?php echo $emp['employee_id']?>" class="btn text-white btn-warning item btn-sm" data-toggle="tooltip" data-placement="top"   title="View Current Items"><span class="fa fa-eye"></span></a>
+
+                                                <a href="<?php echo base_url(); ?>index.php/report/report_history/<?php echo $emp['employee_id']?>" class="btn text-white btn-secondary item btn-sm" data-toggle="tooltip" data-placement="top"   title="View Overall Items"><span class="fa fa-eye"></span></a>
+
                                                 <?php if($_SESSION['usertype'] == 1){ ?>
                                                 <a href="<?php echo base_url(); ?>index.php/report/multi_return/<?php echo $emp['employee_id']?>" class="btn btn-success item btn-sm" data-toggle="tooltip" data-placement="top" title="Multiple Return">
                                                     <i class="fa fa-dedent"></i>
