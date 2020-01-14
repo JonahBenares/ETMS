@@ -2610,7 +2610,10 @@ class Report extends CI_Controller {
                     'lost'=>$lost,
                     'date_issued'=>'',
                     'date_returned'=>'',
+                    'remarks_all'=>'',
                     'remarks'=>'',
+                    'damaged'=>'',
+                    'incident_description'=>'',
                 );
             }
         }else if($ret_id==$id){
@@ -2641,7 +2644,10 @@ class Report extends CI_Controller {
                     'lost'=>$lost,
                     'date_issued'=>'',
                     'date_returned'=>'',
+                    'remarks_all'=>'',
                     'remarks'=>'',
+                    'damaged'=>'',
+                    'incident_description'=>'',
                 );
             }
 
@@ -2664,7 +2670,8 @@ class Report extends CI_Controller {
                 $date_returned =$this->super_model->select_column_where("return_head", "return_date", "return_id", $ret->return_id);
                 $date_issued =$this->super_model->select_column_where("return_details", "date_issued", "return_id", $ret->return_id);
                 $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $et_id);
-                $remarks = $ret->return_date." - ".$ret->return_remarks;
+                $remarks = $ret->return_remarks;
+                $remarks_all = "Returned - ".$ret->return_date;
                 $damaged = $this->super_model->select_column_where("et_details","damage","et_id",$et_id);
                 $rep_edid = $this->super_model->select_column_where("repair_details","ed_id","ed_id",$edid);
                 if($damaged==0 && $rep_edid==0){
@@ -2685,7 +2692,10 @@ class Report extends CI_Controller {
                         'lost'=>$lost,
                         'date_issued'=>$date_issued,
                         'date_returned'=>$date_returned,
+                        'remarks_all'=>$remarks_all,
                         'remarks'=>$remarks,
+                        'damaged'=>'',
+                        'incident_description'=>'',
                     );
                 }
 
@@ -2712,13 +2722,17 @@ class Report extends CI_Controller {
                             'date_issued'=>'',
                             'date_returned'=>'',
                             'remarks'=>$remarks,
+                            'remarks_all'=>'',
+                            'damaged'=>$damaged,
+                            'incident_description'=>$dam->incident_description,
                         );
                     }
                 }
 
                 if($edid == $rep_edid && $damaged==0){
                     foreach($this->super_model->select_row_where("repair_details","ed_id",$rep_edid) AS $rep){
-                        $remarks="Repaired - ".$rep->repair_date." - ".$rep->remarks;
+                        $remarks=$rep->remarks;
+                        $remarks_all="Repaired - ".$rep->repair_date;
                         $et_id = $this->super_model->select_column_where("et_details", "et_id", "ed_id", $rep->ed_id);
                         $et_desc =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et_id);
                         $data['sub'][] = array(
@@ -2739,6 +2753,9 @@ class Report extends CI_Controller {
                             'date_issued'=>'',
                             'date_returned'=>'',
                             'remarks'=>$remarks,
+                            'remarks_all'=>$remarks_all,
+                            'damaged'=>'',
+                            'incident_description'=>'',
                         );
                     }
                 }

@@ -110,11 +110,13 @@
                                             <td><?php echo $s['unit']; ?></td>
                                             <td ><?php echo $s['qty']; ?></td>
                                             <td><?php echo $s['unit_price']; ?></td>
-                                            <td><a href="#" title="Header" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="
-                                                Why do we use it?
-                                                It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-
-                                                "><?php echo $s['remarks']; ?> </a></td>
+                                            <td>
+                                                <?php if($s['damaged']==1){ ?>
+                                                    <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['incident_description']; ?>"><?php echo $s['remarks']; ?></a>
+                                                <?php } else { ?>
+                                                    <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo $s['remarks_all']; ?></a>
+                                                <?php } ?>
+                                            </td>
                                         </tr>
                                         <?php $x++; } } else { ?>
                                         <tr>
