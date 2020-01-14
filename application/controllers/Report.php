@@ -2674,7 +2674,7 @@ class Report extends CI_Controller {
                 $remarks_all = "Returned - ".$ret->return_date;
                 $damaged = $this->super_model->select_column_where("et_details","damage","et_id",$et_id);
                 $rep_edid = $this->super_model->select_column_where("repair_details","ed_id","ed_id",$edid);
-                if($damaged==0 && $rep_edid==0){
+                if($damaged==0 && $rep_edid==0 && $ret_id!=$id){
                     $data['sub'][] = array(
                         'et_id'=>$et_id,
                         'ed_id'=>$edid,
@@ -2861,7 +2861,7 @@ class Report extends CI_Controller {
                 $remarks = $ret->return_date." - ".$ret->return_remarks;
                 $damaged = $this->super_model->select_column_where("et_details","damage","et_id",$et_id);
                 $rep_edid = $this->super_model->select_column_where("repair_details","ed_id","ed_id",$edid);
-                if($damaged==0 && $rep_edid==0){
+                if($damaged==0 && $rep_edid==0 && $ret_id!=$id){
                     $data['sub'][] = array(
                         'et_id'=>$et_id,
                         'ed_id'=>$edid,
