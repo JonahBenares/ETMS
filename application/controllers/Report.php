@@ -2585,15 +2585,12 @@ class Report extends CI_Controller {
         $count =$this->super_model->count_rows_where("return_head", "accountability_id", $id);
         if($count==0){
             foreach($this->super_model->select_custom_where('et_head', "accountability_id='$id' AND cancelled = '0'") AS $sub){
-                foreach($this->super_model->select_custom_where('et_details_id', "et_id='$sub->et_id'") AS $s){
+                foreach($this->super_model->select_custom_where('et_details', "et_id='$sub->et_id'") AS $s){
                     $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
                     $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
                     $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $sub->subcat_id);
-                    $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $sub->et_id);
-                    $lost =$this->super_model->select_column_where("et_details", "lost", "et_id", $sub->et_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
-                    $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $sub->et_id);
                     $data['sub'][] = array(
                         'et_id'=>$sub->et_id,
                         'ed_id'=>$s->ed_id,
