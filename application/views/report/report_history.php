@@ -112,9 +112,9 @@
                                             <td><?php echo $s['unit_price']; ?></td>
                                             <td>
                                                 <?php if($s['damaged']==1){ ?>
-                                                    <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['incident_description']; ?>"><?php echo $s['remarks']; ?></a>
+                                                    <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['incident_description']; ?>"><?php echo $s['remarks']." - ".$s['accountability']; ?></a>
                                                 <?php } else { ?>
-                                                    <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo $s['remarks_all']; ?></a>
+                                                    <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo (!empty($s['accountabilitys'])) ? $s['remarks_all']." ".$s['accountabilitys'] : ''; ?></a>
                                                 <?php } ?>
                                             </td>
                                         </tr>

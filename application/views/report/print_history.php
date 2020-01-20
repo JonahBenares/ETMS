@@ -100,7 +100,11 @@
                         <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['unit_price'];?></td>
-                        <td class="main-tab" align="center"><?php echo $det['remarks']?></td>
+                        <?php if(!empty($det['accountabilitys'])){ ?>
+                            <td class="main-tab" align="center"><?php echo $det['remarks']." - Turn over to ".$det['accountabilitys']?></td>
+                        <?php }else{ ?>
+                            <td class="main-tab" align="center"><?php echo $det['remarks']?></td>
+                        <?php }?>
                     </tr>
                     <?php } } else { ?>
                     <tr>
