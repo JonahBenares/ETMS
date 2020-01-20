@@ -2679,7 +2679,8 @@ class Report extends CI_Controller {
                     $remarks_all = "Turn over to";
                     $damaged = $this->super_model->select_column_where("et_details","damage","et_id",$r->et_id);
                     $rep_edid = $this->super_model->select_column_where("repair_details","ed_id","ed_id",$r->ed_id);
-                    if($damaged==0 && $rep_edid==0){
+                    $counts = $this->super_model->count_custom_where("et_head","et_id='$r->et_id' AND accountability_id='$id'");
+                    if($damaged==0 && $rep_edid==0 && $counts==0){
                         $data['sub'][] = array(
                             'et_id'=>$r->et_id,
                             'ed_id'=>$r->ed_id,
@@ -2911,7 +2912,8 @@ class Report extends CI_Controller {
                     $remarks = $ret->return_remarks;
                     $damaged = $this->super_model->select_column_where("et_details","damage","et_id",$r->et_id);
                     $rep_edid = $this->super_model->select_column_where("repair_details","ed_id","ed_id",$r->ed_id);
-                    if($damaged==0 && $rep_edid==0){
+                    $counts = $this->super_model->count_custom_where("et_head","et_id='$r->et_id' AND accountability_id='$id'");
+                    if($damaged==0 && $rep_edid==0 && $counts==0){
                         $data['sub'][] = array(
                             'et_id'=>$r->et_id,
                             'ed_id'=>$r->ed_id,
