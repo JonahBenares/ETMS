@@ -2585,7 +2585,7 @@ class Report extends CI_Controller {
         $count =$this->super_model->count_rows_where("return_head", "accountability_id", $id);
         if($count==0){
             foreach($this->super_model->select_custom_where('et_head', "accountability_id='$id' AND cancelled = '0'") AS $sub){
-                foreach($this->super_model->select_custom_where('et_details', "et_id='$sub->et_id'") AS $s){
+                foreach($this->super_model->select_custom_where('et_details', "et_id='$sub->et_id' GROUP BY et_id") AS $s){
                     $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
                     $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
@@ -2618,7 +2618,7 @@ class Report extends CI_Controller {
             }
         }else {
             foreach($this->super_model->select_custom_where('et_head', "accountability_id='$id' AND cancelled = '0'") AS $sub){
-                foreach($this->super_model->select_custom_where('et_details', "et_id='$sub->et_id'") AS $s){
+                foreach($this->super_model->select_custom_where('et_details', "et_id='$sub->et_id' GROUP BY et_id") AS $s){
                     $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
                     $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
@@ -2813,7 +2813,7 @@ class Report extends CI_Controller {
         $count =$this->super_model->count_rows_where("return_head", "accountability_id", $id);
         if($count==0){
             foreach($this->super_model->select_custom_where('et_head',"accountability_id='$id' AND cancelled = '0'") AS $sub){
-                foreach($this->super_model->select_custom_where('et_details',"et_id='$sub->et_id'") AS $s){
+                foreach($this->super_model->select_custom_where('et_details',"et_id='$sub->et_id' GROUP BY et_id") AS $s){
                     $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
                     $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
@@ -2848,7 +2848,7 @@ class Report extends CI_Controller {
             }
         }else {
             foreach($this->super_model->select_custom_where('et_head', "accountability_id='$id' AND cancelled = '0'") AS $sub){
-                foreach($this->super_model->select_custom_where('et_details', "et_id='$sub->et_id'") AS $s){
+                foreach($this->super_model->select_custom_where('et_details', "et_id='$sub->et_id' GROUP BY et_id") AS $s){
                     $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $sub->unit_id);
                     $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $sub->accountability_id);
                     $category =$this->super_model->select_column_where("category", "category_name", "category_id", $sub->category_id);
