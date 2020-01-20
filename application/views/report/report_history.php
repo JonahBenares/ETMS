@@ -114,7 +114,13 @@
                                                 <?php if($s['damaged']==1){ ?>
                                                     <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['incident_description']; ?>"><?php echo $s['remarks']." - ".$s['accountability']; ?></a>
                                                 <?php } else { ?>
-                                                    <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo (!empty($s['accountabilitys'])) ? $s['remarks_all']." ".$s['accountabilitys'] : ''; ?></a>
+
+                                                    <?php if(!empty($s['accountabilitys'])){ ?>
+                                                        <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo (!empty($s['accountabilitys'])) ? $s['remarks_all']." ".$s['accountabilitys'] : ''; ?></a>
+                                                    <?php } else { ?>
+                                                        <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo (empty($s['accountabilitys'])) ? 'Returned' : ''; ?></a>
+                                                    <?php } ?>
+
                                                 <?php } ?>
                                             </td>
                                         </tr>
