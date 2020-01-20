@@ -4803,6 +4803,7 @@ class Report extends CI_Controller {
 
     public function ars_report(){  
         $this->load->view('template/header');
+        $this->load->view('template/print_head');
         $data['id']=$this->uri->segment(3);
         $id=$this->uri->segment(3);
         foreach($this->super_model->select_row_where('return_head','return_id',$id) AS $ret){
@@ -6286,6 +6287,7 @@ class Report extends CI_Controller {
 
     public function replace_item(){  
         $this->load->view('template/header'); 
+        $this->load->view('template/print_head'); 
         $empid = $this->uri->segment(3);
         $lost_id = $this->uri->segment(4);
         $data['empid'] = $this->uri->segment(3);

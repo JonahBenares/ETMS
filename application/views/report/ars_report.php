@@ -42,7 +42,7 @@
     
 
 </style>
-<body style="padding-top:20px">
+<!-- <body style="padding-top:20px">
     <div class="container">
         <button onclick="history.go(-1);" class="btn btn-warning btn-sm text-white" id="back">Back</button>
         <table class = "table-main " style = "width:100%">
@@ -54,7 +54,7 @@
                    <p id="head" style="margin: 0px"> <strong>CENTRAL NEGROS POWER RELIABILITY INC.</strong></p>
                     <p id="head" style="margin: 0px">Purok San Jose, Brgy. Calumangan, Bago City</p>
                     <p id="head" style="margin: 0px">Tel. No. 476-7382</p>
-                </td>
+                </td> -->
                 <td style="padding:10px;border-bottom: 2px solid #000;border-left: 2px solid #000" width="50%" align="center">
                     <h5><strong>ASSET RETURN SLIP</strong></h5>
                 </td>
