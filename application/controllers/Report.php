@@ -2909,7 +2909,15 @@ class Report extends CI_Controller {
                     $date_issued =$this->super_model->select_column_where("return_details", "date_issued", "return_id", $ret->return_id);
                     $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $r->et_id);
                     $data['atf_no'] =$this->super_model->select_column_where("return_head", "atf_no", "return_id", $ret->return_id);
-                    $remarks = $ret->return_remarks;
+                    if(!empty($accountabilitys)){
+                        $remarks = $ret->return_remarks;
+                    }else {
+                        if(!empty($ret->return_remarks)){
+                            $remarks = $ret->return_remarks.' - Returned';
+                        }else {
+                            $remarks = 'Returned';
+                        }
+                    }
                     $damaged = $this->super_model->select_column_where("et_details","damage","et_id",$r->et_id);
                     $rep_edid = $this->super_model->select_column_where("repair_details","ed_id","ed_id",$r->ed_id);
                     $counts = $this->super_model->count_custom_where("et_head","et_id='$r->et_id' AND accountability_id='$id'");

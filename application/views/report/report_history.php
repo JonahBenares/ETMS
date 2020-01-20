@@ -117,8 +117,8 @@
 
                                                     <?php if(!empty($s['accountabilitys'])){ ?>
                                                         <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo (!empty($s['accountabilitys'])) ? $s['remarks_all']." ".$s['accountabilitys'] : ''; ?></a>
-                                                    <?php } else { ?>
-                                                        <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo (empty($s['accountabilitys'])) ? 'Returned' : ''; ?></a>
+                                                    <?php } else{ ?>
+                                                        <a href="#" title="Remarks" data-toggle="popover"  data-placement="bottom" data-trigger="hover" data-content="<?php echo $s['remarks']; ?>"><?php echo (!empty($s['remarks_all'])) ? 'Returned' : ''; ?></a>
                                                     <?php } ?>
 
                                                 <?php } ?>

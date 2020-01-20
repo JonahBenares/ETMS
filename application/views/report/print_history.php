@@ -103,7 +103,7 @@
                         <?php if(!empty($det['accountabilitys'])){ ?>
                             <td class="main-tab" align="center"><?php echo (!empty($det['remarks'])) ? $det['remarks']." - Turn over to ".$det['accountabilitys'] : $det['remarks']." Turn over to ".$det['accountabilitys']?></td>
                         <?php }else{ ?>
-                            <td class="main-tab" align="center"><?php echo (!empty($det['remarks'])) ? $det['remarks'] : "Returned";?></td>
+                            <td class="main-tab" align="center"><?php echo $det['remarks'];?></td>
                         <?php }?>
                     </tr>
                     <?php } } else { ?>
