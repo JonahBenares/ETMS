@@ -177,11 +177,11 @@ class Masterfile extends CI_Controller {
         $child=$this->uri->segment(5);
         $row = $this->super_model->count_rows_where("et_head","accountability_id",$child);
         if($row!=0){
-           echo "<script>alert('You cannot delete this record!');window.opener.location.reload();window.location = '".base_url()."index.php/masterfile/employee_pop/$parent';</script>";
+           echo "<script>alert('You cannot delete this record!');window.opener.location.reload();window.location = '".base_url()."masterfile/employee_pop/$parent';</script>";
         }else{
             if($this->super_model->delete_where('employee_inclusion', 'ei_id', $id)){
                 echo "<script>alert('Succesfully Deleted');
-                window.opener.location.reload();window.location = '".base_url()."index.php/masterfile/employee_pop/$parent'; </script>";
+                window.opener.location.reload();window.location = '".base_url()."masterfile/employee_pop/$parent'; </script>";
             }
         }
     }
@@ -601,7 +601,6 @@ class Masterfile extends CI_Controller {
                 window.location ='".base_url()."index.php/masterfile/categ_list'; </script>";
         }
     }
-
 
     public function categ_list(){  
         $this->load->view('template/header');

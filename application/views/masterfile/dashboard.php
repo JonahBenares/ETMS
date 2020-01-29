@@ -8,7 +8,7 @@
             </div>
             <div class="row m-t-25 m-l-150 m-r-150">
                 <div class="col-sm-3 col-lg-3">
-                    <div class="overview-item overview-item--c4" style="height: 85%;<?php echo ($_SESSION['usertype']==1) ? '' : 'pointer-events: none'?>" id="main_btn" onmouseover="nameIn(this)" onmouseout="listIn(this)">
+                    <div class="overview-item overview-item--c4" style="<?php echo ($_SESSION['usertype']==1) ? '' : 'pointer-events: none'?>" id="main_btn" onmouseover="nameIn(this)" onmouseout="listIn(this)">
                         <div class="overview__inner" id="mas_name" >
                             <div class="overview-box clearfix">
                                 <center>
@@ -80,7 +80,7 @@
                     </a>
                 </div> -->
                 <div class="col-sm-3 col-lg-3">
-                    <div class="overview-item overview-item--c3" style="height: 85%;" id="main_btn" onmouseover="repNameIn(this)" onmouseout="repListIn(this)">
+                    <div class="overview-item overview-item--c3" id="main_btn" onmouseover="repNameIn(this)" onmouseout="repListIn(this)">
                         <div class="overview__inner" id="rep_name" >
                             <div class="overview-box clearfix">
                                 <center>
