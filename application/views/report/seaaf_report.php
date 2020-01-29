@@ -109,11 +109,22 @@
                             return $a['set_id'] - $b['set_id'];
                         });
                       $a=0;
+                      $previousId = '';
                        foreach($details AS $det){ 
-                            if($det['set_id']!=0){
+                       // echo $det['count_set'] . "<br>";
+                         /*   if($det['set_id']!=0){
+                                $a++;
+                                $count_set = $det['count_set'];
+                            } else {
+                                 $count_set =0;
+                            }
+*/
+                         /*   if ($previousId !== '' && $previousId !== $det['set_id']) {
                                 $a++;
                             }
+                            $previousId = $det['set_id'];*/
 
+                            //echo $det['set_id'] . " - " .$a. " = " . $count_set . "<br>";
                 ?>
                     <tr>
                         <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['asset_control_no'];?></td>
@@ -125,11 +136,28 @@
                         <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['serial'];?></td>
                         <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['qty'];?></td>
                         <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['unit'];?></td>
-                        <?php if($a==0 || $a==1){ ?>
-                        <td class="main-tab" align="center" style="font-size: 11px" <?php if($a==1) echo " rowspan='".$count_set."'"; ?>><?php if($det['set_id']==0){ echo $det['unit_price']."<small> ".$det['currency']."</small>"; }else{ echo $det['set_price']; } ?></td>
+                     <!--    <?php if($a==0 || $a==1){ ?>
+                        <td class="main-tab" align="center" style="font-size: 11px" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php if($det['set_id']==0){ echo $det['unit_price']."<small> ".$det['currency']."</small>"; }else{ echo $det['set_price']; } ?></td>
 
-                        <td class="main-tab" align="center" style="font-size: 11px" <?php if($a==1) echo " rowspan='".$count_set."'"; ?>><?php if($det['set_id']==0){ echo number_format($det['total'],2); }else { echo number_format($det['set_total'],2); }?></td>
-                        <?php } ?>
+                        <td class="main-tab" align="center" style="font-size: 11px" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php if($det['set_id']==0){ echo number_format($det['total'],2); }else { echo number_format($det['set_total'],2); }?></td>
+                        <?php } ?> -->
+
+                           <?php 
+                              if ($det['set_id']!=0 && ($previousId !== '' && $previousId !== $det['set_id'])) { ?>
+                                <td class="main-tab" align="center" style="font-size: 11px" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php if($det['set_id']==0){ echo $det['unit_price']."<small> ".$det['currency']."</small>"; }else{ echo $det['set_price']; } ?></td>
+
+
+                            <td class="main-tab" align="center" style="font-size: 11px" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php if($det['set_id']==0){ echo number_format($det['total'],2); }else { echo number_format($det['set_total'],2); }?></td>
+                       
+                            <?php } else if($det['set_id']==0){ ?>
+                                 <td class="main-tab" align="center" style="font-size: 11px"><?php echo $det['unit_price']."<small> ".$det['currency']."</small>"; ?></td>
+
+                                <td class="main-tab" align="center" style="font-size: 11px"><?php echo number_format($det['total'],2); ?></td>
+                          <?php  }
+                            $previousId = $det['set_id'];
+
+
+                        ?>
                     </tr>
                 <?php } } else { ?> 
                     <tr>
