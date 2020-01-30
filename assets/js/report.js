@@ -423,5 +423,20 @@ $('.noted').keyup(function(){
         });
     });
 
+function saveACF(){
+    var acfdata = $("#ACFform").serialize();
+    var loc= document.getElementById("baseurl").value;
+    var redirect = loc+'index.php/report/insert_acfno';
+    $.ajax({
+        type: "POST",
+        url: redirect,
+        data: acfdata,
+        success: function(output){
+            //alert(output);
+        }
+    });
+     
+}
+
 
 

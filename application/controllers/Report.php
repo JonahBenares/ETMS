@@ -2812,6 +2812,49 @@ class Report extends CI_Controller {
         $data['user_id'] =$_SESSION['fullname'];
         $ret_id =$this->super_model->select_column_where("return_head", "accountability_id", "accountability_id", $id);
         $count =$this->super_model->count_rows_where("return_head", "accountability_id", $id);
+        $location_id= $this->super_model->select_column_where('employees', 'location_id', 'employee_id', $id);
+        $location= $this->super_model->select_column_where('location', 'location_prefix', 'location_id', $location_id);
+        $date_format=date("Y");
+        $acf_nos= $this->super_model->select_column_where('employees', 'acf_no', 'employee_id', $id);
+        if($acf_nos==''){
+            $acf = $location."-".$date_format."-1001";
+        }else{
+            $acf = $acf_nos;
+        }
+
+        $acf_pref=explode("-", $acf);
+        $one=$acf_pref[0];
+        $two=$acf_pref[1];
+        $three=$acf_pref[2];
+        $four = (!empty($acf_pref[3])) ? $acf_pref[3] : '';
+        if(!empty($one) && !empty($two) && !empty($three) && !empty($four)){ 
+            $acf_prefix1=$acf_pref[0];
+            $acf_prefix2=$acf_pref[1];
+            $acf_prefix3=$acf_pref[2];
+            $acf_prefix=$acf_prefix1."-".$acf_prefix2."-".$acf_prefix3;
+            $series = $acf_pref[3];
+        }else {
+            $acf_prefix1=$acf_pref[0];
+            $acf_prefix2=$acf_pref[1];
+            $acf_prefix=$acf_prefix1."-".$acf_prefix2;
+            $series = $acf_pref[2];
+        }
+
+        $check_existing = $this->super_model->count_custom_where("acf_series", "acf_prefix='$acf_prefix'");
+        if($check_existing==0){
+            $acf_no= $location."-".$date_format."-1001";
+        } else {
+            $series = $this->super_model->get_max_where("acf_series", "series","acf_prefix='$acf_prefix'");
+            $next=$series+1;
+            $acf_no = $location."-".$date_format."-".$next;
+        }
+
+        if($acf_nos==''){
+            $data['acf_no'] =$acf_no;
+        }else {
+            $data['acf_no'] =$acf_nos;
+        }
+
         if($count==0){
             foreach($this->super_model->select_custom_where('et_head',"accountability_id='$id' AND cancelled = '0'") AS $sub){
                 foreach($this->super_model->select_custom_where('et_details',"et_id='$sub->et_id' GROUP BY et_id") AS $s){
@@ -2824,7 +2867,6 @@ class Report extends CI_Controller {
                     $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
                     $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $sub->et_id);
-                    $data['atf_no'] ='';
                     $data['sub'][] = array(
                         'et_id'=>$sub->et_id,
                         'ed_id'=>$s->ed_id,
@@ -2859,7 +2901,6 @@ class Report extends CI_Controller {
                     $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
                     $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $s->set_id);
                     $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $sub->et_id);
-                    $data['atf_no'] ='';
                     $data['sub'][] = array(
                         'et_id'=>$sub->et_id,
                         'ed_id'=>$s->ed_id,
@@ -2908,7 +2949,7 @@ class Report extends CI_Controller {
                     $date_returned =$this->super_model->select_column_where("return_head", "return_date", "return_id", $ret->return_id);
                     $date_issued =$this->super_model->select_column_where("return_details", "date_issued", "return_id", $ret->return_id);
                     $unit_price =$this->super_model->select_column_where("et_details", "unit_price", "et_id", $r->et_id);
-                    $data['atf_no'] =$this->super_model->select_column_where("return_head", "atf_no", "return_id", $ret->return_id);
+                    //$data['atf_no'] =$this->super_model->select_column_where("return_head", "atf_no", "return_id", $ret->return_id);
                     if(!empty($accountabilitys)){
                         $remarks = $ret->return_remarks;
                     }else {
@@ -3034,6 +3075,46 @@ class Report extends CI_Controller {
         }
         $this->load->view('report/print_history',$data);
         $this->load->view('template/scripts');
+    }
+
+    public function insert_acfno(){
+        $acf_no = $this->input->post('acf_no');
+        $emp_id = $this->input->post('employee_id');
+        $acf= $this->super_model->select_column_where('employees', 'acf_no', 'employee_id', $emp_id);
+        $acfdetails=explode("-", $acf_no);
+        $one=$acfdetails[0];
+        $two=$acfdetails[1];
+        $three=$acfdetails[2];
+        $four = (!empty($acfdetails[3])) ? $acfdetails[3] : '';
+
+        if(!empty($one) && !empty($two) && !empty($three) && !empty($four)){ 
+            $acf_prefix1=$acfdetails[0];
+            $acf_prefix2=$acfdetails[1];
+            $acf_prefix3=$acfdetails[2];
+            $acf_prefix=$acf_prefix1."-".$acf_prefix2."-".$acf_prefix3;
+            $series = $acfdetails[3];
+            $acf_no = $acf_prefix."-".$series;
+        }else {
+            $acf_prefix1=$acfdetails[0];
+            $acf_prefix2=$acfdetails[1];
+            $acf_prefix=$acf_prefix1."-".$acf_prefix2;
+            $series = $acfdetails[2];
+            $acf_no = $acf_prefix."-".$series;
+        }
+
+        if($acf==''){
+            $acf_data= array(
+                'acf_prefix'=>$acf_prefix,
+                'series'=>$series,
+            );
+
+            if($this->super_model->insert_into("acf_series", $acf_data)){
+                $acf_up = array(
+                    'acf_no'=>$acf_no
+                ); 
+                $this->super_model->update_where("employees", $acf_up, "employee_id", $emp_id);
+            }
+        }
     }
 
     public function search_employee(){
@@ -3931,21 +4012,53 @@ class Report extends CI_Controller {
         }
 
         $atf_format = date("Y");
-        $prefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
-        $rows=$this->super_model->count_custom_where("return_head","atf_no = '$prefix'");
+        $ret_prefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
+        
+        $ret_pref=explode("-", $ret_prefix);
+        $ret_one=$ret_pref[0];
+        $ret_two=$ret_pref[1];
+        $ret_three=$ret_pref[2];
+        $ret_four = (!empty($ret_pref[3])) ? $ret_pref[3] : '';
+        if(!empty($ret_one) || !empty($ret_two) || !empty($ret_three) || !empty($ret_four)){
+            $atf_pref1=$ret_pref[0];
+            $atf_pref2=$ret_pref[1];
+            $atf_pref3=$ret_pref[2];
+            $atf_pref=$atf_pref1."-".$atf_pref2."-".$atf_pref3;
+            $series = $ret_pref[3];
+        }else {
+            $atf_pref1=$ret_pref[0];
+            $atf_pref2=$ret_pref[1];
+            $atf_pref=$atf_pref1."-".$atf_pref2;
+            $series = $ret_pref[2];
+        }
+
+        $rows=$this->super_model->count_custom_where("atf_series","atf_prefix = '$atf_pref'");
         if($rows==0){
             $atf_no= $location."-".$atf_format."-1001";
         } else {
-            $series = $this->super_model->get_max("atf_series", "series","atf_prefix = '$prefix'");
+            $series = $this->super_model->get_max_where("atf_series", "series","atf_prefix = '$atf_pref'");
             $next=$series+1;
             $atf_no = $location."-".$atf_format."-".$next;
         }
 
         $atfdetails=explode("-", $atf_no);
-        $atf_prefix1=$atfdetails[0];
-        $atf_prefix2=$atfdetails[1];
-        $atf_prefix=$atf_prefix1."-".$atf_prefix2;
-        $series = $atfdetails[2];
+        $atf_one=$atfdetails[0];
+        $atf_two=$atfdetails[1];
+        $atf_three=$atfdetails[2];
+        $atf_four = (!empty($atfdetails[3])) ? $atfdetails[3] : '';
+        if(!empty($atf_one) || !empty($atf_two) || !empty($atf_three) || !empty($atf_four)){
+            $atf_prefix1=$atfdetails[0];
+            $atf_prefix2=$atfdetails[1];
+            $atf_prefix3=$atfdetails[2];
+            $atf_prefix=$atf_prefix1."-".$atf_prefix2."-".$atf_prefix3;
+            $series = $atfdetails[3];
+        }else {
+            $atf_prefix1=$atfdetails[0];
+            $atf_prefix2=$atfdetails[1];
+            $atf_prefix=$atf_prefix1."-".$atf_prefix2;
+            $series = $atfdetails[2];
+        }
+        
 
         $atf_data= array(
             'atf_prefix'=>$atf_prefix,
@@ -3966,11 +4079,26 @@ class Report extends CI_Controller {
         if($this->super_model->insert_into("return_head", $returnhead_data)){
             $ars = $this->input->post('ars_no');
             $assetdetails=explode("-", $ars);
-            $subcat_prefix1=$assetdetails[0];
-            $subcat_prefix2=$assetdetails[1];
-            $subcat_prefix3=$assetdetails[2];
-            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
-            $series = $assetdetails[3];
+            $one=$assetdetails[0];
+            $two=$assetdetails[1];
+            $three=$assetdetails[2];
+            $four = $assetdetails[3];
+            $five = (!empty($assetdetails[4])) ? $assetdetails[4] : '';
+            if(!empty($one) || !empty($two) || !empty($three) || !empty($four) || !empty($five)){
+                $subcat_prefix1=$assetdetails[0];
+                $subcat_prefix2=$assetdetails[1];
+                $subcat_prefix3=$assetdetails[2];
+                $subcat_prefix4=$assetdetails[3];
+                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3."-".$subcat_prefix4;
+                $series = $assetdetails[4];
+            }else {
+                $subcat_prefix1=$assetdetails[0];
+                $subcat_prefix2=$assetdetails[1];
+                $subcat_prefix3=$assetdetails[2];
+                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
+                $series = $assetdetails[3];
+            }
+
             $ars_data= array(
                 'prefix'=>$subcat_prefix,
                 'series'=>$series
@@ -4157,11 +4285,32 @@ class Report extends CI_Controller {
         $date_format = date("Y-m",strtotime($date));
         $prefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
         //secho $prefix;
-        $rows=$this->super_model->count_custom_where("return_head","ars_no = '$prefix'");
+        $assetdetails=explode("-", $prefix);
+        $one=$assetdetails[0];
+        $two=$assetdetails[1];
+        $three=$assetdetails[2];
+        $four = $assetdetails[3];
+        $five = (!empty($prefix[4])) ? $prefix[4] : '';
+        if(!empty($one) || !empty($two) || !empty($three) || !empty($four) || !empty($five)){
+            $subcat_prefix1=$assetdetails[0];
+            $subcat_prefix2=$assetdetails[1];
+            $subcat_prefix3=$assetdetails[2];
+            $subcat_prefix4=$assetdetails[3];
+            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3."-".$subcat_prefix4;
+            $series = $assetdetails[4];
+        }else {
+            $subcat_prefix1=$assetdetails[0];
+            $subcat_prefix2=$assetdetails[1];
+            $subcat_prefix3=$assetdetails[2];
+            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
+            $series = $assetdetails[3];
+        }
+
+        $rows=$this->super_model->count_custom_where("returned_series","prefix = '$subcat_prefix'");
         if($rows==0){
             $ars_no= $location."-".$date_format."-1001";
         } else {
-            $series = $this->super_model->get_max("returned_series", "series","prefix = '$prefix'");
+            $series = $this->super_model->get_max("returned_series", "series","prefix = '$subcat_prefix'");
             $next=$series+1;
             $ars_no = $location."-".$date_format."-".$next;
         }
@@ -4422,8 +4571,6 @@ class Report extends CI_Controller {
             $damage_done = $this->input->post('damage_done'.$x);
             $receipt = $this->input->post('receipt'.$x);
             $recommendation = $this->input->post('recommendation'.$x);
-            $date_format = date("Y-m",strtotime($date));
-            $prefix= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
             foreach($this->super_model->select_row_where('et_details', 'ed_id', $edid) AS $det){
                 $det_data = array(
                     'damage'=>1
@@ -4445,21 +4592,58 @@ class Report extends CI_Controller {
                 $location1 = 'NA';
             }
 
-            $rows=$this->super_model->count_custom_where("damage_info","etdr_no = '$prefix'");
+            $date_format = date("Y-m");
+            $damage_no= $this->super_model->select_column_custom_where("damage_info", "etdr_no", "incident_date LIKE '$date_format%'");
+            $dam_pref=explode("-", $damage_no);
+            $one1=$dam_pref[0];
+            $two1=$dam_pref[1];
+            $three1=$dam_pref[2];
+            $four1 = $dam_pref[3];
+            $five1 = (!empty($dam_pref[4])) ? $dam_pref[4] : '';
+            if(!empty($one1) || !empty($two1) || !empty($three1) || !empty($four1) || !empty($five1)){
+                $dam_prefix1=$dam_pref[0];
+                $dam_prefix2=$dam_pref[1];
+                $dam_prefix3=$dam_pref[2];
+                $dam_prefix4=$dam_pref[3];
+                $dam_prefix=$dam_prefix1."-".$dam_prefix2."-".$dam_prefix3."-".$dam_prefix4;
+                $series = $dam_pref[4];
+            }else {
+                $dam_prefix1=$dam_pref[0];
+                $dam_prefix2=$dam_pref[1];
+                $dam_prefix3=$dam_pref[2];
+                $dam_prefix=$dam_prefix1."-".$dam_prefix2."-".$dam_prefix3;
+                $series = $dam_pref[3];
+            }
+
+            $rows=$this->super_model->count_custom_where("damage_series","damage_prefix = '$dam_prefix'");
             if($rows==0){
                 $etdr_no= $location1."-".$date_format."-1001";
             } else {
-                $series = $this->super_model->get_max("damage_series", "series","damge_prefix = '$prefix'");
+                $series = $this->super_model->get_max_where("damage_series", "series","damage_prefix = '$dam_prefix'");
                 $next=$series+1;
                 $etdr_no = $location1."-".$date_format."-".$next;
             }
 
             $damagedetails=explode("-", $etdr_no);
-            $damage_prefix1=$damagedetails[0];
-            $damage_prefix2=$damagedetails[1];
-            $damage_prefix3=$damagedetails[2];
-            $damage_prefix=$damage_prefix1."-".$damage_prefix2."-".$damage_prefix3;
-            $series = $damagedetails[3];
+            $dam_one=$damagedetails[0];
+            $dam_two=$damagedetails[1];
+            $dam_three=$damagedetails[2];
+            $dam_four = $damagedetails[3];
+            $dam_five = (!empty($damagedetails[4])) ? $damagedetails[4] : '';
+            if(!empty($dam_one) || !empty($dam_two) || !empty($dam_three) || !empty($dam_four) || !empty($dam_five)){
+                $damage_prefix1=$damagedetails[0];
+                $damage_prefix2=$damagedetails[1];
+                $damage_prefix3=$damagedetails[2];
+                $damage_prefix4=$damagedetails[3];
+                $damage_prefix=$damage_prefix1."-".$damage_prefix2."-".$damage_prefix3."-".$damage_prefix4;
+                $series = $damagedetails[4];
+            }else {
+                $damage_prefix1=$damagedetails[0];
+                $damage_prefix2=$damagedetails[1];
+                $damage_prefix3=$damagedetails[2];
+                $damage_prefix=$damage_prefix1."-".$damage_prefix2."-".$damage_prefix3;
+                $series = $damagedetails[3];
+            }
             $damage_data= array(
                 'damage_prefix'=>$damage_prefix,
                 'series'=>$series
@@ -4494,21 +4678,51 @@ class Report extends CI_Controller {
         }
 
         $atf_format = date("Y");
-        $prefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
-        $rows=$this->super_model->count_custom_where("return_head","atf_no = '$prefix'");
-        if($rows==0){
+        $return_prefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
+        $ret_pref=explode("-", $return_prefix);
+        $one3=$ret_pref[0];
+        $two3=$ret_pref[1];
+        $three3=$ret_pref[2];
+        $four3 = (!empty($ret_pref[3])) ? $ret_pref[3] : '';
+        if(!empty($one3) || !empty($two3) || !empty($three3) || !empty($four3)){
+            $ret_prefix1=$ret_pref[0];
+            $ret_prefix2=$ret_pref[1];
+            $ret_prefix3=$ret_pref[2];
+            $ret_prefix=$ret_prefix1."-".$ret_prefix2."-".$ret_prefix3;
+            $series = $ret_pref[3];
+        }else {
+            $ret_prefix1=$ret_pref[0];
+            $ret_prefix2=$ret_pref[1];
+            $ret_prefix=$ret_prefix1."-".$ret_prefix2;
+            $series = $ret_pref[2];
+        }
+
+        $row=$this->super_model->count_custom_where("atf_series","atf_prefix = '$ret_prefix'");
+        if($row==0){
             $atf_no= $location1."-".$atf_format."-1001";
         } else {
-            $series = $this->super_model->get_max("atf_series", "series","atf_prefix = '$prefix'");
+            $series = $this->super_model->get_max_where("atf_series", "series","atf_prefix = '$ret_prefix'");
             $next=$series+1;
             $atf_no = $location1."-".$atf_format."-".$next;
         }
 
         $atfdetails=explode("-", $atf_no);
-        $atf_prefix1=$atfdetails[0];
-        $atf_prefix2=$atfdetails[1];
-        $atf_prefix=$atf_prefix1."-".$atf_prefix2;
-        $series = $atfdetails[2];
+        $atf_one=$atfdetails[0];
+        $atf_two=$atfdetails[1];
+        $atf_three=$atfdetails[2];
+        $atf_four = (!empty($atfdetails[3])) ? $atfdetails[3] : '';
+        if(!empty($atf_one) || !empty($atf_two) || !empty($atf_three) || !empty($atf_four)){
+            $atf_prefix1=$atfdetails[0];
+            $atf_prefix2=$atfdetails[1];
+            $atf_prefix3=$atfdetails[2];
+            $atf_prefix=$atf_prefix1."-".$atf_prefix2."-".$atf_prefix3;
+            $series = $atfdetails[3];
+        }else {
+            $atf_prefix1=$atfdetails[0];
+            $atf_prefix2=$atfdetails[1];
+            $atf_prefix=$atf_prefix1."-".$atf_prefix2;
+            $series = $atfdetails[2];
+        }
 
         $atf_data= array(
             'atf_prefix'=>$atf_prefix,
@@ -4518,12 +4732,33 @@ class Report extends CI_Controller {
 
 
         $date_format = date("Y-m",strtotime($date));
-        $prefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
-        $rows=$this->super_model->count_custom_where("return_head","ars_no = '$prefix'");
-        if($rows==0){
+        $arsprefix= $this->super_model->select_column_custom_where("return_head", "ars_no", "return_date LIKE '$date_format%'");
+        $pref=explode("-", $arsprefix);
+        $one2=$pref[0];
+        $two2=$pref[1];
+        $three2=$pref[2];
+        $four2 = $pref[3];
+        $five2 = (!empty($pref[4])) ? $pref[4] : '';
+        if(!empty($one2) || !empty($two2) || !empty($three2) || !empty($four2) || !empty($five2)){
+            $sub_prefix1=$pref[0];
+            $sub_prefix2=$pref[1];
+            $sub_prefix3=$pref[2];
+            $sub_prefix4=$pref[3];
+            $sub_prefix=$sub_prefix1."-".$sub_prefix2."-".$sub_prefix3."-".$sub_prefix4;
+            $series = $pref[4];
+        }else{
+            $sub_prefix1=$pref[0];
+            $sub_prefix2=$pref[1];
+            $sub_prefix3=$pref[2];
+            $sub_prefix=$sub_prefix1."-".$sub_prefix2."-".$sub_prefix3;
+            $series = $pref[3];
+        }
+
+        $rowss=$this->super_model->count_custom_where("returned_series","prefix = '$sub_prefix'");
+        if($rowss==0){
             $ars_no= $location1."-".$date_format."-1001";
         } else {
-            $series = $this->super_model->get_max("returned_series", "series","prefix = '$prefix'");
+            $series = $this->super_model->get_max_where("returned_series", "series","prefix = '$sub_prefix'");
             $next=$series+1;
             $ars_no = $location1."-".$date_format."-".$next;
         }
@@ -4542,11 +4777,25 @@ class Report extends CI_Controller {
         if($this->super_model->insert_into("return_head", $returnhead_data)){
             $ars = $ars_no;
             $assetdetails=explode("-", $ars);
-            $subcat_prefix1=$assetdetails[0];
-            $subcat_prefix2=$assetdetails[1];
-            $subcat_prefix3=$assetdetails[2];
-            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
-            $series = $assetdetails[3];
+            $asset_one=$assetdetails[0];
+            $asset_two=$assetdetails[1];
+            $asset_three=$assetdetails[2];
+            $asset_four = $assetdetails[3];
+            $asset_five = (!empty($assetdetails[4])) ? $assetdetails[4] : '';
+            if(!empty($asset_one) || !empty($asset_two) || !empty($asset_three) || !empty($asset_four) || !empty($asset_five)){
+                $subcat_prefix1=$assetdetails[0];
+                $subcat_prefix2=$assetdetails[1];
+                $subcat_prefix3=$assetdetails[2];
+                $subcat_prefix4=$assetdetails[3];
+                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3."-".$subcat_prefix4;
+                $series = $assetdetails[4];
+            }else{
+                $subcat_prefix1=$assetdetails[0];
+                $subcat_prefix2=$assetdetails[1];
+                $subcat_prefix3=$assetdetails[2];
+                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
+                $series = $assetdetails[3];
+            }
             $ars_data= array(
                 'prefix'=>$subcat_prefix,
                 'series'=>$series
@@ -5457,21 +5706,49 @@ class Report extends CI_Controller {
             }
         }
         $atf_format = date("Y");
-        $prefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
-        $rows=$this->super_model->count_custom_where("return_head","atf_no = '$prefix'");
+        $atfprefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
+
+        $atfpref=explode("-", $atfprefix);
+        $atf_one=$atfpref[0];
+        $atf_two=$atfpref[1];
+        $atf_three=$atfpref[2];
+        $atf_four = (!empty($atfpref[3])) ? $atfpref[3] : '';
+        if(!empty($atf_one) || !empty($atf_two) || !empty($atf_three) || !empty($atf_four)){
+            $atf_pref1=$atfpref[0];
+            $atf_pref2=$atfpref[1];
+            $atf_pref3=$atfpref[2];
+            $atf_pref=$atf_pref1."-".$atf_pref2."-".$atf_pref3;
+        }else{
+            $atf_pref1=$atfpref[0];
+            $atf_pref2=$atfpref[1];
+            $atf_pref=$atf_pref1."-".$atf_pref2;
+        }
+        $rows=$this->super_model->count_custom_where("atf_series","atf_prefix = '$atf_pref'");
         if($rows==0){
             $atf_no= $location."-".$atf_format."-1001";
         } else {
-            $series = $this->super_model->get_max("atf_series", "series","atf_prefix = '$prefix'");
+            $series = $this->super_model->get_max_where("atf_series", "series","atf_prefix = '$atf_pref'");
             $next=$series+1;
             $atf_no = $location."-".$atf_format."-".$next;
         }
 
         $atfdetails=explode("-", $atf_no);
-        $atf_prefix1=$atfdetails[0];
-        $atf_prefix2=$atfdetails[1];
-        $atf_prefix=$atf_prefix1."-".$atf_prefix2;
-        $series = $atfdetails[2];
+        $atfone=$atfdetails[0];
+        $atftwo=$atfdetails[1];
+        $atfthree=$atfdetails[2];
+        $atffour = (!empty($atfdetails[3])) ? $atfdetails[3] : '';
+        if(!empty($atfone) || !empty($atftwo) || !empty($atfthree) || !empty($atffour)){
+            $atf_prefix1=$atfdetails[0];
+            $atf_prefix2=$atfdetails[1];
+            $atf_prefix3=$atfdetails[2];
+            $atf_prefix=$atf_prefix1."-".$atf_prefix2."-".$atf_prefix3;
+            $series = $atfdetails[3];
+        }else {
+            $atf_prefix1=$atfdetails[0];
+            $atf_prefix2=$atfdetails[1];
+            $atf_prefix=$atf_prefix1."-".$atf_prefix2;
+            $series = $atfdetails[2];
+        }
 
         $atf_data= array(
             'atf_prefix'=>$atf_prefix,
@@ -5500,13 +5777,27 @@ class Report extends CI_Controller {
 
         if($this->super_model->insert_into("return_head", $returnhead_data)){
 
-         $ars = $this->input->post('ars_no');
+            $ars = $this->input->post('ars_no');
             $assetdetails=explode("-", $ars);
-            $subcat_prefix1=$assetdetails[0];
-            $subcat_prefix2=$assetdetails[1];
-            $subcat_prefix3=$assetdetails[2];
-            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
-            $series = $assetdetails[3];
+            $ars_one=$assetdetails[0];
+            $ars_two=$assetdetails[1];
+            $ars_three=$assetdetails[2];
+            $ars_four =$assetdetails[3];
+            $ars_five = (!empty($assetdetails[4])) ? $assetdetails[4] : '';
+            if(!empty($ars_one) || !empty($ars_two) || !empty($ars_three) || !empty($ars_four) || !empty($ars_five)){
+                $subcat_prefix1=$assetdetails[0];
+                $subcat_prefix2=$assetdetails[1];
+                $subcat_prefix3=$assetdetails[2];
+                $subcat_prefix4=$assetdetails[3];
+                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3."-".$subcat_prefix4;
+                $series = $assetdetails[4];
+            }else {
+                $subcat_prefix1=$assetdetails[0];
+                $subcat_prefix2=$assetdetails[1];
+                $subcat_prefix3=$assetdetails[2];
+                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3;
+                $series = $assetdetails[3]; 
+            }
             $ars_data= array(
                 'prefix'=>$subcat_prefix,
                 'series'=>$series
