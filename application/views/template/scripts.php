@@ -75,19 +75,19 @@
         
         var rep_name = document.getElementById("rep_name");
         var rep_list = document.getElementById("rep_list");
-        function repNameIn(x) {            
+        function repNameIn(d) {            
             rep_name.setAttribute('style', 'display:none');
             rep_list.setAttribute('style', 'display:block');
         }
-        function repListIn(x) {
+        function repListIn(d) {
             rep_name.setAttribute('style', 'display:block');
             rep_list.setAttribute('style', 'display:none');
         }
-        function repNameIn1(x) {            
+        function repNameIn1(d) {            
             rep_name1.setAttribute('style', 'display:none');
             rep_list1.setAttribute('style', 'display:block');
         }
-        function repListIn1(x) {
+        function repListIn1(d) {
             rep_name1.setAttribute('style', 'display:block');
             rep_list1.setAttribute('style', 'display:none');
         }
