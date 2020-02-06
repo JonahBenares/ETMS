@@ -203,14 +203,14 @@
                                 if(!empty($main)){
                                 foreach($main AS $m){ ?>
                                     <tr>                                        
-                                        <td>
-                                            <a href="<?php echo base_url(); ?>index.php/report/view_more/<?php echo $m['et_id'];?>" class="btn btn-link "  data-toggle="tooltip" data-placement="right" title="View" >
-                                                <?php echo $m['accountability']; ?>
-                                            </a>                                            
-                                        </td>
+                                        <td><?php echo $m['accountability']; ?></td>
                                         <td><?php echo $m['cat']; ?></td>
                                         <td><?php echo $m['subcat']; ?></td>
-                                        <td><?php echo $m['et_desc']; ?></td>
+                                        <td>
+                                            <a href="<?php echo base_url(); ?>index.php/report/view_more/<?php echo $m['et_id'];?>" class="btn btn-link "  data-toggle="tooltip" data-placement="right" title="View" style="word-wrap: break-word;">
+                                                <?php echo $m['et_desc']; ?>
+                                            </a> 
+                                        </td>
                                         <td><?php echo $m['unit']; ?></td>
                                         <td><?php echo $m['qty']; ?></td>
                                         <td><?php echo $m['department']; ?></td>

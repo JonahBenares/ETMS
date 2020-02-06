@@ -40,7 +40,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php if(!empty($avail)){ foreach($avail AS $a){ ?>
+                                <?php 
+                                    if(!empty($avail)){ 
+                                        usort($avail, function($a, $b) {
+                                            return $a['set_id'] - $b['set_id'];
+                                        });
+                                        foreach($avail AS $a){ 
+                                ?>
                                     <tr <?php if($a['damaged'] == 1){ echo "class='tr-damage'"; } else { echo ''; }?>>
                                         <td >  
                                             <div class="table-data-feature">
@@ -57,8 +63,6 @@
                                             <?php } ?> 
                                             </div>
                                         </td>
-                                        <!-- <td><?php echo $a['asset_control']; ?></td> -->
-                                        <!-- <td><?php if(!empty($a['acquisition_date'])) { echo date('M j, Y',strtotime($a['acquisition_date'])); }else { echo ''; } ?></td> -->
                                         <td><?php echo $a['category']; ?></td>
                                         <td><?php echo $a['subcat']; ?></td>
                                         <td>
@@ -74,8 +78,6 @@
                                                  <?php echo $a['set_name'];?>
                                             </a> 
                                         </td>
-                                        <!-- <td><?php echo $a['set_name']; ?></td> -->
-                                        <!-- <td><?php echo $a['department']; ?></td> -->
                                     </tr>
                                 <?php } } ?>
                                 </tbody>

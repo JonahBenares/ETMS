@@ -96,22 +96,20 @@ class Borrow extends CI_Controller {
         $borpref=explode("-", $bor_prefix);
         $bor_one=$borpref[0];
         $bor_two=$borpref[1];
-        $bor_three=$borpref[2];
+        $bor_three=(!empty($borpref[2])) ? $borpref[2] : '';
         $bor_four = $borpref[3];
         $bor_five = (!empty($borpref[4])) ? $borpref[4] : '';
-        if(!empty($bor_one) || !empty($bor_two) || !empty($bor_three) || !empty($bor_four) || !empty($bor_five)){
+        if(!empty($bor_one) && !empty($bor_two) && !empty($bor_three) && !empty($bor_four) && !empty($bor_five)){
             $borrow_pref1=$borpref[0];
             $borrow_pref2=$borpref[1];
             $borrow_pref3=$borpref[2];
             $borrow_pref4=$borpref[3];
             $borrow_pref=$borrow_pref1."-".$borrow_pref2."-".$borrow_pref3."-".$borrow_pref4;
-            $series = $borpref[4];
         }else{
             $borrow_pref1=$borpref[0];
             $borrow_pref2=$borpref[1];
             $borrow_pref3=$borpref[2];
-            $borrow_pref=$borrow_pref1."-".$borrow_pref2."-".$borrow_pref2;
-            $series = $borpref[3];
+            $borrow_pref=$borrow_pref1."-".$borrow_pref2."-".$borrow_pref3;
         }
 
         $rows=$this->super_model->count_custom_where("borrow_series","borrow_prefix = '$borrow_pref'");
@@ -126,10 +124,10 @@ class Borrow extends CI_Controller {
         $borrowdetails=explode("-", $borrow_no);
         $borrow_one=$borrowdetails[0];
         $borrow_two=$borrowdetails[1];
-        $borrow_three=$borrowdetails[2];
+        $borrow_three=(!empty($borrowdetails[2])) ? $borrowdetails[2] : '';
         $borrow_four = $borrowdetails[3];
         $borrow_five = (!empty($borrowdetails[4])) ? $borrowdetails[4] : '';
-        if(!empty($borrow_one) || !empty($borrow_two) || !empty($borrow_three) || !empty($borrow_four) || !empty($borrow_five)){
+        if(!empty($borrow_one) && !empty($borrow_two) && !empty($borrow_three) && !empty($borrow_four) && !empty($borrow_five)){
             $borrow_prefix1=$borrowdetails[0];
             $borrow_prefix2=$borrowdetails[1];
             $borrow_prefix3=$borrowdetails[2];
@@ -140,7 +138,7 @@ class Borrow extends CI_Controller {
             $borrow_prefix1=$borrowdetails[0];
             $borrow_prefix2=$borrowdetails[1];
             $borrow_prefix3=$borrowdetails[2];
-            $borrow_prefix=$borrow_prefix1."-".$borrow_prefix2."-".$borrow_prefix2;
+            $borrow_prefix=$borrow_prefix1."-".$borrow_prefix2."-".$borrow_prefix3;
             $series = $borrowdetails[3];
         }
 
@@ -729,7 +727,7 @@ class Borrow extends CI_Controller {
             $dam_three=$damagepref[2];
             $dam_four = $damagepref[3];
             $dam_five = (!empty($damagepref[4])) ? $damagepref[4] : '';
-            if(!empty($dam_one) || !empty($dam_two) || !empty($dam_three) || !empty($dam_four) || !empty($dam_five)){
+            if(!empty($dam_one) && !empty($dam_two) && !empty($dam_three) && !empty($dam_four) && !empty($dam_five)){
                 $dam_pref1=$damagepref[0];
                 $dam_pref2=$damagepref[1];
                 $dam_pref3=$damagepref[2];
@@ -757,7 +755,7 @@ class Borrow extends CI_Controller {
             $damage_three=$damagedetails[2];
             $damage_four = $damagedetails[3];
             $damage_five = (!empty($damagedetails[4])) ? $damagedetails[4] : '';
-            if(!empty($damage_one) || !empty($damage_two) || !empty($damage_three) || !empty($damage_four) || !empty($damage_five)){
+            if(!empty($damage_one) && !empty($damage_two) && !empty($damage_three) && !empty($damage_four) && !empty($damage_five)){
                 $damage_prefix1=$damagedetails[0];
                 $damage_prefix2=$damagedetails[1];
                 $damage_prefix3=$damagedetails[2];
@@ -848,7 +846,7 @@ class Borrow extends CI_Controller {
         $ret_two=$retp[1];
         $ret_three=$retp[2];
         $ret_four = (!empty($retp[3])) ? $retp[3] : '';
-        if(!empty($ret_one) || !empty($ret_two) || !empty($ret_three) || !empty($ret_four)){
+        if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four)){
             $ret_pref1=$retp[0];
             $ret_pref2=$retp[1];
             $ret_pref3=$retp[2];
@@ -873,7 +871,7 @@ class Borrow extends CI_Controller {
         $atf_two=$atfdetails[1];
         $atf_three=$atfdetails[2];
         $atf_four = (!empty($atfdetails[3])) ? $atfdetails[3] : '';
-        if(!empty($atf_one) || !empty($atf_two) || !empty($atf_three) || !empty($atf_four)){
+        if(!empty($atf_one) && !empty($atf_two) && !empty($atf_three) && !empty($atf_four)){
             $atf_prefix1=$atfdetails[0];
             $atf_prefix2=$atfdetails[1];
             $atf_prefix3=$atfdetails[2];

@@ -67,55 +67,41 @@
             <table width="100%" class="table-bordered">
                 <tr>                
                     <td class="main-tab" width="10%" align="center"><strong>Asset #</strong></td>
-                    <td class="main-tab" width="20%" align="center"><strong>Acquisition Date</strong></td>
-                    <td class="main-tab" width="20%" align="center"><strong>Lot No. </strong></td>
-                    <td class="main-tab" width="20%" align="center"><strong>Set Name</strong></td>
+                    <td class="main-tab" width="10%" align="center"><strong>Acquisition Date</strong></td>
                     <td class="main-tab" width="40%" align="center"><strong>Description</strong></td>                    
                     <td class="main-tab" width="7%" align="center"><strong>Qty</strong></td>
                     <td class="main-tab" width="7%" align="center"><strong>U/M</strong></td>
+                    <td class="main-tab" width="20%" align="center"><strong>Set Name</strong></td>
+                    <td class="main-tab" width="20%" align="center"><strong>Lot No. </strong></td>
                     <td class="main-tab" width="7%" align="center"><strong>Cost</strong></td>
                     <td class="main-tab" width="8%" align="center"><strong>Total</strong></td>
                 </tr>
                 <tr>
                 <?php 
                     if(!empty($details)){ 
-
-                      $a=0;
+                        $a=0;
                         $b=0;
-                      $ct_set =count(array_unique($set));
-                      $new_set = array_unique($set);
-                      //print_r($new_set);
-
-                        foreach($details AS $det){ 
-                           
+                        $ct_set =count(array_unique($set));
+                        $new_set = array_unique($set);
+                        foreach($details AS $det){          
                 ?>
                     <tr>
                         <td class="main-tab" align="center"><?php echo $det['asset_control_no'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['acquisition_date'];?></td>
-                        <td class="main-tab" align="center"><?php echo $det['set_lot'];?></td>
-                        <td class="main-tab" align="center"><?php echo $det['set_name'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['et_desc'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
                         <?php
-                         
-                        foreach($new_set AS $key=>$value){
-                            if($key==$a ){
-                           ?>
+                            foreach($new_set AS $key=>$value){
+                                if($key==$a){
+                        ?>
+                            <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['set_name'];?></td>
+                            <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['set_lot'];?></td>
                             <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['unit_price']; ?></td>
                             <td class="main-tab" align="center" <?php  echo " rowspan='".$value."'"; ?>><?php echo number_format($det['total'],2); ?></td>
-                        <?php 
-                                 } 
-                        }
-                        ?>
-                  
+                        <?php } } ?>
                     </tr>
-                <?php $a++; 
-              
-                  
-                 
-                    } } else { ?> 
-                    
+                <?php $a++; } } else { ?> 
                     <tr>
                         <td class="main-tab" align="center" colspan='9'><center>No Data Available.</center></td>
                     </tr>
@@ -126,45 +112,6 @@
                 </tr>  
             </table>
             <br>
-            <!-- <table width="100%">
-                <tr>
-                    <td class="main-tab" style="text-indent:20%">I hereby acknowledge receipt of the company owned property/ies listed above for which I am accountable. I agree to maintain the property/ies in good condition and to return it when I cease working for the company, or earlier on request.  I promise to report any loss or damage immediately and further agree to use the said property for work related purposes.</td>
-                </tr>
-            </table>
-            <br>
-             <table width="100%">
-                <tr>
-                    <td width="10%"></td>
-                    <td width="26%" class="main-tab">Prepared by:</td>
-                    <td width="10%"></td>
-                    <td width="26%" class="main-tab">Received by:</td>
-                    <td width="10%"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom;" align = 'center'>
-                        <?php echo $username;?>
-                    </td> 
-                    <td></td>
-                    <td style="border-bottom:1px solid #000;color:black">
-                        <?php if($type == 2){ ?>
-                            <?php if(!empty($child)){  foreach($child as $c){ echo  $c['emp'].', <br>'; } } ?>
-                        <?php } else { ?>
-                            <div style = "text-align:center;"><?php echo  $employee;?></div>
-                        <?php } ?>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input class="select" type="" name="" value="Asset Management Assistant" >
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>  -->
             <hr>
             <small>printed by: <?php echo $_SESSION['fullname'];?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
         <!-- </div> -->

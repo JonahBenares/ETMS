@@ -2389,57 +2389,53 @@ class Report extends CI_Controller {
     public function report_set_avail(){  
         $this->load->view('template/header');
         $this->load->view('template/sidebar');
-        $row=$this->super_model->count_custom_where("et_head", "accountability_id!=0 AND cancelled=0");
+        $row=$this->super_model->count_custom_where("et_head", "accountability_id=0 AND cancelled=0");
 
         $row_set_avail = $this->row_set_avail();
-        /*foreach($this->super_model->select_custom_where("et_head", "accountability_id='0'") AS $check){
-            $data['available_qty']=$this->super_model->count_custom_where("et_details", "damage='0'");           
-        }*/
-        /*$data['available_qty']=$this->super_model->count_join_where('et_head','et_details', "damage='0' AND accountability_id = '0'",'et_id');*/
         $data['available_set_qty']= $this->row_set_avail();
         $data['available_qty']= $this->row_avail();
         $data['damage_qty']=$this->super_model->count_custom_where("et_details", "damage='1'");
         if($row_set_avail!=0){
-            //foreach($this->super_model->select_custom_where('et_head', 'accountability_id=0') AS $et){
-            foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' and change_location = '0' AND set_id!='0' AND lost='0' AND cancelled='0'","et_id") as $et){
-                /*foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$et->et_id'") AS $det){*/
-                $damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
-                $item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et->et_id);
+            foreach($this->super_model->select_custom_where('et_head', "accountability_id='0' AND cancelled='0'") AS $et){
+                //foreach($this->super_model->select_join_where("et_head","et_details","damage='0' AND accountability_id = '0' and change_location = '0' AND set_id!='0' AND lost='0' AND cancelled='0'","et_id") as $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
-                $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
-                $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
-                $qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $et->et_id);
-                $empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $et->et_id);
-                /*$brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
-                $serial =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
-                $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
-                $acn =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
-                $acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);*/
-                $ed_id =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $et->et_id);
-                if($damage==0){
-                    $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et->et_id);
-                    $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
-                    $data['avail'][] = array(
-                        'et_id'=>$et->et_id,
-                        'ed_id'=>$ed_id,
-                        'empid'=>$empid,
-                        'unit'=>$unit,
-                        'damaged'=>$damage,
-                        'department'=>$et->department,
-                        'et_desc'=>$et->et_desc,
-                        'category'=>$category,
-                        'subcat'=>$subcat,
-                        'qty'=>$qty,
-                        'set_name'=>$set_name,
-                        'set_id'=>$set_id,
-                        /*'serial_no'=>$serial,
-                        'asset_control'=>$acn,
-                        'acquisition_date'=>$acquisition_date,
-                        'brand'=>$brand
-                        'model'=>$model,*/
-                    );
+                $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et->et_id);
+                foreach($this->super_model->select_custom_where("et_details", "damage='0' AND change_location = '0' AND set_id!='0' AND et_id ='$et->et_id' ORDER BY set_id ASC") AS $det){
+                    //$damage =$this->super_model->select_column_where("et_details", "damage", "et_id", $et->et_id);
+                    //$item =$this->super_model->select_column_where("et_head", "et_desc", "et_id", $et->et_id);
+                    $category =$this->super_model->select_column_where("category", "category_name", "category_id", $et->category_id);
+                    $subcat =$this->super_model->select_column_where("subcategory", "subcat_name", "subcat_id", $et->subcat_id);
+                    //$qty =$this->super_model->select_column_where("et_head", "qty", "et_id", $et->et_id);
+                    //$empid =$this->super_model->select_column_where("et_head", "accountability_id", "et_id", $et->et_id);
+                    /*$brand =$this->super_model->select_column_where("et_details", "brand", "et_id", $et->et_id);
+                    $serial =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
+                    $model =$this->super_model->select_column_where("et_details", "model", "et_id", $et->et_id);
+                    $acn =$this->super_model->select_column_where("et_details", "asset_control_no", "et_id", $et->et_id);
+                    $acquisition_date =$this->super_model->select_column_where("et_details", "acquisition_date", "et_id", $et->et_id);*/
+                    //$ed_id =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $et->et_id);
+                    //if($det->damage==0){
+                        $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $det->set_id);
+                        $data['avail'][] = array(
+                            'et_id'=>$et->et_id,
+                            'ed_id'=>$det->ed_id,
+                            'empid'=>$et->accountability_id,
+                            'unit'=>$unit,
+                            'damaged'=>$det->damage,
+                            'department'=>$et->department,
+                            'et_desc'=>$et->et_desc,
+                            'category'=>$category,
+                            'subcat'=>$subcat,
+                            'qty'=>$et->qty,
+                            'set_name'=>$set_name,
+                            'set_id'=>$det->set_id,
+                            /*'serial_no'=>$serial,
+                            'asset_control'=>$acn,
+                            'acquisition_date'=>$acquisition_date,
+                            'brand'=>$brand
+                            'model'=>$model,*/
+                        );
+                    //}
                 }
-                //}
             }
         }else {
             $data['avail'] = array();
@@ -2453,7 +2449,7 @@ class Report extends CI_Controller {
        $count_next_set= $this->super_model->count_rows_where("et_details","set_id",$set_id);
        return $count_next_set;
     }*/
-    public function set_print_avail(){  
+    public function set_print_avail1(){  
         $this->load->view('template/header');
         $this->load->view('template/print_head');
         $data['id']=$this->uri->segment(3);
@@ -2461,29 +2457,30 @@ class Report extends CI_Controller {
         $row=$this->super_model->count_custom_where("et_head","accountability_id='0' AND cancelled='0'");
         if($row!=0){
             foreach($this->super_model->select_row_where('et_head','accountability_id=0 AND cancelled=0') AS $aaf){
-                $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $aaf->accountability_id); 
-                foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$aaf->accountability_id) AS $em){
+                //$data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $aaf->accountability_id); 
+                /*foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$aaf->accountability_id) AS $em){
                     $data['child'][] = array( 
                         'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
                     );
-                }
-                $data['date_issued'] =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $aaf->et_id);
+                }*/
+                //$data['date_issued'] =$this->super_model->select_column_where("et_details", "date_issued", "et_id", $aaf->et_id);
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $aaf->unit_id);
-                $data['user_id'] =$_SESSION['fullname'];
-                $data['username'] =$this->super_model->select_column_where("users", "fullname", "user_id", $aaf->user_id);
-                $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $aaf->accountability_id);
-                $data['department'] =$aaf->department;
+                //$data['user_id'] =$_SESSION['fullname'];
+                //$data['username'] =$this->super_model->select_column_where("users", "fullname", "user_id", $aaf->user_id);
+                //$accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $aaf->accountability_id);
+                //$data['department'] =$aaf->department;
                 $qty = 1;
-                if(!isset($id)){
-                    foreach($this->super_model->select_custom_where('et_details', "et_id = '$aaf->et_id' AND set_id != '0' ORDER BY set_id DESC") AS $det){
+                //if(!isset($id)){
+                    foreach($this->super_model->select_custom_where('et_details', "et_id = '$aaf->et_id' AND set_id = '$id' AND damage = '0' ORDER BY set_id DESC") AS $det){
                         $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND set_id ='$det->set_id'");
-                         $count_distinct_set = $this->super_model->custom_query_single("ct","SELECT COUNT(DISTINCT set_id) AS ct FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND  set_id != 0");
+                         $count_distinct_set = $this->super_model->custom_query_single("ct","SELECT COUNT(DISTINCT set_id) AS ct FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND  set_id != '0'");
                         
                         //$data['count_set']=$count_set;
                         $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
                         $set_price = $this->super_model->select_column_where("et_set", "set_price", "set_id", $det->set_id);
                         $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $det->set_id);
                         $set_lot = $this->super_model->select_column_where("et_set", "set_serial_no", "set_id", $det->set_id);
+                        //echo $currency;
                         $total=$qty*$set_price;
                         $data['details'][] = array(
                             'set_id'=>$det->set_id,
@@ -2504,7 +2501,7 @@ class Report extends CI_Controller {
                          $data['set'][]=$count_set;
                     }
                    
-                }else {
+                /*}else {
                     foreach($this->super_model->select_custom_where('et_details', "et_id = '$aaf->et_id' AND set_id = '$id' ORDER BY set_id DESC") AS $det){
                         $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND cancelled='0' AND set_id ='$id'");
                         //$data['count_set']=$count_set;
@@ -2532,14 +2529,50 @@ class Report extends CI_Controller {
                          $data['set'][]=$count_set;
                     }
 
-                }
+                }*/
             }
         }else {
             $data['details'] = array();
-            $data['department'] =  '';
+            /*$data['department'] =  '';
             $data['type'] =  '';
             $data['date_issued'] =  '';
-            $data['user_id'] =  '';
+            $data['user_id'] =  '';*/
+        }
+        $this->load->view('report/set_print_avail1',$data);
+        $this->load->view('template/scripts');
+    }
+
+    public function set_print_avail(){  
+        $this->load->view('template/header');
+        $this->load->view('template/print_head');
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        $qty=1;
+        foreach($this->super_model->select_custom_where("et_head","accountability_id='0' AND cancelled='0'") AS $a){
+            $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $a->unit_id);
+            foreach($this->super_model->select_custom_where("et_details","et_id='$a->et_id' AND set_id='$id'  AND damage = '0'") AS $b){
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND set_id ='$id' AND damage = '0'");
+                $count_distinct_set = $this->super_model->custom_query_single("ct","SELECT COUNT(DISTINCT set_id) AS ct FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND  set_id != '0' AND damage = '0'");
+                $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$id);
+                $set_lot = $this->super_model->select_column_where("et_set","set_serial_no","set_id",$id);
+                $set_price = $this->super_model->select_column_where("et_set","set_price","set_id",$id);
+                $total=$qty*$set_price;
+                $data['details'][]=array(
+                    'set_id'=>$b->set_id,
+                    'et_desc'=>$a->et_desc,
+                    'asset_control_no'=>$b->asset_control_no,
+                    'acquisition_date'=>$b->acquisition_date,
+                    'set_name'=>$set_name,
+                    'set_lot'=>$set_lot,
+                    'unit_price'=>$set_price,
+                    'unit'=>$unit,
+                    'qty'=>$qty,
+                    'total'=>$total,
+                    'count_set'=>$count_set,
+                    'count_distinct'=>$count_distinct_set
+                );
+                $data['set'][]=$count_set;
+            }
         }
         $this->load->view('report/set_print_avail',$data);
         $this->load->view('template/scripts');
@@ -3804,7 +3837,7 @@ class Report extends CI_Controller {
                 $edid =$this->super_model->select_column_where("et_details", "ed_id", "et_id", $sub->et_id);
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $sub->et_id);
                 $set_name =$this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
-                $rows = $this->super_model->count_rows_where("et_details","ed_id",$edid);
+                $rows = $this->super_model->count_custom_where("et_details","ed_id='$edid' AND damage='0'");
                 if($rows!=0){
                     $data['sub'][] = array(
                         'set_id'=>$set_id,
@@ -4016,15 +4049,19 @@ class Report extends CI_Controller {
         
         $ret_pref=explode("-", $ret_prefix);
         $ret_one=$ret_pref[0];
-        $ret_two=$ret_pref[1];
+        $ret_two=(!empty($ret_pref[1])) ? $ret_pref[1] : '';
         $ret_three=$ret_pref[2];
         $ret_four = (!empty($ret_pref[3])) ? $ret_pref[3] : '';
-        if(!empty($ret_one) || !empty($ret_two) || !empty($ret_three) || !empty($ret_four)){
+        if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four)){
             $atf_pref1=$ret_pref[0];
             $atf_pref2=$ret_pref[1];
             $atf_pref3=$ret_pref[2];
             $atf_pref=$atf_pref1."-".$atf_pref2."-".$atf_pref3;
             $series = $ret_pref[3];
+        }else if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three)){
+            $atf_pref1=$ret_pref[0];
+            $atf_pref=$atf_pref1;
+            $series = $ret_pref[1];
         }else {
             $atf_pref1=$ret_pref[0];
             $atf_pref2=$ret_pref[1];
@@ -4043,15 +4080,19 @@ class Report extends CI_Controller {
 
         $atfdetails=explode("-", $atf_no);
         $atf_one=$atfdetails[0];
-        $atf_two=$atfdetails[1];
+        $atf_two=(!empty($atfdetails[1])) ? $atfdetails[1] : '';
         $atf_three=$atfdetails[2];
         $atf_four = (!empty($atfdetails[3])) ? $atfdetails[3] : '';
-        if(!empty($atf_one) || !empty($atf_two) || !empty($atf_three) || !empty($atf_four)){
+        if(!empty($atf_one) && !empty($atf_two) && !empty($atf_three) && !empty($atf_four)){
             $atf_prefix1=$atfdetails[0];
             $atf_prefix2=$atfdetails[1];
             $atf_prefix3=$atfdetails[2];
             $atf_prefix=$atf_prefix1."-".$atf_prefix2."-".$atf_prefix3;
             $series = $atfdetails[3];
+        }else if(!empty($atf_one) && !empty($atf_two) && !empty($atf_three)){
+            $atf_prefix1=$atfdetails[0];
+            $atf_prefix=$atf_prefix1;
+            $series = $atfdetails[1];
         }else {
             $atf_prefix1=$atfdetails[0];
             $atf_prefix2=$atfdetails[1];
@@ -4080,17 +4121,22 @@ class Report extends CI_Controller {
             $ars = $this->input->post('ars_no');
             $assetdetails=explode("-", $ars);
             $one=$assetdetails[0];
-            $two=$assetdetails[1];
+            $two=(!empty($assetdetails[1])) ? $assetdetails[1] : '';
             $three=$assetdetails[2];
             $four = $assetdetails[3];
             $five = (!empty($assetdetails[4])) ? $assetdetails[4] : '';
-            if(!empty($one) || !empty($two) || !empty($three) || !empty($four) || !empty($five)){
+            if(!empty($one) && !empty($two) && !empty($three) && !empty($four) && !empty($five)){
                 $subcat_prefix1=$assetdetails[0];
                 $subcat_prefix2=$assetdetails[1];
                 $subcat_prefix3=$assetdetails[2];
                 $subcat_prefix4=$assetdetails[3];
                 $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3."-".$subcat_prefix4;
                 $series = $assetdetails[4];
+            }else if(!empty($one) && !empty($two) && !empty($three)){
+                $subcat_prefix1=$assetdetails[0];
+                $subcat_prefix2=$assetdetails[1];
+                $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
+                $series = $assetdetails[2];
             }else {
                 $subcat_prefix1=$assetdetails[0];
                 $subcat_prefix2=$assetdetails[1];
@@ -4288,16 +4334,21 @@ class Report extends CI_Controller {
         $assetdetails=explode("-", $prefix);
         $one=$assetdetails[0];
         $two=$assetdetails[1];
-        $three=$assetdetails[2];
+        $three=(!empty($prefix[2])) ? $prefix[2] : '';
         $four = $assetdetails[3];
         $five = (!empty($prefix[4])) ? $prefix[4] : '';
-        if(!empty($one) || !empty($two) || !empty($three) || !empty($four) || !empty($five)){
+        if(!empty($one) && !empty($two) && !empty($three) && !empty($four) && !empty($five)){
             $subcat_prefix1=$assetdetails[0];
             $subcat_prefix2=$assetdetails[1];
             $subcat_prefix3=$assetdetails[2];
             $subcat_prefix4=$assetdetails[3];
             $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$subcat_prefix3."-".$subcat_prefix4;
             $series = $assetdetails[4];
+        }else if(!empty($one) && !empty($two) && !empty($three)){
+            $subcat_prefix1=$assetdetails[0];
+            $subcat_prefix2=$assetdetails[1];
+            $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
+            $series = $assetdetails[2];
         }else {
             $subcat_prefix1=$assetdetails[0];
             $subcat_prefix2=$assetdetails[1];
@@ -4597,22 +4648,22 @@ class Report extends CI_Controller {
             $dam_pref=explode("-", $damage_no);
             $one1=$dam_pref[0];
             $two1=$dam_pref[1];
-            $three1=$dam_pref[2];
+            $three1=(!empty($dam_pref[2])) ? $dam_pref[2] : '';
             $four1 = $dam_pref[3];
             $five1 = (!empty($dam_pref[4])) ? $dam_pref[4] : '';
-            if(!empty($one1) || !empty($two1) || !empty($three1) || !empty($four1) || !empty($five1)){
+            if(!empty($one1) && !empty($two1) && !empty($three1) && !empty($four1) && !empty($five1)){
                 $dam_prefix1=$dam_pref[0];
                 $dam_prefix2=$dam_pref[1];
                 $dam_prefix3=$dam_pref[2];
                 $dam_prefix4=$dam_pref[3];
                 $dam_prefix=$dam_prefix1."-".$dam_prefix2."-".$dam_prefix3."-".$dam_prefix4;
-                $series = $dam_pref[4];
+                //$series = $dam_pref[4];
             }else {
                 $dam_prefix1=$dam_pref[0];
                 $dam_prefix2=$dam_pref[1];
                 $dam_prefix3=$dam_pref[2];
                 $dam_prefix=$dam_prefix1."-".$dam_prefix2."-".$dam_prefix3;
-                $series = $dam_pref[3];
+                //$series = $dam_pref[3];
             }
 
             $rows=$this->super_model->count_custom_where("damage_series","damage_prefix = '$dam_prefix'");
@@ -4627,10 +4678,10 @@ class Report extends CI_Controller {
             $damagedetails=explode("-", $etdr_no);
             $dam_one=$damagedetails[0];
             $dam_two=$damagedetails[1];
-            $dam_three=$damagedetails[2];
+            $dam_three=(!empty($damagedetails[2])) ? $damagedetails[2] : '';
             $dam_four = $damagedetails[3];
             $dam_five = (!empty($damagedetails[4])) ? $damagedetails[4] : '';
-            if(!empty($dam_one) || !empty($dam_two) || !empty($dam_three) || !empty($dam_four) || !empty($dam_five)){
+            if(!empty($dam_one) && !empty($dam_two) && !empty($dam_three) && !empty($dam_four) && !empty($dam_five)){
                 $damage_prefix1=$damagedetails[0];
                 $damage_prefix2=$damagedetails[1];
                 $damage_prefix3=$damagedetails[2];
@@ -4681,20 +4732,20 @@ class Report extends CI_Controller {
         $return_prefix= $this->super_model->select_column_custom_where("return_head", "atf_no", "return_date LIKE '$atf_format%'");
         $ret_pref=explode("-", $return_prefix);
         $one3=$ret_pref[0];
-        $two3=$ret_pref[1];
+        $two3=(!empty($ret_pref[1])) ? $ret_pref[1] : '';
         $three3=$ret_pref[2];
         $four3 = (!empty($ret_pref[3])) ? $ret_pref[3] : '';
-        if(!empty($one3) || !empty($two3) || !empty($three3) || !empty($four3)){
+        if(!empty($one3) && !empty($two3) && !empty($three3) && !empty($four3)){
             $ret_prefix1=$ret_pref[0];
             $ret_prefix2=$ret_pref[1];
             $ret_prefix3=$ret_pref[2];
             $ret_prefix=$ret_prefix1."-".$ret_prefix2."-".$ret_prefix3;
-            $series = $ret_pref[3];
+            //$series = $ret_pref[3];
         }else {
             $ret_prefix1=$ret_pref[0];
             $ret_prefix2=$ret_pref[1];
             $ret_prefix=$ret_prefix1."-".$ret_prefix2;
-            $series = $ret_pref[2];
+            //$series = $ret_pref[2];
         }
 
         $row=$this->super_model->count_custom_where("atf_series","atf_prefix = '$ret_prefix'");
@@ -4708,10 +4759,10 @@ class Report extends CI_Controller {
 
         $atfdetails=explode("-", $atf_no);
         $atf_one=$atfdetails[0];
-        $atf_two=$atfdetails[1];
+        $atf_two=(!empty($atfdetails[1])) ? $atfdetails[1] : '';
         $atf_three=$atfdetails[2];
         $atf_four = (!empty($atfdetails[3])) ? $atfdetails[3] : '';
-        if(!empty($atf_one) || !empty($atf_two) || !empty($atf_three) || !empty($atf_four)){
+        if(!empty($atf_one) && !empty($atf_two) && !empty($atf_three) && !empty($atf_four)){
             $atf_prefix1=$atfdetails[0];
             $atf_prefix2=$atfdetails[1];
             $atf_prefix3=$atfdetails[2];
@@ -4736,22 +4787,22 @@ class Report extends CI_Controller {
         $pref=explode("-", $arsprefix);
         $one2=$pref[0];
         $two2=$pref[1];
-        $three2=$pref[2];
+        $three2=(!empty($pref[2])) ? $pref[2] : '';
         $four2 = $pref[3];
         $five2 = (!empty($pref[4])) ? $pref[4] : '';
-        if(!empty($one2) || !empty($two2) || !empty($three2) || !empty($four2) || !empty($five2)){
+        if(!empty($one2) && !empty($two2) && !empty($three2) && !empty($four2) && !empty($five2)){
             $sub_prefix1=$pref[0];
             $sub_prefix2=$pref[1];
             $sub_prefix3=$pref[2];
             $sub_prefix4=$pref[3];
             $sub_prefix=$sub_prefix1."-".$sub_prefix2."-".$sub_prefix3."-".$sub_prefix4;
-            $series = $pref[4];
+            //$series = $pref[4];
         }else{
             $sub_prefix1=$pref[0];
             $sub_prefix2=$pref[1];
             $sub_prefix3=$pref[2];
             $sub_prefix=$sub_prefix1."-".$sub_prefix2."-".$sub_prefix3;
-            $series = $pref[3];
+            //$series = $pref[3];
         }
 
         $rowss=$this->super_model->count_custom_where("returned_series","prefix = '$sub_prefix'");
@@ -4779,10 +4830,10 @@ class Report extends CI_Controller {
             $assetdetails=explode("-", $ars);
             $asset_one=$assetdetails[0];
             $asset_two=$assetdetails[1];
-            $asset_three=$assetdetails[2];
+            $asset_three=(!empty($assetdetails[2])) ? $assetdetails[2] : '';
             $asset_four = $assetdetails[3];
             $asset_five = (!empty($assetdetails[4])) ? $assetdetails[4] : '';
-            if(!empty($asset_one) || !empty($asset_two) || !empty($asset_three) || !empty($asset_four) || !empty($asset_five)){
+            if(!empty($asset_one) && !empty($asset_two) && !empty($asset_three) && !empty($asset_four) && !empty($asset_five)){
                 $subcat_prefix1=$assetdetails[0];
                 $subcat_prefix2=$assetdetails[1];
                 $subcat_prefix3=$assetdetails[2];
@@ -4935,7 +4986,7 @@ class Report extends CI_Controller {
         $rows=$this->super_model->count_custom_where("et_head","et_desc LIKE '%$item%'");
         if($rows!=0){
              echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("et_head", "accountability_id='0' AND et_desc LIKE '%$item%'") AS $itm){
+            foreach($this->super_model->select_custom_where("et_head", "accountability_id='0' AND cancelled='0' AND et_desc LIKE '%$item%'") AS $itm){
                 foreach($this->super_model->select_custom_where("et_details", "damage='0' AND et_id ='$itm->et_id' AND change_location = '0' AND lost='0'") AS $det){  
                     $qty = 1;
                     $unit = $this->super_model->select_column_where("unit", "unit_name", "unit_id", $itm->unit_id);
@@ -4951,10 +5002,10 @@ class Report extends CI_Controller {
 
     public function rep_itm(){
         $item=$this->input->post('item');
-        $rows=$this->super_model->count_custom_where("et_head","et_desc LIKE '%$item%'");
+        $rows=$this->super_model->count_custom_where("et_head","cancelled='0' AND et_desc LIKE '%$item%'");
         if($rows!=0){
              echo "<ul id='name-item'>";
-            foreach($this->super_model->select_custom_where("et_head", "et_desc LIKE '%$item%'") AS $itm){
+            foreach($this->super_model->select_custom_where("et_head", "cancelled='0' AND et_desc LIKE '%$item%'") AS $itm){
             ?>
                    <li onClick="selectItems('<?php echo $itm->et_id; ?>','<?php echo $itm->et_desc; ?>')"><?php echo $itm->et_desc; ?></li>
             <?php 
@@ -5939,6 +5990,7 @@ class Report extends CI_Controller {
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
         }
         $num=3;
+        $t=4;
 
         $from=$this->uri->segment(3);
         $to=$this->uri->segment(4);
@@ -6129,7 +6181,8 @@ class Report extends CI_Controller {
                 $num++;
             }
         }else {
-            foreach($this->super_model->select_custom_where('et_head', 'cancelled =0 AND accountability_id!=0 AND save_temp=0') AS $et){
+            //foreach($this->super_model->select_custom_where('et_head', "cancelled ='0' AND accountability_id!='0' AND save_temp='0' ORDER BY et_desc ASC") AS $et){
+            foreach ($this->super_model->select_join_where_order("et_head", "et_details", "accountability_id!='0' AND cancelled='0' AND save_temp='0'", "et_id", "set_id","DESC") AS $et){
                 $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $et->unit_id);
                 $accountability =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $et->accountability_id);
                 $empid =$this->super_model->select_column_where("employees", "employee_id", "employee_id", $et->accountability_id);
@@ -6153,7 +6206,7 @@ class Report extends CI_Controller {
                 $remarks =$this->super_model->select_column_where("et_details", "remarks", "et_id", $et->et_id);
                 $total = $et->qty*$unit_price;
                 $serial_no='';
-                foreach($this->super_model->select_row_where("et_details", "et_id", $et->et_id) AS $ser){
+                foreach($this->super_model->select_custom_where("et_details", "et_id='$et->et_id' ORDER BY set_id ASC") AS $ser){
                     $serial_no .= (!empty($ser->serial_no)) ? $ser->serial_no.", " : '';
                 }
                 //$serial_no =$this->super_model->select_column_where("et_details", "serial_no", "et_id", $et->et_id);
@@ -6169,6 +6222,7 @@ class Report extends CI_Controller {
                 $location = $this->super_model->select_column_where("location", "location_name", "location_id", $location_id);
                 $set_id =$this->super_model->select_column_where("et_details", "set_id", "et_id", $et->et_id);
                 $set_name = $this->super_model->select_column_where("et_set", "set_name", "set_id", $set_id);
+                $et_set_id = $this->super_model->select_column_where("et_set", "set_id", "set_id", $set_id);
                 if($et->accountability_id!=0 && $borrowed==0 && $lost==0){
                     $status = 'Assigned';
                 }else if($et->accountability_id==0 && $change_location==1){
@@ -6182,18 +6236,26 @@ class Report extends CI_Controller {
                 }else if($lost==1){
                     $status = 'Lost Item / '.$accountability;
                 }
+                /*$count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id != '0' AND set_id='$et_set_id'");
+                if($set_id==$et_set_id){
+                    $objPHPExcel->getActiveSheet()->mergeCells('S'.$num.":S".$t);
+                    $objPHPExcel->getActiveSheet()->mergeCells('T'.$num.":T".$t);
+                    $objPHPExcel->getActiveSheet()->mergeCells('U'.$num.":U".$t);
+                    $t++;   
+                }*/
+
 
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$num, $category);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $asset_control_no);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $acquisition_date);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('B'.$num, $ser->asset_control_no);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('C'.$num, $ser->acquisition_date);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$num, $et->et_desc);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $brand);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $type);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $model);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$num, $ser->brand);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$num, $ser->type);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$num, $ser->model);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$num, $serial_no);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$num, $et->qty);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$num, $unit);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $date_issued);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$num, $ser->date_issued);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$num, $employee);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.$num, $status);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N'.$num, $department);
@@ -6202,13 +6264,13 @@ class Report extends CI_Controller {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q'.$num, $rack);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('R'.$num, $condition);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S'.$num, $set_name);
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T'.$num, $unit_price.' '.$currency);
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T'.$num, $ser->unit_price.' '.$currency);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$num, $total.' '.$currency);
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$num, $remarks);
                 $objPHPExcel->getActiveSheet()->getStyle('A'.$num.":V".$num)->applyFromArray($styleArray);
                 $objPHPExcel->getActiveSheet()->getStyle('H'.$num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                 $objPHPExcel->getActiveSheet()->getStyle('H'.$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
-                $objPHPExcel->getActiveSheet()->getStyle('S'.$num.":T".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $objPHPExcel->getActiveSheet()->getStyle('T'.$num.":U".$num)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);    
                 $objPHPExcel->getActiveSheet()->protectCells('A'.$num.":V".$num,'admin');
                 $num++;

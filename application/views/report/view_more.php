@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="row">
-            <?php foreach($details AS $det){ ?>
+            <?php if(!empty($details)){ foreach($details AS $det){ ?>
                 <div class="col-lg-10 offset-lg-1">
                     <div class="card bor-radius20 shadow encode_css ">
                         <div class="p-t-20 p-l-20 p-b-20 p-r-20">
@@ -119,7 +119,7 @@
                         </div>
                     </div>
                 </div>
-            <?php } ?>
+            <?php } } ?>
             </div>            
             <div class="row">
                 <div class="col-md-12">
