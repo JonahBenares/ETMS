@@ -15,7 +15,7 @@
                                         <span class="fa fa-wrench"></span> Repair
                                     </a> -->
                                     <!-- <a href="<?php echo base_url(); ?>index.php/report/create_set_avail" class="btn btn-warning text-white bor-radius20 pull-right">Create Set</a> -->
-                                    <a href="<?php echo base_url(); ?>index.php/report/set_print_avail" class="btn btn-primary bor-radius100" title="Set Print">
+                                    <a href="<?php echo base_url(); ?>index.php/report/set_print_avail_all" class="btn btn-primary bor-radius100" title="Set Print">
                                     <span class="fa fa-print"></span></a>
                                     <?php if($_SESSION['usertype'] == 1){ ?> 
                                     <a href="<?php echo base_url(); ?>index.php/report/aaf_assign_rep" class="btn btn-success">
