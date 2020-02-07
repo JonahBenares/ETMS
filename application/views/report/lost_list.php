@@ -26,7 +26,11 @@
                                 foreach($lost AS $l){ ?>
                                     <tr>                                        
                                         <td><?php echo $l['lost_date']; ?></td>
-                                        <td><?php echo $l['item']; ?></td>
+                                        <td>
+                                            <a href="<?php echo base_url(); ?>index.php/report/view_more/<?php echo $l['et_id'];?>" class=""  data-toggle="tooltip" data-placement="right" title="View" style="word-wrap: break-word;">
+                                                <?php echo $l['item']; ?>
+                                            </a> 
+                                        </td>
                                         <td><?php echo $l['replacement']; ?></td>
                                         <td><?php echo $l['accountable']; ?></td>
                                         <td><?php echo $l['remarks']; ?></td>
