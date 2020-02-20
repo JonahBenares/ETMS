@@ -304,11 +304,28 @@ class Encode extends CI_Controller {
             
                 if($this->super_model->insert_into("et_details", $data)){
                     $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
-                    $subcat_prefix1=$assetdetails[0];
+                    $ret_one=$assetdetails[0];
+                    $ret_two=(!empty($assetdetails[1])) ? $assetdetails[1] : '';
+                    $ret_three=(!empty($assetdetails[2])) ? $assetdetails[2] : '';
+                    $ret_four = (!empty($assetdetails[3])) ? $assetdetails[3] : '';
+                    if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four)){
+                        $subcat_prefix1=$assetdetails[0];
+                        $subcat_prefix2=$assetdetails[1];
+                        $location=$assetdetails[2];
+                        $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
+                        $series = $assetdetails[3];
+                    }else {
+                        $subcat_prefix1=$assetdetails[0];
+                        $location=$assetdetails[1];
+                        $subcat_prefix=$subcat_prefix1;
+                        $series = $assetdetails[2];
+                    }
+
+                    /*$subcat_prefix1=$assetdetails[0];
                     $subcat_prefix2=$assetdetails[1];
                     $location=$assetdetails[2];
-                    $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
-                    $series = $assetdetails[3];
+                    $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$location;
+                    $series = $assetdetails[3];*/
                     $asset_data= array(
                         'subcat_prefix'=>$subcat_prefix,
                         'location'=>$location,
@@ -350,11 +367,28 @@ class Encode extends CI_Controller {
             
                 if($this->super_model->insert_into("et_details", $data)){
                     $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
-                    $subcat_prefix1=$assetdetails[0];
+                    $assetdetails=explode("-", $this->input->post('acn['.$x.']'));
+                    $ret_one=$assetdetails[0];
+                    $ret_two=(!empty($assetdetails[1])) ? $assetdetails[1] : '';
+                    $ret_three=(!empty($assetdetails[2])) ? $assetdetails[2] : '';
+                    $ret_four = (!empty($assetdetails[3])) ? $assetdetails[3] : '';
+                    if(!empty($ret_one) && !empty($ret_two) && !empty($ret_three) && !empty($ret_four)){
+                        $subcat_prefix1=$assetdetails[0];
+                        $subcat_prefix2=$assetdetails[1];
+                        $location=$assetdetails[2];
+                        $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2."-".$location;
+                        $series = $assetdetails[3];
+                    }else {
+                        $subcat_prefix1=$assetdetails[0];
+                        $location=$assetdetails[1];
+                        $subcat_prefix=$subcat_prefix1."-".$location;
+                        $series = $assetdetails[2];
+                    }
+                    /*$subcat_prefix1=$assetdetails[0];
                     $subcat_prefix2=$assetdetails[1];
                     $location=$assetdetails[2];
                     $subcat_prefix=$subcat_prefix1."-".$subcat_prefix2;
-                    $series = $assetdetails[3];
+                    $series = $assetdetails[3];*/
                     $asset_data= array(
                         'subcat_prefix'=>$subcat_prefix,
                         'location'=>$location,
