@@ -96,6 +96,9 @@
                                     </thead>
                                     <tbody>
                                         <?php
+                                            usort($sub, function($a, $b) {
+                                                return $a['set_id'] - $b['set_id'];
+                                            });
                                             $x = 1;
                                             foreach($sub AS $s){ 
                                             //if($s['set_id']==0){
@@ -114,7 +117,11 @@
                                             <td><?php echo $s['unit']; ?></td>
                                             <td ><?php echo $s['qty']; ?></td>
                                             <td><?php echo $s['department']; ?></td>
-                                            <td><?php echo $s['set_name'];?></td>
+                                            <td>
+                                                <a href="<?php echo base_url(); ?>index.php/report/set_print_account/<?php echo $s['set_id'];?>/<?php echo $s['empid'];?>" class="btn btn-ilink" data-toggle="tooltip" data-placement="top" title="View Set"  style="white-space: normal!important;text-align: left">
+                                                    <?php echo $s['set_name'];?> 
+                                                </a>
+                                            </td>
                                             <td>                                            
                                                 <div class="table-data-feature">
                                                     <?php if($s['lost']==0){ ?>

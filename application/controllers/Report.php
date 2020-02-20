@@ -2578,6 +2578,47 @@ class Report extends CI_Controller {
         $this->load->view('template/scripts');
     }
 
+    public function set_print_account(){  
+        $this->load->view('template/header');
+        $this->load->view('template/print_head');
+        $data['id']=$this->uri->segment(3);
+        $id=$this->uri->segment(3);
+        $empid=$this->uri->segment(4);
+        $data['employee'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $empid);
+        $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $empid);
+        $data['aaf_no'] =$this->super_model->select_column_where("employees", "aaf_no", "employee_id", $empid);
+        $qty=1;
+        foreach($this->super_model->select_custom_where("et_head","accountability_id='$empid' AND cancelled='0'") AS $a){
+            $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $a->unit_id);
+            $data['department'] = $a->department;
+            foreach($this->super_model->select_custom_where("et_details","et_id='$a->et_id' AND set_id='$id'  AND damage = '0'") AS $b){
+                $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND set_id ='$id' AND damage = '0'");
+                $count_distinct_set = $this->super_model->custom_query_single("ct","SELECT COUNT(DISTINCT set_id) AS ct FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND  set_id != '0' AND damage = '0'");
+                $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$id);
+                $set_lot = $this->super_model->select_column_where("et_set","set_serial_no","set_id",$id);
+                $set_price = $this->super_model->select_column_where("et_set","set_price","set_id",$id);
+                $total=$qty*$set_price;
+                $data['details'][]=array(
+                    'set_id'=>$b->set_id,
+                    'et_desc'=>$a->et_desc,
+                    'asset_control_no'=>$b->asset_control_no,
+                    'acquisition_date'=>$b->acquisition_date,
+                    'set_name'=>$set_name,
+                    'set_lot'=>$set_lot,
+                    'unit_price'=>$set_price,
+                    'unit'=>$unit,
+                    'qty'=>$qty,
+                    'total'=>$total,
+                    'count_set'=>$count_set,
+                    'count_distinct'=>$count_distinct_set
+                );
+                $data['set'][]=$count_set;
+            }
+        }
+        $this->load->view('report/set_print_account',$data);
+        $this->load->view('template/scripts');
+    }
+
     public function set_print_avail_all(){  
         $this->load->view('template/header');
         $this->load->view('template/print_head');

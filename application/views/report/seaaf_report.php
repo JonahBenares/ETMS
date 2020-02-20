@@ -143,7 +143,7 @@
                         <?php } ?> -->
 
                            <?php 
-                              if ($det['set_id']!=0 && ($previousId !== '' && $previousId !== $det['set_id'])) { ?>
+                              if ($det['set_id']!=0 && ($previousId !== $det['set_id'])) { ?>
                                 <td class="main-tab" align="center" style="font-size: 11px" <?php if($det['set_id']!=0) echo " rowspan='".$det['count_set']."'"; ?>><?php if($det['set_id']==0){ echo $det['unit_price']."<small> ".$det['currency']."</small>"; }else{ echo $det['set_price']; } ?></td>
 
 
