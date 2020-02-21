@@ -46,6 +46,9 @@
                                     </thead>
                                     <tbody>
                                         <?php
+                                            usort($sub, function($a, $b) {
+                                                return $a['set_id'] - $b['set_id'];
+                                            });
                                             $x = 1;
                                             foreach($sub AS $s){ 
                                         ?>
