@@ -4028,6 +4028,8 @@ class Report extends CI_Controller {
                 );
                 foreach($this->super_model->select_row_where('et_details', 'et_id', $view->et_id) AS $det){
                     $currency = $this->super_model->select_column_where("currency", "currency_name", "currency_id", $det->currency_id);
+                    $company = $this->super_model->select_column_where("company", "company_name", "company_id", $det->company_id);
+                    $rack = $this->super_model->select_column_where("rack", "rack_name", "rack_id", $det->rack_id);
                     $data['details'][] = array(
                         'set_id'=>$det->set_id,
                         'et_id'=>$det->et_id,
@@ -4042,7 +4044,10 @@ class Report extends CI_Controller {
                         'damage'=>$det->damage,
                         'date_issued'=>$det->date_issued,
                         'unit_price'=>$det->unit_price,
+                        'physical_condition'=>$det->physical_condition,
                         'currency'=>$currency,
+                        'company'=>$company,
+                        'rack'=>$rack,
                         'picture1'=>$det->picture1,
                         'picture2'=>$det->picture2,
                         'picture3'=>$det->picture3,

@@ -85,7 +85,7 @@
                 </tr>              
             </table>
         </div>
-        <!-- <div class="col-lg-12"> -->
+        <div class="col-lg-12">
             <table width="100%" class="table-bordered">
                 <tr>                
                     <td class="main-tab" width="7%" align="center"><strong>Asset #</strong></td>
@@ -145,7 +145,7 @@
             </table>
             <hr>
             <small>printed by: <?php echo $_SESSION['fullname'];?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
-        <!-- </div> -->
+        </div>
     </div>
     <center><a href="" id="printBtn" onclick="iprint()" class="btn btn-block btn-success m-t-50 m-b-50 animated headShake">Print</a></center>
     <script>

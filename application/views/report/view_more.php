@@ -73,10 +73,16 @@
                                     <td>: <?php echo $det['serial_no'];?></td>
                                     <td>Unit Price</td>
                                     <td>: <?php if($det['set_id']==0){ echo $det['unit_price']."<small> ".$det['currency']."</small>"; }?></td>
+                                    <td>Physical Condition</td>
+                                    <td>: <?php echo $det['physical_condition']?></td>
                                 </tr>
                                 <tr>
-                                    <td>Acquired by</td>
-                                    <td colspan="3">: <?php echo $det['acquired_by'];?></td>
+                                    <td>Supplier</td>
+                                    <td>: <?php echo $det['acquired_by'];?></td>
+                                    <td>Company</td>
+                                    <td>: <?php echo $det['company'];?></td>
+                                    <td>Rack</td>
+                                    <td>: <?php echo $det['rack'];?></td>
                                 </tr>
                                 <tr>
                                     <td>Remarks</td>
