@@ -2597,6 +2597,7 @@ class Report extends CI_Controller {
                 $set_name = $this->super_model->select_column_where("et_set","set_name","set_id",$id);
                 $set_lot = $this->super_model->select_column_where("et_set","set_serial_no","set_id",$id);
                 $set_price = $this->super_model->select_column_where("et_set","set_price","set_id",$id);
+                $data['date_issued'] = $b->date_issued;
                 $total=$qty*$set_price;
                 $data['details'][]=array(
                     'set_id'=>$b->set_id,
@@ -2608,6 +2609,9 @@ class Report extends CI_Controller {
                     'unit_price'=>$set_price,
                     'unit'=>$unit,
                     'qty'=>$qty,
+                    'brand'=>$b->brand,
+                    'model'=>$b->model,
+                    'model'=>$b->model,
                     'total'=>$total,
                     'count_set'=>$count_set,
                     'count_distinct'=>$count_distinct_set
