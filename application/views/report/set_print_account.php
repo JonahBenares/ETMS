@@ -6,6 +6,7 @@
     <title>Print</title>
 </head>
 <style type="text/css">
+    body,p,h5{font-size: 12px!important}
     .table-main{
         border:2px solid black;
         border-bottom:0px solid black;
@@ -26,6 +27,7 @@
     }
     p, .main-tab, h5, label.nomarg{
         color:#000;
+        font-family: Arial, Helvetica, sans-serif;
     }
     .select {
        text-align-last: center;
@@ -92,11 +94,11 @@
                     <td class="main-tab" width="6%" align="center"><strong>Acquisition Date</strong></td>
                     <td class="main-tab" width="20%" align="center"><strong>Item</strong></td>  
                     <td class="main-tab" width="10%" align="center"><strong>Brand</strong></td>
-                    <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>                  
+                    <td class="main-tab" width="10%" align="center"><strong>Type</strong></td>                  
+                    <td class="main-tab" width="10%" align="center"><strong>Model</strong></td>  
+                    <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>                
                     <td class="main-tab" width="3%" align="center"><strong>Qty</strong></td>
                     <td class="main-tab" width="4%" align="center"><strong>U/M</strong></td>
-                    <td class="main-tab" width="10%" align="center"><strong>Set Name</strong></td>
-                    <td class="main-tab" width="10%" align="center"><strong>Serial No.</strong></td>
                     <td class="main-tab" width="8%" align="center"><strong>Cost</strong></td>
                     <td class="main-tab" width="8%" align="center"><strong>Total</strong></td>
                 </tr>
@@ -114,15 +116,17 @@
                         <td class="main-tab" align="center"><?php echo $det['acquisition_date'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['et_desc'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['brand'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['type'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['model'];?></td>
+                        <td class="main-tab" align="center"><?php echo $det['serial_no'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['qty'];?></td>
                         <td class="main-tab" align="center"><?php echo $det['unit'];?></td>
                         <?php
                             foreach($new_set AS $key=>$value){
                                 if($key==$a){
                         ?>
-                            <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['set_name'];?></td>
-                            <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['set_lot'];?></td>
+                            <!-- <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['set_name'];?></td> -->
+                           <!--  <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['set_lot'];?></td> -->
                             <td class="main-tab" align="center" <?php echo " rowspan='".$value."'"; ?>><?php echo $det['unit_price']; ?></td>
                             <td class="main-tab" align="center" <?php  echo " rowspan='".$value."'"; ?>><?php echo number_format($det['total'],2); ?></td>
                         <?php } } ?>
@@ -144,6 +148,40 @@
                 </tr>
             </table>
             <hr>
+            <br>
+             <table width="100%">
+                <tr>
+                    <td width="10%"></td>
+                    <td width="26%" class="main-tab">Prepared by:</td>
+                    <td width="10%"></td>
+                    <td width="26%" class="main-tab">Received by:</td>
+                    <td width="10%"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="border-bottom:1px solid #000;vertical-align:bottom;color:black" align = "center">
+                        <?php echo $user_id;?>
+                    </td> 
+                    <td></td>
+                    <td style="border-bottom:1px solid #000;color:black;vertical-align:bottom;<?php echo ($type != 2) ? 'text-align: center;' : '';?>">
+                        <?php if($type == 2){ ?>
+                            <?php if(!empty($child)){  foreach($child as $c){ echo  "<div style='margin-top: 20px;'>".$c['emp'].', <div>'; } } ?>
+                        <?php } else { ?>
+                            <?php echo  $employee;?>
+                        <?php } ?>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input class="select" type="" name="" value="" >
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
             <small>printed by: <?php echo $_SESSION['fullname'];?> || date: <?php echo date('Y-m-d');?> || Equipment and Tool Management System </small>
         </div>
     </div>

@@ -2587,9 +2587,16 @@ class Report extends CI_Controller {
         $data['employee'] =$this->super_model->select_column_where("employees", "employee_name", "employee_id", $empid);
         $data['position'] =$this->super_model->select_column_where("employees", "position", "employee_id", $empid);
         $data['aaf_no'] =$this->super_model->select_column_where("employees", "aaf_no", "employee_id", $empid);
+        $data['user_id'] =$_SESSION['fullname'];
+        foreach($this->super_model->select_row_where('employee_inclusion','parent_id',$empid) AS $em){
+            $data['child'][] = array( 
+                'emp'=> $this->super_model->select_column_where("employees", "employee_name", "employee_id", $em->child_id), 
+            );
+        }
         $qty=1;
         foreach($this->super_model->select_custom_where("et_head","accountability_id='$empid' AND cancelled='0'") AS $a){
             $unit =$this->super_model->select_column_where("unit", "unit_name", "unit_id", $a->unit_id);
+            $data['type'] = $this->super_model->select_column_where("employees", "type", "employee_id", $a->accountability_id); 
             $data['department'] = $a->department;
             foreach($this->super_model->select_custom_where("et_details","et_id='$a->et_id' AND set_id='$id'  AND damage = '0'") AS $b){
                 $count_set = $this->super_model->count_custom("SELECT et_head.et_id FROM et_details INNER JOIN et_head ON et_head.et_id = et_details.et_id WHERE accountability_id = '0' AND set_id ='$id' AND damage = '0'");
@@ -2610,8 +2617,9 @@ class Report extends CI_Controller {
                     'unit'=>$unit,
                     'qty'=>$qty,
                     'brand'=>$b->brand,
+                    'type'=>$b->type,
                     'model'=>$b->model,
-                    'model'=>$b->model,
+                    'serial_no'=>$b->serial_no,
                     'total'=>$total,
                     'count_set'=>$count_set,
                     'count_distinct'=>$count_distinct_set
